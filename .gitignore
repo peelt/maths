@@ -48,3 +48,4 @@ next-env.d.ts
 
 # auth verification build
 /.next-auth-check/
+tsconfig.json.verify-auth-backup

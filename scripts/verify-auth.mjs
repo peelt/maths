@@ -12,7 +12,7 @@
  * session lookup must DENY access, not grant it.
  */
 import { spawn, spawnSync } from "node:child_process";
-import { rmSync } from "node:fs";
+import { copyFileSync, rmSync } from "node:fs";
 
 const PORT = 3999;
 const DIST = ".next-auth-check";
@@ -53,6 +53,13 @@ async function waitForServer(url, attempts = 60) {
   throw new Error(`Server did not start at ${url}`);
 }
 
+// Next rewrites tsconfig.json to add a types path for whatever distDir is in
+// use. Left alone, this script would dirty the working tree on every run, so
+// the file is snapshotted and restored below.
+const TSCONFIG = "tsconfig.json";
+const TSCONFIG_BACKUP = "tsconfig.json.verify-auth-backup";
+copyFileSync(TSCONFIG, TSCONFIG_BACKUP);
+
 rmSync(DIST, { recursive: true, force: true });
 console.log("Building with Supabase configured…\n");
 run("npx", ["next", "build"]);
@@ -83,6 +90,8 @@ try {
 } finally {
   server.kill("SIGKILL");
   rmSync(DIST, { recursive: true, force: true });
+  copyFileSync(TSCONFIG_BACKUP, TSCONFIG);
+  rmSync(TSCONFIG_BACKUP, { force: true });
 }
 
 if (failures > 0) {
