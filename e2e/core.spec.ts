@@ -151,3 +151,19 @@ test("the progress page reports what you have done", async ({ page }) => {
   await expect(page.getByText("Questions answered")).toBeVisible();
   await expect(page.getByText("By topic")).toBeVisible();
 });
+
+test("the sign-in form is in the served HTML, not only after hydration", async ({ request }) => {
+  // Fetched as raw HTML with no JavaScript executed. This is the check that
+  // matters: reading the query parameters with useSearchParams would push the
+  // whole form behind a Suspense boundary, so the server would send only a
+  // "Loading…" fallback. Sign-in gates the entire site, so a hydration failure
+  // there would leave students staring at a spinner with no way in.
+  const response = await request.get("/signin");
+  expect(response.ok()).toBe(true);
+
+  const html = await response.text();
+  expect(html).toContain("Your email address");
+  expect(html).toContain("Email me a link");
+  expect(html).toMatch(/<input[^>]+type="email"/);
+  expect(html).not.toContain("Loading…");
+});
