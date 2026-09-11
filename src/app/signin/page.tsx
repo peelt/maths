@@ -1,14 +1,32 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SignInForm } from "@/components/SignInForm";
 import { PageHeading } from "@/components/ui";
+import { safeRedirectPath } from "@/lib/redirect";
 
 export const metadata: Metadata = {
   title: "Sign in",
   description: "Sign in to save your progress through A Level Maths.",
 };
 
-export default function SignInPage() {
+/**
+ * The query parameters are read HERE, on the server, and passed down as props.
+ *
+ * The obvious alternative — `useSearchParams()` inside the form — forces the
+ * form behind a Suspense boundary on a prerendered page, so the server emits
+ * only the fallback and the form exists solely after hydration. This page is
+ * the gate to the whole site, so a hydration failure there locks everyone out
+ * with nothing on screen but a spinner. Reading the params server-side keeps
+ * the form in the HTML.
+ *
+ * The cost is that this page is dynamic rather than static, which is the right
+ * trade for a sign-in page.
+ */
+export default async function SignInPage(props: PageProps<"/signin">) {
+  const params = await props.searchParams;
+
+  const nextParam = Array.isArray(params.next) ? params.next[0] : params.next;
+  const errorParam = Array.isArray(params.error) ? params.error[0] : params.error;
+
   return (
     <div className="mx-auto max-w-md">
       <PageHeading
@@ -16,10 +34,7 @@ export default function SignInPage() {
         title="Sign in to save your progress"
         lead="So the site remembers what you have done, what is due for review, and can pick up where you left off on any device."
       />
-      {/* useSearchParams needs a Suspense boundary to keep the page static. */}
-      <Suspense fallback={<div className="rounded-xl border border-border bg-surface p-6 text-muted">Loading…</div>}>
-        <SignInForm />
-      </Suspense>
+      <SignInForm next={safeRedirectPath(nextParam)} linkError={errorParam ?? null} />
     </div>
   );
 }

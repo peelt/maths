@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/redirect";
 
 /**
  * Where the magic link lands.
@@ -14,20 +15,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
  * It requires the Supabase email template to point here:
  *   /auth/confirm?token_hash={{ .TokenHash }}&type=email
  */
-
-/**
- * Only ever redirect to a path on this site.
- *
- * `next` arrives from the URL, so without this an attacker could craft a
- * confirm link that bounces a freshly signed-in student to another site.
- * Rejects anything not starting with a single "/", which covers absolute URLs
- * and protocol-relative "//evil.com".
- */
-function safeRedirectPath(value: string | null): string {
-  if (!value) return "/";
-  if (!value.startsWith("/") || value.startsWith("//")) return "/";
-  return value;
-}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
