@@ -54,6 +54,7 @@ Configure Supabase and sign-in becomes required.
 | `npm run build` | Production build |
 | `npm test` | Unit tests (marking, scheduling, question bank integrity) |
 | `npm run e2e` | End-to-end tests, desktop and mobile |
+| `npm run verify:auth` | Builds with Supabase configured and checks route protection actually redirects |
 | `npm run lint` | Lint |
 
 ## Deploying
@@ -149,6 +150,15 @@ from a seed, so the same question is never repeated verbatim, and storing the
 seed reproduces any past question exactly for review.
 
 ### Testing
+
+`NEXT_PUBLIC_*` values are inlined at build time, so the end-to-end suite — which
+runs with no backend — can never exercise the signed-out-and-redirected path.
+That path only exists once Supabase is configured, which makes it the easiest
+thing here to break unnoticed. `npm run verify:auth` covers it: it builds with
+deliberately unreachable Supabase credentials into a separate output directory
+and asserts that protected routes redirect while `/signin` and `/privacy` do
+not. Unreachable is the point — a failed session lookup must deny access, not
+grant it.
 
 The most important test asserts that **every question template marks its own
 canonical answer as correct across 60 generated variants**. A question that
