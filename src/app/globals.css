@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/*
+ * Design tokens.
+ *
+ * The palette is deliberately calm and high contrast. This is a study tool
+ * used for long stretches, often late, by someone who finds visual clutter
+ * costly — so there is one accent colour carrying the primary action, muted
+ * surfaces, and no decoration that does not carry meaning.
+ */
+:root {
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --surface-2: #f3f1ee;
+  --border: #e2dfda;
+  --text: #1c1a17;
+  --text-muted: #6b655d;
+
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef2ff;
+  --on-accent: #ffffff;
+
+  --correct: #15803d;
+  --correct-soft: #f0fdf4;
+  --correct-border: #bbf7d0;
+
+  --wrong: #b91c1c;
+  --wrong-soft: #fef2f2;
+  --wrong-border: #fecaca;
+
+  --warn: #b45309;
+  --warn-soft: #fffbeb;
+  --warn-border: #fde68a;
+
+  --pure: #4f46e5;
+  --statistics: #0f766e;
+  --mechanics: #b45309;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --surface: #1b1e24;
+    --surface-2: #23272e;
+    --border: #333841;
+    --text: #eceef1;
+    --text-muted: #9aa1ac;
+
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-soft: #232842;
+    --on-accent: #14161a;
+
+    --correct: #4ade80;
+    --correct-soft: #16281c;
+    --correct-border: #2f5738;
+
+    --wrong: #f87171;
+    --wrong-soft: #2c1919;
+    --wrong-border: #5d2c2c;
+
+    --warn: #fbbf24;
+    --warn-soft: #2a2212;
+    --warn-border: #5a4718;
+
+    --pure: #818cf8;
+    --statistics: #2dd4bf;
+    --mechanics: #fbbf24;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-correct: var(--correct);
+  --color-correct-soft: var(--correct-soft);
+  --color-correct-border: var(--correct-border);
+  --color-wrong: var(--wrong);
+  --color-wrong-soft: var(--wrong-soft);
+  --color-wrong-border: var(--wrong-border);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-border: var(--warn-border);
+  --color-pure: var(--pure);
+  --color-statistics: var(--statistics);
+  --color-mechanics: var(--mechanics);
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  /* Slightly larger than default: less crowding, easier to hold your place. */
+  font-size: 16.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus must always be obvious — this is a keyboard-first interface. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/*
+ * Respect a stated preference for less motion. Everything here is feedback,
+ * never decoration, so removing it costs nothing.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* KaTeX sits slightly large against body text at its default size. */
+.katex {
+  font-size: 1.05em;
+}
+
+/* Long equations scroll rather than forcing the page sideways on a phone. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.35rem;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 180ms ease-out;
+}
