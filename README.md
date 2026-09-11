@@ -18,7 +18,7 @@ Built around three ideas:
 |---|---|
 | **Specification map** | 19 topics, 89 spec points across Pure, Statistics and Mechanics, with exam guidance on each |
 | **Formula reference** | Split by whether a formula is **given in the exam booklet** or must be **memorised** — press <kbd>f</kbd> anywhere |
-| **Question bank** | Parameterised templates generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
+| **Question bank** | 52 parameterised templates across all 19 topics, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
 | **Interactives** | Graph transformations and the derivative-as-gradient, where seeing it move beats reading about it |
 | **Spaced repetition** | Every spec point is scheduled to come back before it is forgotten |
 
@@ -127,10 +127,30 @@ parses.
 
 ## Scope
 
-The specification map and formula reference are **complete**. The question bank
-is **partial** and is being built out topic by topic, starting with Year 1 Pure.
-Every topic page states plainly whether it can be practised yet — coverage is
-never overstated.
+Being precise about this, because a revision tool that overstates its coverage
+is worse than one that admits its gaps.
+
+**Complete:**
+
+- The specification map — all 19 topics and 89 spec points, each with exam
+  guidance.
+- The formula reference — every formula from the specification appendix and
+  the A Level section of the exam booklet, correctly attributed to one list or
+  the other.
+- The exam guide — papers, assessment objectives, mark scheme codes, the large
+  data set, calculator requirements.
+
+**Partial:**
+
+- The question bank. 52 templates covering all 19 topics and roughly a third of
+  the 89 spec points, weighted towards Year 1 Pure. Depth varies: Algebra and
+  functions has eleven question types, Moments has one.
+- Interactives. Two so far, on graph transformations and the derivative as a
+  gradient — the two places where watching it move genuinely beats reading
+  about it.
+
+Every topic page states plainly whether a spec point can be practised yet, and
+the dashboard only offers topics that actually have questions.
 
 ---
 
