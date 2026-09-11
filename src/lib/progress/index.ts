@@ -33,9 +33,11 @@ async function resolveStore(): Promise<ProgressStore> {
 
   try {
     const { data } = await client.auth.getUser();
-    // No session. The Proxy normally redirects before this is reached, so this
-    // is a fallback rather than a route students take.
-    if (!data.user) return createLocalStore();
+    // No session, or an anonymous one left over from the earlier build — see
+    // the note in src/proxy.ts. Neither should write to a real account's rows.
+    // The Proxy normally redirects before this is reached, so this is a
+    // fallback rather than a route students take.
+    if (!data.user || data.user.is_anonymous) return createLocalStore();
     return createSupabaseStore(client, data.user.id);
   } catch (error) {
     // Never let a backend problem interrupt a session in progress.
