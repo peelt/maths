@@ -368,7 +368,6 @@ export function evaluate(node: Node, scope: Record<string, number> = {}): number
           return Math.pow(l, r);
       }
     }
-    // eslint-disable-next-line no-fallthrough
     case "call":
       return FUNCTIONS[node.name](evaluate(node.arg, scope));
   }

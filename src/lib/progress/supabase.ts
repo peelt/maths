@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ReviewState } from "@/lib/scheduling";
-import { emptyStreak, type Attempt, type ProgressStore, type SessionSummary, type Streak } from "./types";
+import { emptyStreak, type Attempt, type ProgressStore, type SessionSummary } from "./types";
 
 /**
  * Supabase-backed progress.

@@ -98,7 +98,6 @@ describe("question bank coverage", () => {
     const covered = new Set(questionTemplates.map((t) => `${t.paper}:${t.specCode}`));
     const total = allSpecPoints.length;
     // Not a pass/fail target — this is a visible record of where the bank is.
-    // eslint-disable-next-line no-console
     console.log(`Question coverage: ${covered.size} of ${total} spec points across ${allTopics.length} topics`);
     expect(covered.size).toBeGreaterThan(0);
   });
