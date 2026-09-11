@@ -96,3 +96,10 @@ test("the page does not scroll sideways on a phone", async ({ page }) => {
   );
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test("says where progress is being saved", async ({ page }) => {
+  // With no Supabase configured — which is how the e2e suite runs — the site
+  // must say plainly that progress is local, rather than implying it syncs.
+  await page.goto("/");
+  await expect(page.getByText("Progress is saved on this device.")).toBeVisible();
+});

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { FormulaSheet } from "./FormulaSheet";
+import { StorageStatus } from "./StorageStatus";
 
 const NAV = [
   { href: "/", label: "Today" },
@@ -88,6 +89,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
             This is an independent revision tool and is not affiliated with or endorsed by Pearson.
             Always check the current specification and your teacher&rsquo;s guidance.
           </p>
+          <StorageStatus />
         </div>
       </footer>
 
