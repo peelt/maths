@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { FormulaSheet } from "./FormulaSheet";
-import { StorageStatus } from "./StorageStatus";
+import { AccountStatus } from "./AccountStatus";
 
 const NAV = [
   { href: "/", label: "Today" },
   { href: "/topics", label: "Topics" },
+  { href: "/progress", label: "Progress" },
   { href: "/exam", label: "The exam" },
 ];
 
@@ -40,13 +41,19 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
           <Link href="/" className="font-bold tracking-tight">
             A Level Maths
             <span className="ml-2 hidden text-xs font-medium text-muted sm:inline">Edexcel 9MA0</span>
           </Link>
 
-          <nav className="flex items-center gap-1" aria-label="Main">
+          {/* On a phone the nav drops to its own full-width row, and scrolls
+              within itself if the labels still do not fit. Either way the page
+              body never scrolls sideways. */}
+          <nav
+            className="-mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0"
+            aria-label="Main"
+          >
             {NAV.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
@@ -54,7 +61,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-md px-2.5 py-1.5 text-sm transition-colors ${
+                  className={`shrink-0 whitespace-nowrap rounded-md px-2 py-1.5 text-xs transition-colors sm:px-2.5 sm:text-sm ${
                     active ? "bg-surface-2 font-semibold text-text" : "text-muted hover:text-text"
                   }`}
                 >
@@ -64,7 +71,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
             })}
             <button
               onClick={() => setSheetOpen(true)}
-              className="ml-1 inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
+              className="ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs text-muted transition-colors hover:bg-surface-2 hover:text-text sm:ml-1 sm:px-2.5 sm:text-sm"
               aria-haspopup="dialog"
             >
               Formulae
@@ -89,7 +96,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
             This is an independent revision tool and is not affiliated with or endorsed by Pearson.
             Always check the current specification and your teacher&rsquo;s guidance.
           </p>
-          <StorageStatus />
+          <AccountStatus />
         </div>
       </footer>
 

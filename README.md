@@ -21,6 +21,8 @@ Built around three ideas:
 | **Question bank** | 52 parameterised templates across all 19 topics, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
 | **Interactives** | Graph transformations and the derivative-as-gradient, where seeing it move beats reading about it |
 | **Spaced repetition** | Every spec point is scheduled to come back before it is forgotten |
+| **Progress history** | What you have covered, per-topic accuracy and mastery, and the spec points worth going back to |
+| **Sign-in** | Magic link — an email address, no password |
 
 ### The given-versus-memorised split
 
@@ -42,7 +44,9 @@ npm install
 npm run dev
 ```
 
-It works immediately with no backend: progress is saved in the browser.
+With no Supabase configured it runs **open**, with progress saved in the
+browser — which is how development and the test suite run, with no secrets.
+Configure Supabase and sign-in becomes required.
 
 | Command | What it does |
 |---|---|
@@ -60,15 +64,42 @@ It works immediately with no backend: progress is saved in the browser.
 2. Add the two environment variables below.
 3. Add your domain and point its DNS at Vercel.
 
-### Supabase (optional — enables progress syncing across devices)
+### Supabase and email
 
-Without these variables the site falls back to browser storage and everything
-still works. With them, progress follows the student between phone and laptop.
+Students sign in with a **magic link**: they type an email address, click the
+link that arrives, and they are in. No password is ever created.
 
-1. Create a Supabase project. Choose a region near your users.
-2. Run `supabase/migrations/0001_initial_schema.sql` in the SQL editor.
-3. Enable **anonymous sign-ins** under Authentication → Providers.
-4. Set these in Vercel:
+1. Create a Supabase project and run `supabase/migrations/0001_initial_schema.sql`
+   in the SQL editor.
+2. **Authentication → Emails → SMTP Settings.** Custom SMTP is **required**, not
+   optional: Supabase's built-in sender is capped at **2 emails per hour**, which
+   is unusable with more than one student. For Postmark:
+
+   | Field | Value |
+   |---|---|
+   | Host | `smtp.postmarkapp.com` (transactional, *not* `smtp-broadcasts`) |
+   | Port | `587` |
+   | Username | Postmark Server API Token |
+   | Password | the same token |
+   | Sender | an address on a verified Sender Signature |
+
+3. **Authentication → Rate Limits.** Raise the email cap; the 2/hour limit stays
+   in force until you do, whatever your SMTP provider can handle.
+4. **Authentication → URL Configuration.** Set the Site URL and add redirect URLs
+   for every domain the site runs on.
+5. **Edit the magic link email template** to point at:
+
+   ```
+   /auth/confirm?token_hash={{ .TokenHash }}&type=email
+   ```
+
+   This matters. The default flow is PKCE, which keeps a code verifier in the
+   browser that requested the link — so the link only works in *that* browser. A
+   student who asks for a link on a laptop and opens the email on their phone
+   would get an error. The token-hash flow carries no browser-bound state and
+   works wherever the mail is opened.
+
+6. Set these in Vercel, then redeploy — they are inlined at build time:
 
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
@@ -76,14 +107,13 @@ still works. With them, progress follows the student between phone and laptop.
    ```
 
 **On keys.** The anon key is designed to be public and to sit in the browser;
-row level security is what actually protects the data. The **service role key
-is never needed by this app** — do not add it to Vercel, the repository, or
+row level security is what actually protects the data. The **service role key is
+never needed by this app** — do not add it to Vercel, the repository, or
 anywhere else. If something appears to need it, that is a bug.
 
-**On sign-in.** There is none. Supabase anonymous auth creates a real auth
-identity silently, which is what makes row level security meaningful — without
-it every row would have to be world-readable. The student opens the site and
-starts working.
+**On data.** Only an email address and progress are stored. There is a
+`/privacy` page saying so in plain English, and a self-service delete in the
+footer of every page.
 
 ## How it is put together
 
@@ -95,6 +125,8 @@ src/lib/marking/       expression parser, evaluator, equivalence, marking
 src/lib/questions/     seeded generation and practice set building
 src/lib/scheduling/    spaced repetition
 src/lib/progress/      ProgressStore, with local and Supabase adapters
+src/lib/supabase/      browser and server clients, shared config
+src/proxy.ts           session refresh and route protection (Next 16 "Proxy")
 supabase/migrations/   schema and row level security
 ```
 

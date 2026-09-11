@@ -101,5 +101,53 @@ test("says where progress is being saved", async ({ page }) => {
   // With no Supabase configured — which is how the e2e suite runs — the site
   // must say plainly that progress is local, rather than implying it syncs.
   await page.goto("/");
-  await expect(page.getByText("Progress is saved on this device.")).toBeVisible();
+  await expect(page.getByText(/Progress is saved in this browser/)).toBeVisible();
+});
+
+test("stays open when no backend is configured", async ({ page }) => {
+  // Sign-in is required in production, but the site must remain usable with no
+  // Supabase configured — otherwise development and this very suite need
+  // secrets, and a backend outage would take the whole site down in CI.
+  await page.goto("/practice/algebra-and-functions");
+  await expect(page).toHaveURL(/\/practice\/algebra-and-functions/);
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+});
+
+test("the sign-in page asks for an email and nothing else", async ({ page }) => {
+  await page.goto("/signin");
+  await expect(page.getByLabel("Your email address")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Email me a link/ })).toBeVisible();
+  // No password field anywhere — that is the point of magic link.
+  await expect(page.locator('input[type="password"]')).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /What we store/ }).first()).toBeVisible();
+});
+
+test("explains what is stored and how to delete it", async ({ page }) => {
+  await page.goto("/privacy");
+  await expect(page.getByRole("heading", { name: "What we store", level: 1 })).toBeVisible();
+  await expect(page.getByText(/Delete my data/)).toBeVisible();
+});
+
+test("the progress page invites you to start when there is no history", async ({ page }) => {
+  await page.goto("/progress");
+  await expect(page.getByRole("heading", { name: "Your progress" })).toBeVisible();
+  await expect(page.getByText(/Nothing here yet/)).toBeVisible();
+});
+
+test("the progress page reports what you have done", async ({ page }) => {
+  // Answer one question, then confirm it is reflected in the history.
+  await page.goto("/practice/algebra-and-functions");
+  const input = page.getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) {
+    await input.fill("1");
+    await page.getByRole("button", { name: "Check" }).click();
+  } else {
+    await page.locator("fieldset button").first().click();
+    await page.getByRole("button", { name: "Check" }).click();
+  }
+  await expect(page.getByRole("button", { name: /Next question|Finish/ })).toBeVisible();
+
+  await page.goto("/progress");
+  await expect(page.getByText("Questions answered")).toBeVisible();
+  await expect(page.getByText("By topic")).toBeVisible();
 });

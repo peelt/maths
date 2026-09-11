@@ -1,4 +1,4 @@
-import { getSupabaseClient, ensureAnonymousUser, supabaseConfigured } from "@/lib/supabase/client";
+import { getSupabaseClient, supabaseConfigured } from "@/lib/supabase/client";
 import { createLocalStore } from "./local";
 import { createSupabaseStore } from "./supabase";
 import type { ProgressStore } from "./types";
@@ -13,8 +13,12 @@ let cached: Promise<ProgressStore> | null = null;
 /**
  * The store the app should use.
  *
- * Supabase when it is configured and reachable, browser storage otherwise.
- * Resolution is cached so the anonymous sign-in only happens once per load.
+ * Supabase when there is a signed-in session; browser storage only when
+ * Supabase is not configured at all, which is how development and the
+ * end-to-end suite run without secrets.
+ *
+ * Resolution is cached, so sign-in and sign-out must clear it —
+ * `resetProgressStoreCache()` is called from the auth helpers.
  */
 export function getProgressStore(): Promise<ProgressStore> {
   cached ??= resolveStore();
@@ -28,17 +32,19 @@ async function resolveStore(): Promise<ProgressStore> {
   if (!client) return createLocalStore();
 
   try {
-    const userId = await ensureAnonymousUser(client);
-    if (!userId) return createLocalStore();
-    return createSupabaseStore(client, userId);
+    const { data } = await client.auth.getUser();
+    // No session. The Proxy normally redirects before this is reached, so this
+    // is a fallback rather than a route students take.
+    if (!data.user) return createLocalStore();
+    return createSupabaseStore(client, data.user.id);
   } catch (error) {
-    // Never let a backend problem stop a revision session.
+    // Never let a backend problem interrupt a session in progress.
     console.warn("Supabase unavailable, using local progress:", error);
     return createLocalStore();
   }
 }
 
-/** Used by tests and by the reset control in settings. */
+/** Clear the resolved store. Called on sign-in and sign-out. */
 export function resetProgressStoreCache(): void {
   cached = null;
 }
