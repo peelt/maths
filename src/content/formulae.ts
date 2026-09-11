@@ -1,0 +1,591 @@
+/**
+ * The formula reference.
+ *
+ * Split by whether a formula is PROVIDED in the exam, or must be RECALLED.
+ *
+ *  - "memorise" entries come from Appendix 1 of the 9MA0 specification, which
+ *    lists formulae students are expected to know and which are explicitly
+ *    stated NOT to appear in the exam booklet.
+ *  - "booklet" entries come from the A Level Mathematics section (pages 5-8) of
+ *    Pearson's "Mathematical formulae and statistical tables", the booklet
+ *    issued in the exam room.
+ *
+ * The split is the point of this feature. Some pairings are genuinely
+ * surprising and cost marks every year: compound angle formulae are given but
+ * double angle formulae are not; the quotient rule is given but the product
+ * and chain rules are not.
+ */
+
+export type FormulaSource = "memorise" | "booklet";
+export type FormulaArea = "pure" | "statistics" | "mechanics";
+
+export interface Formula {
+  id: string;
+  name: string;
+  /** KaTeX source. */
+  latex: string;
+  source: FormulaSource;
+  area: FormulaArea;
+  /** Heading this formula sits under, e.g. "Logarithms". */
+  group: string;
+  /** Why it matters, or the trap attached to it. */
+  note?: string;
+  keywords: string[];
+}
+
+export const formulae: Formula[] = [
+  // ---------------------------------------------------------------- memorise
+  {
+    id: "quadratic-formula",
+    name: "Quadratic formula",
+    latex: "ax^2+bx+c=0 \\implies x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
+    source: "memorise",
+    area: "pure",
+    group: "Algebra",
+    note: "The discriminant b^2-4ac alone tells you how many real roots there are, without solving.",
+    keywords: ["quadratic", "formula", "discriminant", "roots"],
+  },
+  {
+    id: "indices",
+    name: "Laws of indices",
+    latex: "a^x a^y=a^{x+y}\\qquad \\frac{a^x}{a^y}=a^{x-y}\\qquad (a^x)^y=a^{xy}",
+    source: "memorise",
+    area: "pure",
+    group: "Algebra",
+    keywords: ["indices", "powers", "exponents"],
+  },
+  {
+    id: "log-laws",
+    name: "Laws of logarithms",
+    latex:
+      "\\log_a x+\\log_a y=\\log_a(xy)\\qquad \\log_a x-\\log_a y=\\log_a\\!\\left(\\tfrac{x}{y}\\right)\\qquad k\\log_a x=\\log_a x^k",
+    source: "memorise",
+    area: "pure",
+    group: "Logarithms",
+    note: "The power law is the one that does the work — it brings an unknown exponent down where you can solve for it.",
+    keywords: ["logarithm", "log laws", "product", "quotient", "power"],
+  },
+  {
+    id: "log-definition",
+    name: "Definition of a logarithm",
+    latex: "\\log_a x=n \\iff x=a^n \\quad (a>0,\\ x>0)",
+    source: "memorise",
+    area: "pure",
+    group: "Logarithms",
+    keywords: ["logarithm", "definition", "inverse"],
+  },
+  {
+    id: "straight-line",
+    name: "Equation of a straight line",
+    latex: "y-y_1=m(x-x_1)",
+    source: "memorise",
+    area: "pure",
+    group: "Coordinate geometry",
+    keywords: ["straight line", "gradient", "point"],
+  },
+  {
+    id: "perpendicular-gradients",
+    name: "Perpendicular gradients",
+    latex: "m_1m_2=-1",
+    source: "memorise",
+    area: "pure",
+    group: "Coordinate geometry",
+    note: "Needed in every tangent-and-normal question, and in most circle questions.",
+    keywords: ["perpendicular", "gradient", "normal", "negative reciprocal"],
+  },
+  {
+    id: "ap-nth-term",
+    name: "Arithmetic sequence: nth term",
+    latex: "u_n=a+(n-1)d",
+    source: "memorise",
+    area: "pure",
+    group: "Sequences and series",
+    note: "The nth term must be recalled; the SUM formula is given in the booklet.",
+    keywords: ["arithmetic", "nth term", "progression", "AP"],
+  },
+  {
+    id: "gp-nth-term",
+    name: "Geometric sequence: nth term",
+    latex: "u_n=ar^{\\,n-1}",
+    source: "memorise",
+    area: "pure",
+    group: "Sequences and series",
+    note: "As with arithmetic sequences, the nth term is recalled but the sum is given.",
+    keywords: ["geometric", "nth term", "progression", "GP", "common ratio"],
+  },
+  {
+    id: "sine-rule",
+    name: "Sine rule",
+    latex: "\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}",
+    source: "memorise",
+    area: "pure",
+    group: "Triangles",
+    note: "Watch the ambiguous case — an obtuse angle may also satisfy the equation.",
+    keywords: ["sine rule", "triangle", "ambiguous"],
+  },
+  {
+    id: "cosine-rule",
+    name: "Cosine rule",
+    latex: "a^2=b^2+c^2-2bc\\cos A",
+    source: "memorise",
+    area: "pure",
+    group: "Triangles",
+    keywords: ["cosine rule", "triangle"],
+  },
+  {
+    id: "triangle-area",
+    name: "Area of a triangle",
+    latex: "\\text{Area}=\\tfrac{1}{2}ab\\sin C",
+    source: "memorise",
+    area: "pure",
+    group: "Triangles",
+    keywords: ["area", "triangle", "sine"],
+  },
+  {
+    id: "pythagorean-identity",
+    name: "Pythagorean identity",
+    latex: "\\cos^2A+\\sin^2A\\equiv 1",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    note: "Divide through by cos^2 A or sin^2 A to derive the other two — safer than memorising them separately.",
+    keywords: ["pythagorean", "identity", "sin squared", "cos squared"],
+  },
+  {
+    id: "sec-identity",
+    name: "Secant identity",
+    latex: "\\sec^2A\\equiv 1+\\tan^2A",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    keywords: ["sec", "secant", "tan", "identity"],
+  },
+  {
+    id: "cosec-identity",
+    name: "Cosecant identity",
+    latex: "\\operatorname{cosec}^2A\\equiv 1+\\cot^2A",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    keywords: ["cosec", "cosecant", "cot", "identity"],
+  },
+  {
+    id: "double-angle-sin",
+    name: "Double angle: sine",
+    latex: "\\sin 2A\\equiv 2\\sin A\\cos A",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    note: "Double angle formulae are NOT in the booklet, even though compound angle formulae are. This catches people out every year.",
+    keywords: ["double angle", "sin 2A"],
+  },
+  {
+    id: "double-angle-cos",
+    name: "Double angle: cosine",
+    latex: "\\cos 2A\\equiv \\cos^2A-\\sin^2A",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    note: "Combine with the Pythagorean identity to get the two other forms, 2cos^2 A - 1 and 1 - 2sin^2 A — the ones you need to integrate sin^2 and cos^2.",
+    keywords: ["double angle", "cos 2A"],
+  },
+  {
+    id: "double-angle-tan",
+    name: "Double angle: tangent",
+    latex: "\\tan 2A\\equiv \\frac{2\\tan A}{1-\\tan^2A}",
+    source: "memorise",
+    area: "pure",
+    group: "Trigonometric identities",
+    keywords: ["double angle", "tan 2A"],
+  },
+  {
+    id: "arc-length",
+    name: "Arc length",
+    latex: "s=r\\theta",
+    source: "memorise",
+    area: "pure",
+    group: "Mensuration",
+    note: "Radians only.",
+    keywords: ["arc", "length", "radians", "sector"],
+  },
+  {
+    id: "sector-area",
+    name: "Area of a sector",
+    latex: "A=\\tfrac{1}{2}r^2\\theta",
+    source: "memorise",
+    area: "pure",
+    group: "Mensuration",
+    note: "Radians only.",
+    keywords: ["sector", "area", "radians"],
+  },
+  {
+    id: "circle-mensuration",
+    name: "Circle: circumference and area",
+    latex: "C=2\\pi r=\\pi d\\qquad A=\\pi r^2",
+    source: "memorise",
+    area: "pure",
+    group: "Mensuration",
+    keywords: ["circle", "circumference", "area"],
+  },
+  {
+    id: "trapezium-area",
+    name: "Area of a trapezium",
+    latex: "A=\\tfrac{1}{2}(a+b)h",
+    source: "memorise",
+    area: "pure",
+    group: "Mensuration",
+    keywords: ["trapezium", "area"],
+  },
+  {
+    id: "diff-standard",
+    name: "Standard derivatives",
+    latex:
+      "\\frac{d}{dx}x^n=nx^{n-1}\\qquad \\frac{d}{dx}\\sin kx=k\\cos kx\\qquad \\frac{d}{dx}\\cos kx=-k\\sin kx",
+    source: "memorise",
+    area: "pure",
+    group: "Differentiation",
+    keywords: ["derivative", "differentiate", "standard", "power rule"],
+  },
+  {
+    id: "diff-exp-ln",
+    name: "Derivatives of e^kx and ln x",
+    latex: "\\frac{d}{dx}e^{kx}=ke^{kx}\\qquad \\frac{d}{dx}\\ln x=\\frac{1}{x}",
+    source: "memorise",
+    area: "pure",
+    group: "Differentiation",
+    keywords: ["exponential", "ln", "derivative"],
+  },
+  {
+    id: "product-rule",
+    name: "Product rule",
+    latex: "\\frac{d}{dx}\\big[f(x)g(x)\\big]=f'(x)g(x)+f(x)g'(x)",
+    source: "memorise",
+    area: "pure",
+    group: "Differentiation",
+    note: "Must be recalled — even though the QUOTIENT rule is printed in the booklet.",
+    keywords: ["product rule", "differentiate"],
+  },
+  {
+    id: "chain-rule",
+    name: "Chain rule",
+    latex: "\\frac{d}{dx}f\\big(g(x)\\big)=f'\\big(g(x)\\big)g'(x)",
+    source: "memorise",
+    area: "pure",
+    group: "Differentiation",
+    note: "Also recalled, not given.",
+    keywords: ["chain rule", "composite", "differentiate"],
+  },
+  {
+    id: "int-standard",
+    name: "Standard integrals",
+    latex:
+      "\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+c\\ (n\\neq-1)\\qquad \\int \\frac{1}{x}\\,dx=\\ln|x|+c",
+    source: "memorise",
+    area: "pure",
+    group: "Integration",
+    note: "The n = -1 exclusion is why the logarithm case exists at all.",
+    keywords: ["integral", "integrate", "power", "ln"],
+  },
+  {
+    id: "int-trig-exp",
+    name: "Integrals of sin, cos and e^kx",
+    latex:
+      "\\int\\!\\cos kx\\,dx=\\tfrac{1}{k}\\sin kx+c\\quad \\int\\!\\sin kx\\,dx=-\\tfrac{1}{k}\\cos kx+c\\quad \\int\\! e^{kx}dx=\\tfrac{1}{k}e^{kx}+c",
+    source: "memorise",
+    area: "pure",
+    group: "Integration",
+    keywords: ["integral", "sin", "cos", "exponential"],
+  },
+  {
+    id: "vector-magnitude",
+    name: "Magnitude of a vector",
+    latex: "|x\\mathbf{i}+y\\mathbf{j}+z\\mathbf{k}|=\\sqrt{x^2+y^2+z^2}",
+    source: "memorise",
+    area: "pure",
+    group: "Vectors",
+    keywords: ["magnitude", "modulus", "vector", "3D"],
+  },
+  {
+    id: "mean",
+    name: "Mean of a set of data",
+    latex: "\\bar{x}=\\frac{\\sum x}{n}=\\frac{\\sum fx}{\\sum f}",
+    source: "memorise",
+    area: "statistics",
+    group: "Averages",
+    keywords: ["mean", "average", "frequency"],
+  },
+  {
+    id: "standardising",
+    name: "Standardising a normal variable",
+    latex: "X\\sim N(\\mu,\\sigma^2)\\implies Z=\\frac{X-\\mu}{\\sigma}\\sim N(0,1)",
+    source: "memorise",
+    area: "statistics",
+    group: "Normal distribution",
+    keywords: ["standardise", "z score", "normal"],
+  },
+  {
+    id: "weight",
+    name: "Weight",
+    latex: "W=mg",
+    source: "memorise",
+    area: "mechanics",
+    group: "Forces",
+    note: "Mass and weight are different quantities in different units — examiners penalise confusing them.",
+    keywords: ["weight", "mass", "gravity"],
+  },
+  {
+    id: "friction",
+    name: "Friction",
+    latex: "F\\leqslant \\mu R",
+    source: "memorise",
+    area: "mechanics",
+    group: "Forces",
+    note: "Equality only when the body is moving or on the point of moving. In equilibrium it is an inequality — using equality there is the classic trap.",
+    keywords: ["friction", "coefficient", "limiting", "rough"],
+  },
+  {
+    id: "newton-second-law",
+    name: "Newton's second law",
+    latex: "F=ma",
+    source: "memorise",
+    area: "mechanics",
+    group: "Forces",
+    keywords: ["newton", "second law", "force", "acceleration"],
+  },
+  {
+    id: "variable-acceleration",
+    name: "Kinematics with variable acceleration",
+    latex:
+      "\\mathbf{v}=\\frac{d\\mathbf{r}}{dt}\\qquad \\mathbf{a}=\\frac{d\\mathbf{v}}{dt}=\\frac{d^2\\mathbf{r}}{dt^2}\\qquad \\mathbf{r}=\\int\\mathbf{v}\\,dt\\qquad \\mathbf{v}=\\int\\mathbf{a}\\,dt",
+    source: "memorise",
+    area: "mechanics",
+    group: "Kinematics",
+    note: "Use these the moment acceleration depends on time — the constant acceleration formulae are then invalid.",
+    keywords: ["variable acceleration", "calculus", "kinematics", "differentiate", "integrate"],
+  },
+
+  // ----------------------------------------------------------------- booklet
+  {
+    id: "ap-sum",
+    name: "Arithmetic series: sum",
+    latex: "S_n=\\tfrac{1}{2}n(a+l)=\\tfrac{1}{2}n\\big[2a+(n-1)d\\big]",
+    source: "booklet",
+    area: "pure",
+    group: "Sequences and series",
+    note: "Given — but the spec still says you should be able to PROVE it, by the reverse-and-add argument.",
+    keywords: ["arithmetic", "sum", "series", "AP"],
+  },
+  {
+    id: "gp-sum",
+    name: "Geometric series: sum",
+    latex: "S_n=\\frac{a(1-r^n)}{1-r}\\qquad S_\\infty=\\frac{a}{1-r}\\ \\ (|r|<1)",
+    source: "booklet",
+    area: "pure",
+    group: "Sequences and series",
+    note: "Given — but again the proof is examinable, and you must state |r| < 1 when using the sum to infinity.",
+    keywords: ["geometric", "sum", "infinity", "convergent"],
+  },
+  {
+    id: "binomial-series",
+    name: "Binomial series",
+    latex:
+      "(a+b)^n=a^n+\\binom{n}{1}a^{n-1}b+\\binom{n}{2}a^{n-2}b^2+\\cdots+b^n",
+    source: "booklet",
+    area: "pure",
+    group: "Sequences and series",
+    keywords: ["binomial", "expansion", "ncr"],
+  },
+  {
+    id: "binomial-rational",
+    name: "Binomial expansion for rational n",
+    latex:
+      "(1+x)^n=1+nx+\\frac{n(n-1)}{2!}x^2+\\cdots\\qquad (|x|<1)",
+    source: "booklet",
+    area: "pure",
+    group: "Sequences and series",
+    note: "The validity condition is printed here — so there is no excuse for omitting it, and it is a mark.",
+    keywords: ["binomial", "rational", "validity", "expansion"],
+  },
+  {
+    id: "change-of-base",
+    name: "Change of base",
+    latex: "\\log_a x=\\frac{\\log_b x}{\\log_b a}",
+    source: "booklet",
+    area: "pure",
+    group: "Logarithms",
+    keywords: ["change of base", "logarithm"],
+  },
+  {
+    id: "compound-angle",
+    name: "Compound angle formulae",
+    latex:
+      "\\sin(A\\pm B)=\\sin A\\cos B\\pm\\cos A\\sin B\\qquad \\cos(A\\pm B)=\\cos A\\cos B\\mp\\sin A\\sin B",
+    source: "booklet",
+    area: "pure",
+    group: "Trigonometric identities",
+    note: "Given — but the DOUBLE angle formulae are not, even though they follow from these by setting B = A.",
+    keywords: ["compound angle", "addition formulae", "sin", "cos"],
+  },
+  {
+    id: "compound-angle-tan",
+    name: "Compound angle: tangent",
+    latex: "\\tan(A\\pm B)=\\frac{\\tan A\\pm\\tan B}{1\\mp\\tan A\\tan B}",
+    source: "booklet",
+    area: "pure",
+    group: "Trigonometric identities",
+    keywords: ["compound angle", "tan"],
+  },
+  {
+    id: "small-angle",
+    name: "Small angle approximations",
+    latex: "\\sin\\theta\\approx\\theta\\qquad \\cos\\theta\\approx1-\\tfrac{\\theta^2}{2}\\qquad \\tan\\theta\\approx\\theta",
+    source: "booklet",
+    area: "pure",
+    group: "Trigonometric identities",
+    note: "Radians only — the booklet says so explicitly.",
+    keywords: ["small angle", "approximation", "radians"],
+  },
+  {
+    id: "first-principles",
+    name: "Differentiation from first principles",
+    latex: "f'(x)=\\lim_{h\\to 0}\\frac{f(x+h)-f(x)}{h}",
+    source: "booklet",
+    area: "pure",
+    group: "Differentiation",
+    note: "The definition is given, but you must still produce the full argument — quoting it is not the same as using it.",
+    keywords: ["first principles", "limit", "definition", "derivative"],
+  },
+  {
+    id: "quotient-rule",
+    name: "Quotient rule",
+    latex: "\\frac{d}{dx}\\!\\left(\\frac{u}{v}\\right)=\\frac{v\\frac{du}{dx}-u\\frac{dv}{dx}}{v^2}",
+    source: "booklet",
+    area: "pure",
+    group: "Differentiation",
+    note: "Given — unlike the product and chain rules, which are not.",
+    keywords: ["quotient rule", "differentiate"],
+  },
+  {
+    id: "diff-reciprocal-trig",
+    name: "Derivatives of tan, sec, cot and cosec",
+    latex:
+      "\\tfrac{d}{dx}\\tan kx=k\\sec^2kx\\quad \\tfrac{d}{dx}\\sec kx=k\\sec kx\\tan kx\\quad \\tfrac{d}{dx}\\cot kx=-k\\operatorname{cosec}^2kx",
+    source: "booklet",
+    area: "pure",
+    group: "Differentiation",
+    keywords: ["tan", "sec", "cot", "cosec", "derivative"],
+  },
+  {
+    id: "integration-by-parts",
+    name: "Integration by parts",
+    latex: "\\int u\\frac{dv}{dx}\\,dx=uv-\\int v\\frac{du}{dx}\\,dx",
+    source: "booklet",
+    area: "pure",
+    group: "Integration",
+    note: "Choosing u is the skill, and it is not in the booklet: pick the part that gets simpler when differentiated.",
+    keywords: ["by parts", "integration"],
+  },
+  {
+    id: "int-reciprocal-trig",
+    name: "Integrals of sec^2, tan, cot, cosec and sec",
+    latex:
+      "\\int\\sec^2kx\\,dx=\\tfrac{1}{k}\\tan kx\\qquad \\int\\tan kx\\,dx=\\tfrac{1}{k}\\ln|\\sec kx|",
+    source: "booklet",
+    area: "pure",
+    group: "Integration",
+    keywords: ["sec squared", "tan", "cot", "cosec", "integral"],
+  },
+  {
+    id: "trapezium-rule",
+    name: "The trapezium rule",
+    latex:
+      "\\int_a^b y\\,dx\\approx\\tfrac{1}{2}h\\big\\{(y_0+y_n)+2(y_1+y_2+\\cdots+y_{n-1})\\big\\},\\quad h=\\frac{b-a}{n}",
+    source: "booklet",
+    area: "pure",
+    group: "Numerical methods",
+    note: "n strips means n + 1 ordinates — the most common counting error in the topic.",
+    keywords: ["trapezium", "numerical integration", "ordinates", "strips"],
+  },
+  {
+    id: "newton-raphson",
+    name: "Newton-Raphson iteration",
+    latex: "x_{n+1}=x_n-\\frac{f(x_n)}{f'(x_n)}",
+    source: "booklet",
+    area: "pure",
+    group: "Numerical methods",
+    note: "Given — but the geometric understanding, and why it fails when the gradient is near zero, is what is examined.",
+    keywords: ["newton raphson", "iteration", "root"],
+  },
+  {
+    id: "prob-union",
+    name: "Addition rule",
+    latex: "P(A\\cup B)=P(A)+P(B)-P(A\\cap B)",
+    source: "booklet",
+    area: "statistics",
+    group: "Probability",
+    keywords: ["union", "addition", "or"],
+  },
+  {
+    id: "prob-conditional",
+    name: "Conditional probability",
+    latex: "P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}\\qquad P(A\\cap B)=P(A)P(B\\mid A)",
+    source: "booklet",
+    area: "statistics",
+    group: "Probability",
+    note: "Given — the marks are for identifying which event is the condition, not for quoting this.",
+    keywords: ["conditional", "given that", "intersection"],
+  },
+  {
+    id: "sxx",
+    name: "Sum of squares and standard deviation",
+    latex:
+      "S_{xx}=\\sum(x_i-\\bar{x})^2=\\sum x_i^2-\\frac{(\\sum x_i)^2}{n}\\qquad \\sigma=\\sqrt{\\frac{S_{xx}}{n}}",
+    source: "booklet",
+    area: "statistics",
+    group: "Measures of spread",
+    keywords: ["standard deviation", "variance", "Sxx", "summary statistics"],
+  },
+  {
+    id: "binomial-distribution",
+    name: "Binomial distribution",
+    latex:
+      "P(X=x)=\\binom{n}{x}p^x(1-p)^{n-x}\\qquad \\text{mean}=np\\qquad \\text{variance}=np(1-p)",
+    source: "booklet",
+    area: "statistics",
+    group: "Distributions",
+    keywords: ["binomial", "distribution", "mean", "variance"],
+  },
+  {
+    id: "sampling-distribution",
+    name: "Distribution of the sample mean",
+    latex: "\\bar{X}\\sim N\\!\\left(\\mu,\\frac{\\sigma^2}{n}\\right)\\implies \\frac{\\bar{X}-\\mu}{\\sigma/\\sqrt{n}}\\sim N(0,1)",
+    source: "booklet",
+    area: "statistics",
+    group: "Distributions",
+    note: "The variance is divided by n — forgetting that is the standard error in hypothesis tests for a mean.",
+    keywords: ["sample mean", "sampling distribution", "standard error"],
+  },
+  {
+    id: "suvat",
+    name: "Constant acceleration formulae",
+    latex:
+      "v=u+at\\qquad s=ut+\\tfrac{1}{2}at^2\\qquad s=vt-\\tfrac{1}{2}at^2\\qquad v^2=u^2+2as\\qquad s=\\tfrac{1}{2}(u+v)t",
+    source: "booklet",
+    area: "mechanics",
+    group: "Kinematics",
+    note: "Given — but the spec requires you to be able to DERIVE them from the velocity-time graph, and they only apply when acceleration is constant.",
+    keywords: ["suvat", "constant acceleration", "kinematics", "equations of motion"],
+  },
+];
+
+export const formulaGroups = [...new Set(formulae.map((f) => f.group))];
+
+export function formulaeBySource(source: FormulaSource): Formula[] {
+  return formulae.filter((f) => f.source === source);
+}
+
+export const formulaStats = {
+  total: formulae.length,
+  memorise: formulae.filter((f) => f.source === "memorise").length,
+  booklet: formulae.filter((f) => f.source === "booklet").length,
+};
