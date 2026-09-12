@@ -376,3 +376,67 @@ test("the card is visibly distinct from the canvas in every theme", async ({ pag
     expect(canvas, theme).not.toBe(card);
   }
 });
+
+test("the homepage has exactly one h1, and the figure is decorative", async ({ page }) => {
+  await page.goto("/");
+  // The homepage had no h1 at all before the hero was added.
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator("h1")).toContainText("A Level Maths");
+
+  // The figure repeats nothing a screen reader needs, so it must be hidden.
+  const figures = page.locator("main section svg");
+  const count = await figures.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i++) {
+    await expect(figures.nth(i)).toHaveAttribute("aria-hidden", "true");
+  }
+});
+
+test("every topic on the index has an illustration", async ({ page }) => {
+  await page.goto("/topics");
+  const cards = page.locator("main li");
+  const cardCount = await cards.count();
+  expect(cardCount).toBe(19);
+  // One figure per card, all nineteen.
+  await expect(page.locator("main li svg")).toHaveCount(19);
+});
+
+test("the primary action stays in view on a small phone", async ({ page }) => {
+  // The hero must never push the one primary action below the fold — that is
+  // the whole reason the homepage resolves to a single button. Measured, not
+  // assumed: with the hero above the panel this landed at 738px on a 640px
+  // screen, so on narrow viewports the task comes first.
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto("/");
+  const start = page.getByRole("link", { name: "Start", exact: true });
+  await expect(start).toBeVisible();
+  const box = await start.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y + box!.height).toBeLessThanOrEqual(640);
+});
+
+test("the display control is reachable on a phone without sideways scrolling", async ({ page }) => {
+  // It used to sit inside the nav's horizontal scroller, where it slid off the
+  // edge — hiding the most important accessibility control on the site.
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto("/");
+  const inView = await page.evaluate(() => {
+    const buttons = [...document.querySelectorAll('[aria-label="Display settings"]')];
+    return buttons.some((el) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.left >= -1 && r.right <= window.innerWidth + 1;
+    });
+  });
+  expect(inView).toBe(true);
+});
+
+test("the homepage does not scroll sideways on the narrowest phones", async ({ page }) => {
+  for (const width of [320, 360, 390]) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto("/");
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, `${width}px`).toBeLessThanOrEqual(1);
+  }
+});

@@ -87,7 +87,13 @@ export function AppearanceControls() {
         <span className="hidden sm:inline">Display</span>
       </summary>
 
-      <div className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-border bg-surface p-4 shadow-lg">
+      {/*
+       * hidden/group-open keeps the panel out of the layout while collapsed —
+       * an absolutely positioned child of a closed <details> is still laid
+       * out, which put a 264px box past the right edge of a 360px screen.
+       * The width is capped so it can never exceed a narrow viewport.
+       */}
+      <div className="absolute right-0 z-50 mt-2 hidden w-[min(16rem,calc(100vw-2rem))] rounded-xl border border-border bg-surface p-4 shadow-lg group-open:block">
         <fieldset>
           <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
             Colours

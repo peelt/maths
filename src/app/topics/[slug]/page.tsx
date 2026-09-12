@@ -7,6 +7,7 @@ import { Maths } from "@/components/Maths";
 import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
 import { noteFor } from "@/content/notes";
+import { TopicIllustration } from "@/components/illustration/topics";
 
 export function generateStaticParams() {
   return allTopics.map((topic) => ({ slug: topic.slug }));
@@ -32,7 +33,13 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
         ← All topics
       </Link>
 
-      <PageHeading eyebrow={`Topic ${topic.number}`} title={topic.name} lead={topic.blurb} />
+      <div className="flex items-start justify-between gap-6">
+        <PageHeading eyebrow={`Topic ${topic.number}`} title={topic.name} lead={topic.blurb} />
+        <TopicIllustration
+          slug={topic.slug}
+          className="mt-6 hidden h-20 w-[7.2rem] shrink-0 sm:block"
+        />
+      </div>
 
       <div className="mb-8 flex flex-wrap items-center gap-2">
         <PaperBadge paper={topic.paper} />

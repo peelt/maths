@@ -42,17 +42,44 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
-          <Link href="/" className="font-bold tracking-tight">
+        {/*
+         * Three children, reordered by CSS rather than duplicated.
+         *
+         * On a phone: brand and the controls share the top row, and the nav
+         * links wrap to a full-width row below. The controls are deliberately
+         * NOT in the nav — that row scrolls horizontally, and inside it the
+         * appearance control slid off the edge, hiding the most important
+         * accessibility affordance on the site behind a sideways scroll nobody
+         * would think to try.
+         *
+         * From sm upwards all three sit on one row: brand, nav, controls.
+         *
+         * One instance of each control, not one per breakpoint. Rendering both
+         * and hiding one leaves two elements with the same accessible name,
+         * which is ambiguous to tooling and to tests.
+         */}
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+          <Link href="/" className="order-1 mr-auto min-w-0 truncate font-bold tracking-tight">
             A Level Maths
             <span className="ml-2 hidden text-xs font-medium text-muted sm:inline">Edexcel 9MA0</span>
           </Link>
 
-          {/* On a phone the nav drops to its own full-width row, and scrolls
-              within itself if the labels still do not fit. Either way the page
-              body never scrolls sideways. */}
+          <div className="order-2 flex shrink-0 items-center gap-1 sm:order-3">
+            <button
+              onClick={() => setSheetOpen(true)}
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-2.5 sm:text-sm"
+              aria-haspopup="dialog"
+            >
+              Formulae
+              <kbd className="hidden rounded border border-border bg-surface-2 px-1 text-[10px] font-semibold sm:inline">
+                f
+              </kbd>
+            </button>
+            <AppearanceControls />
+          </div>
+
           <nav
-            className="-mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0"
+            className="order-3 -mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 sm:order-2 sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0"
             aria-label="Main"
           >
             {NAV.map((item) => {
@@ -70,19 +97,6 @@ export function SiteChrome({ children }: { children: ReactNode }) {
                 </Link>
               );
             })}
-            <div className="ml-auto flex shrink-0 items-center gap-1 sm:ml-1">
-              <button
-                onClick={() => setSheetOpen(true)}
-                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-2.5 sm:text-sm"
-                aria-haspopup="dialog"
-              >
-                Formulae
-                <kbd className="hidden rounded border border-border bg-surface-2 px-1 text-[10px] font-semibold sm:inline">
-                  f
-                </kbd>
-              </button>
-              <AppearanceControls />
-            </div>
           </nav>
         </div>
       </header>
