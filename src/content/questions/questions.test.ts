@@ -115,12 +115,23 @@ describe("question bank", () => {
 });
 
 describe("question bank coverage", () => {
-  it("reports honestly which spec points can be practised", () => {
+  it("has at least one question for every spec point", () => {
+    // The scheduler can only ever surface a spec point that has questions, so
+    // an uncovered point is invisible to spaced repetition rather than merely
+    // thin — a student could revise diligently and never be shown it. This is
+    // an assertion rather than a report so that adding a spec point without
+    // questions fails here instead of quietly leaving a hole in the course.
     const covered = new Set(questionTemplates.map((t) => `${t.paper}:${t.specCode}`));
-    const total = allSpecPoints.length;
-    // Not a pass/fail target — this is a visible record of where the bank is.
-    console.log(`Question coverage: ${covered.size} of ${total} spec points across ${allTopics.length} topics`);
-    expect(covered.size).toBeGreaterThan(0);
+    const missing: string[] = [];
+    for (const topic of allTopics) {
+      for (const point of topic.points) {
+        if (!covered.has(`${topic.paper}:${point.code}`)) {
+          missing.push(`${topic.paper}:${point.code} (${point.title})`);
+        }
+      }
+    }
+    expect(missing, `spec points with no practice: ${missing.join(", ")}`).toEqual([]);
+    expect(covered.size).toBe(allSpecPoints.length);
   });
 });
 

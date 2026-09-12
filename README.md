@@ -18,7 +18,7 @@ Built around three ideas:
 |---|---|
 | **Specification map** | 19 topics, 89 spec points across Pure, Statistics and Mechanics, with exam guidance on each |
 | **Formula reference** | Split by whether a formula is **given in the exam booklet** or must be **memorised** — press <kbd>f</kbd> anywhere |
-| **Question bank** | 52 parameterised templates across all 19 topics, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
+| **Question bank** | 107 parameterised templates covering **all 89 spec points**, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
 | **Interactives** | Graph transformations and the derivative-as-gradient, where seeing it move beats reading about it |
 | **Spaced repetition** | Every spec point is scheduled to come back before it is forgotten |
 | **Progress history** | What you have covered, per-topic accuracy and mastery, and the spec points worth going back to |
@@ -182,17 +182,24 @@ is worse than one that admits its gaps.
 - The exam guide — papers, assessment objectives, mark scheme codes, the large
   data set, calculator requirements.
 
+- The question bank. 107 templates covering every one of the 89 spec points,
+  so nothing in the specification is invisible to the scheduler. Depth still
+  varies — Algebra and functions has the most question types, and several spec
+  points have exactly one — but no spec point has none.
+
 **Partial:**
 
-- The question bank. 52 templates covering all 19 topics and roughly a third of
-  the 89 spec points, weighted towards Year 1 Pure. Depth varies: Algebra and
-  functions has eleven question types, Moments has one.
+- Depth within a spec point. One template per spec point means one shape of
+  question; a student who has seen it twice has seen the shape. The points with
+  a single template are the obvious place to add next.
 - Interactives. Two so far, on graph transformations and the derivative as a
   gradient — the two places where watching it move genuinely beats reading
   about it.
+- Teaching notes. Each spec point has a summary and an exam note, but there is
+  nothing longer between "one-line summary" and "here is a question".
 
-Every topic page states plainly whether a spec point can be practised yet, and
-the dashboard only offers topics that actually have questions.
+A test asserts the full coverage, so adding a spec point without questions
+fails the build rather than quietly leaving a gap.
 
 ---
 
