@@ -455,3 +455,58 @@ test("the homepage does not scroll sideways on the narrowest phones", async ({ p
     expect(overflow, `${width}px`).toBeLessThanOrEqual(1);
   }
 });
+
+test("exam pace is off until asked for, and then stays on", async ({ page }) => {
+  await page.goto("/practice/algebra-and-functions");
+
+  // Off by default. A clock nobody asked for is pressure, and the brief's
+  // whole point is that the timing is short practice rather than an ordeal.
+  const toggle = page.getByRole("button", { name: /Exam pace/ });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("progressbar", { name: "Time used on this question" })).toHaveCount(0);
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  const clock = page.getByRole("progressbar", { name: "Time used on this question" });
+  await expect(clock).toBeVisible();
+
+  // Remembered across visits, so it is a choice made once rather than a
+  // decision every single time the site is opened.
+  await page.goto("/practice/differentiation");
+  await expect(page.getByRole("button", { name: /Exam pace/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("progressbar", { name: "Time used on this question" })).toBeVisible();
+});
+
+test("the clock counts up, and stops while feedback is on screen", async ({ page }) => {
+  await page.goto("/practice/algebra-and-functions");
+  await page.getByRole("button", { name: /Exam pace/ }).click();
+
+  const used = () =>
+    page
+      .getByRole("progressbar", { name: "Time used on this question" })
+      .getAttribute("aria-valuenow")
+      .then(Number);
+
+  await page.waitForTimeout(1200);
+  const running = await used();
+
+  // Answer it — anything will do, since this is about the clock and not the
+  // marking. Feedback then has to freeze it: reading the mark scheme is not
+  // time spent thinking about the question, and counting it would make every
+  // pace figure meaningless.
+  // The set is random, so question one may be multiple choice rather than a
+  // typed answer. Handle both, or this passes until the day it does not.
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+
+  const atFeedback = await used();
+  await page.waitForTimeout(1500);
+  expect(await used()).toBe(atFeedback);
+  expect(atFeedback).toBeGreaterThanOrEqual(running);
+});
