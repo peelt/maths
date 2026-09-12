@@ -2,6 +2,8 @@ import type { QuestionTemplate } from "@/lib/questions/types";
 import { pureAlgebraQuestions } from "./pure-algebra";
 import { pureCalculusQuestions } from "./pure-calculus";
 import { pureNumericalQuestions } from "./pure-numerical";
+import { pureSequencesQuestions } from "./pure-sequences";
+import { pureTrigonometryQuestions } from "./pure-trigonometry";
 import { statisticsQuestions } from "./statistics";
 import { mechanicsQuestions } from "./mechanics";
 
@@ -17,6 +19,8 @@ export const questionTemplates: QuestionTemplate[] = [
   ...pureAlgebraQuestions,
   ...pureCalculusQuestions,
   ...pureNumericalQuestions,
+  ...pureSequencesQuestions,
+  ...pureTrigonometryQuestions,
   ...statisticsQuestions,
   ...mechanicsQuestions,
 ];
@@ -25,6 +29,8 @@ export {
   pureAlgebraQuestions,
   pureCalculusQuestions,
   pureNumericalQuestions,
+  pureSequencesQuestions,
+  pureTrigonometryQuestions,
   statisticsQuestions,
   mechanicsQuestions,
 };

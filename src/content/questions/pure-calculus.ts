@@ -35,7 +35,7 @@ export const pureCalculusQuestions: QuestionTemplate[] = [
           { mark: "A1", text: `$x^{2}+${d}x-${Math.pow(2, t)}=0 \\Rightarrow (x-${p})(x+${p + d})=0$` },
           { mark: "A1", text: `$x=${p}$, rejecting $x=${-(p + d)}$ because you cannot take the logarithm of a negative number.`, why: "That rejection is a real mark. Always check solutions against the domain of the original logarithms." },
         ],
-        trap: `Giving both roots. $x=${-(p + d)}$ makes $\\log_{2}x$ undefined, so it must be rejected and you must SAY why.`,
+        trap: `Giving both roots. $x=${-(p + d)}$ is not in the domain of $\\log_{2}x$, so it must be rejected and you must SAY why.`,
       };
     },
   },

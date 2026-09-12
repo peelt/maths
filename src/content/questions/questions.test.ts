@@ -64,17 +64,32 @@ describe("question bank", () => {
     it("never renders a malformed number or sign", () => {
       for (let i = 0; i < VARIANTS; i++) {
         const q = generateQuestion(template, i * 31337 + 5);
-        const text = [q.prompt, ...q.solution.map((s) => s.text)].join(" ");
+        const text = [q.prompt, q.hint ?? "", q.trap ?? "", ...q.solution.map((s) => s.text)].join(" ");
         // "+ -3" or "- -3" is the classic giveaway of a generated question.
         expect(text, `${id} seed ${q.seed}`).not.toMatch(/[+-]\s*-\s*\d/);
-        expect(text).not.toMatch(/undefined|NaN|Infinity/);
+        // A bare "undefined" or "NaN" in student-facing text means a value
+        // failed to interpolate. Nothing here should say those words in prose
+        // either — a mark scheme says "not in the domain of", which is both
+        // correct and unambiguous.
+        expect(text, `${id} seed ${q.seed}: a value failed to interpolate, or prose used a reserved word`).not.toMatch(
+          /undefined|NaN|Infinity/,
+        );
       }
     });
 
     it("writes valid LaTeX in prompts and solutions", () => {
       for (let i = 0; i < 12; i++) {
         const q = generateQuestion(template, i * 60013 + 3);
-        const text = [q.prompt, ...q.solution.map((s) => s.text), ...q.solution.map((s) => s.why ?? "")].join(" ");
+        // Hints and traps carry LaTeX too, and are shown to the student just
+        // as prominently as the solution — an unclosed brace there breaks the
+        // page at exactly the moment they got something wrong.
+        const text = [
+          q.prompt,
+          q.hint ?? "",
+          q.trap ?? "",
+          ...q.solution.map((s) => s.text),
+          ...q.solution.map((s) => s.why ?? ""),
+        ].join(" ");
         for (const segment of extractMaths(text)) {
           expect(
             () => katex.renderToString(segment, { throwOnError: true }),
