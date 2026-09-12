@@ -123,7 +123,7 @@ interface CurveProps {
  * near-vertical line joining the two branches — which would be a lie about the
  * shape of the curve, and exactly the misconception these plots should avoid.
  */
-export function Curve({ fn, color = "var(--accent)", width = 2.5, dashed = false, opacity = 1 }: CurveProps) {
+export function Curve({ fn, color = "var(--plot-a)", width = 2.5, dashed = false, opacity = 1 }: CurveProps) {
   const { x, y, xRange, yRange, width: pixelWidth } = useScale();
 
   const path = useMemo(() => {
@@ -174,7 +174,7 @@ export function Curve({ fn, color = "var(--accent)", width = 2.5, dashed = false
   );
 }
 
-export function PlotPoint({ x: px, y: py, color = "var(--accent)", label }: { x: number; y: number; color?: string; label?: string }) {
+export function PlotPoint({ x: px, y: py, color = "var(--plot-a)", label }: { x: number; y: number; color?: string; label?: string }) {
   const { x, y } = useScale();
   return (
     <g>
@@ -192,7 +192,7 @@ export function PlotPoint({ x: px, y: py, color = "var(--accent)", label }: { x:
 export function StraightLine({
   through,
   gradient,
-  color = "var(--warn)",
+  color = "var(--plot-b)",
   dashed = false,
 }: {
   through: { x: number; y: number };
@@ -256,7 +256,7 @@ export function PlotCircle({
 export function PlotSegment({
   from,
   to,
-  color = "var(--accent)",
+  color = "var(--plot-a)",
   width = 2,
   dashed = false,
 }: {
@@ -287,9 +287,9 @@ export function PlotRect({
   x1,
   y0,
   y1,
-  fill = "var(--accent)",
+  fill = "var(--plot-a)",
   opacity = 0.25,
-  stroke = "var(--accent)",
+  stroke = "var(--plot-a)",
 }: {
   x0: number;
   x1: number;
@@ -319,7 +319,7 @@ export function PlotRect({
 /** A polyline through data points — a trajectory, or a sampled path. */
 export function PlotPath({
   points,
-  color = "var(--accent)",
+  color = "var(--plot-a)",
   width = 2.5,
   dashed = false,
 }: {

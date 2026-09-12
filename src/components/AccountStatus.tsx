@@ -63,7 +63,7 @@ export function AccountStatus() {
   if (state.kind === "signed-out") {
     return (
       <p className="mt-3 flex items-start gap-2">
-        <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-warn" aria-hidden />
+        <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-note" aria-hidden />
         <span>
           Not signed in.{" "}
           <Link href="/signin" className="text-accent underline underline-offset-2">

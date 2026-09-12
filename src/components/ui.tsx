@@ -30,17 +30,22 @@ export function PageHeading({
   );
 }
 
-const paperStyles: Record<Paper, string> = {
-  pure: "text-pure border-pure/35 bg-pure/10",
-  statistics: "text-statistics border-statistics/35 bg-statistics/10",
-  mechanics: "text-mechanics border-mechanics/35 bg-mechanics/10",
-};
+/**
+ * One neutral style for all three papers.
+ *
+ * These were indigo, teal and amber — an indigo-versus-amber distinction, and
+ * ADHD is associated with impaired blue-yellow discrimination. The badge
+ * already names the paper in words, so the colour was carrying no information
+ * and was competing with the single action accent for attention. Removing it
+ * costs nothing and quiets the page.
+ */
+const paperBadgeStyle = "text-muted border-border-soft bg-surface-2";
 
 export function PaperBadge({ paper }: { paper: Paper }) {
   const label = paper === "pure" ? "Papers 1 & 2" : "Paper 3";
   const name = paper[0].toUpperCase() + paper.slice(1);
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${paperStyles[paper]}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${paperBadgeStyle}`}>
       {name}
       <span className="opacity-60">·</span>
       <span className="opacity-80">{label}</span>
@@ -72,7 +77,7 @@ export function Button({
     "inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 font-semibold transition-colors";
   const styles =
     variant === "primary"
-      ? "bg-accent text-on-accent hover:bg-accent-hover"
+      ? "bg-accent-fill text-on-accent hover:bg-accent-fill-hover"
       : "border border-border bg-surface text-text hover:bg-surface-2";
   return (
     <Link href={href} className={`${base} ${styles} ${className}`}>
@@ -94,7 +99,7 @@ export function Meter({ value, label }: { value: number; label?: string }) {
         aria-valuemax={100}
         aria-label={label ?? "Progress"}
       >
-        <div className="h-full rounded-full bg-accent transition-[width]" style={{ width: `${percent}%` }} />
+        <div className="h-full rounded-full bg-accent-fill transition-[width]" style={{ width: `${percent}%` }} />
       </div>
       <span className="w-9 shrink-0 text-right text-xs tabular-nums text-muted">{percent}%</span>
     </div>

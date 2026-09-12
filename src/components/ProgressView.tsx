@@ -102,7 +102,7 @@ export function ProgressView() {
         </p>
         <Link
           href="/"
-          className="mt-5 inline-block rounded-lg bg-accent px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-hover"
+          className="mt-5 inline-block rounded-lg bg-accent-fill px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-fill-hover"
         >
           Start practising
         </Link>

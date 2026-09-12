@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { allTopics, getTopic } from "@/content/spec";
-import { questionTemplates, specPointsWithQuestions } from "@/lib/questions";
+import { questionTemplates } from "@/lib/questions";
 import { Maths } from "@/components/Maths";
 import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
@@ -24,7 +24,6 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
   const topic = getTopic(slug);
   if (!topic) notFound();
 
-  const covered = specPointsWithQuestions();
   const templateCount = questionTemplates.filter((q) => q.topicSlug === topic.slug).length;
 
   return (
@@ -45,7 +44,7 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
       {templateCount > 0 ? (
         <Link
           href={`/practice/${topic.slug}`}
-          className="mb-10 inline-flex items-center rounded-lg bg-accent px-6 py-3 font-semibold text-on-accent hover:bg-accent-hover"
+          className="mb-10 inline-flex items-center rounded-lg bg-accent-fill px-6 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
         >
           Practise this topic
         </Link>
@@ -59,7 +58,6 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
 
       <ol className="space-y-5">
         {topic.points.map((point) => {
-          const hasQuestions = covered.has(`${topic.paper}:${point.code}`);
           const interactive = interactiveFor(topic.paper, point.code);
           const note = noteFor(topic.paper, point.code);
           return (
@@ -70,11 +68,6 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
                 </span>
                 <h2 className="text-lg font-bold">{point.title}</h2>
                 <YearBadge year={point.year} />
-                {hasQuestions ? (
-                  <span className="rounded-full border border-accent/30 bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent">
-                    practisable
-                  </span>
-                ) : null}
               </div>
 
               <Maths className="text-[0.97rem] leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0">
@@ -82,8 +75,8 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
               </Maths>
 
               {point.examNote ? (
-                <div className="mt-4 rounded-lg border-l-2 border-accent bg-accent-soft/40 py-2 pl-4 pr-3">
-                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-accent">
+                <div className="mt-4 rounded-lg border-l-2 border-note-border bg-note-soft py-2 pl-4 pr-3">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-note">
                     In the exam
                   </p>
                   <Maths className="text-sm leading-relaxed [&_p]:m-0">{point.examNote}</Maths>
@@ -120,13 +113,13 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
                       ))}
                     </ol>
 
-                    <p className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wider text-warn">
+                    <p className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wider text-wrong">
                       Watch for
                     </p>
                     <ul className="space-y-2">
                       {note.watchFor.map((item, i) => (
                         <li key={i} className="flex gap-3">
-                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-warn" />
+                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-wrong" />
                           <Maths className="min-w-0 flex-1 text-sm leading-relaxed [&_p]:m-0">{item}</Maths>
                         </li>
                       ))}

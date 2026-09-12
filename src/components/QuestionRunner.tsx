@@ -172,7 +172,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
               : "Hard set. Everything you missed is queued to return, which is exactly how it should work."}
         </p>
         {streakMessage ? (
-          <p className="mt-4 inline-block rounded-full border border-accent/30 bg-accent-soft px-4 py-1.5 text-sm font-semibold text-accent">
+          <p className="mt-4 inline-block rounded-full border border-correct-border bg-correct-soft px-4 py-1.5 text-sm font-semibold text-correct">
             {streakMessage}
           </p>
         ) : null}
@@ -180,7 +180,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             href={`/practice/${topicSlug}`}
-            className="rounded-lg bg-accent px-5 py-3 font-semibold text-on-accent hover:bg-accent-hover"
+            className="rounded-lg bg-accent-fill px-5 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
           >
             Another set
           </Link>
@@ -212,7 +212,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
           </span>
         </div>
         <div className="h-1.5 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={total}>
-          <div className="h-full rounded-full bg-accent transition-[width] duration-300" style={{ width: `${((index + 1) / total) * 100}%` }} />
+          <div className="h-full rounded-full bg-accent-fill transition-[width] duration-300" style={{ width: `${((index + 1) / total) * 100}%` }} />
         </div>
       </div>
 
@@ -280,7 +280,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
         </div>
 
         {result && !result.correct && result.message ? (
-          <p className="mt-4 rounded-lg border border-warn-border bg-warn-soft px-4 py-3 text-sm text-warn">
+          <p className="mt-4 rounded-lg border border-note-border bg-note-soft px-4 py-3 text-sm text-note">
             {result.message}
           </p>
         ) : null}
@@ -290,7 +290,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
             <button
               onClick={() => void submit()}
               disabled={!input.trim()}
-              className="rounded-lg bg-accent px-5 py-2.5 font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-40"
+              className="rounded-lg bg-accent-fill px-5 py-2.5 font-semibold text-on-accent transition-colors hover:bg-accent-fill-hover disabled:opacity-40"
             >
               Check
             </button>
@@ -357,7 +357,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
 
                 {question.trap ? (
                   <div className="mt-4 border-t border-border pt-3">
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-warn">
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-wrong">
                       Where people lose the mark
                     </p>
                     <Maths className="text-sm [&_p]:m-0">{question.trap}</Maths>
@@ -369,7 +369,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
             <button
               onClick={next}
               autoFocus
-              className="mt-5 rounded-lg bg-accent px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-hover"
+              className="mt-5 rounded-lg bg-accent-fill px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-fill-hover"
             >
               {isLast ? "Finish" : "Next question"}
               <kbd className="ml-2 hidden rounded border border-on-accent/30 px-1 text-[10px] sm:inline">↵</kbd>

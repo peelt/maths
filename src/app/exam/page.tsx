@@ -76,7 +76,7 @@ export default function ExamPage() {
                   {ao.code}
                 </span>
                 <h3 className="font-bold">{ao.name}</h3>
-                <span className="ml-auto text-sm font-semibold tabular-nums text-accent">
+                <span className="ml-auto text-sm font-semibold tabular-nums text-muted">
                   {ao.weight}
                 </span>
               </div>

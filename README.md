@@ -118,6 +118,62 @@ anywhere else. If something appears to need it, that is a bug.
 `/privacy` page saying so in plain English, and a self-service delete in the
 footer of every page.
 
+## Design, and why it looks like this
+
+Built for a student with ADHD, so the palette follows what the evidence
+supports rather than a general preference for calm colours. Four decisions, and
+the reason for each:
+
+**The card is visibly distinct from the canvas.** This carries most of the
+benefit. In a classroom study, children with ADHD made significantly fewer
+errors when the board and the wall behind it were different colours, and
+performed worst in an all-white room. The first version of this site had a
+canvas-to-card contrast of **1.04:1** — white on white, the condition that
+performed worst. Every theme is now at least 1.25:1.
+
+**Nothing meaningful rests on blue versus yellow.** ADHD is associated with
+impaired blue–yellow discrimination, and in one virtual-environment study
+participants took markedly longer on attention tasks under a blue/yellow scheme
+than a green/red one. Correct and incorrect are green and red, always next to a
+word. The three paper badges used to be indigo, teal and amber — an
+indigo-versus-amber distinction — and are now a single neutral, because each
+badge already says "Pure" or "Statistics" in words.
+
+**Base contrast is softened, not maximised.** Pure black on pure white raises
+visual stress. Body text was **17.4:1**; it now sits near 8:1 — past AAA, but
+reached with charcoal rather than black. The contrast test has an *upper* bound
+as well as a lower one, because maximising contrast here is the wrong instinct.
+
+**One directional accent.** Muted amber means "do this next" and nothing else.
+It is never used for status, and status is never amber — which is why the
+progress meter and the primary button share a colour that no badge or panel
+borrows.
+
+Plot series get their own tokens, deliberately outside both the green/red
+feedback pair and the blue/yellow axis, and separated in lightness as well as
+hue so two curves stay distinguishable.
+
+### Choice, because preference varies
+
+Light, tinted and dark themes plus three text sizes, under **Display** in the
+header. This is the strongest single recommendation in neurodiversity design
+guidance: what is restful for one reader is glaring or muddy for another, and
+the variation across ADHD, dyslexia and autism is wide enough that it has to be
+a setting rather than a default someone else picked. The choice is stored per
+device, applied before the first paint so there is no flash of the wrong
+palette, and an explicit choice overrides the device setting.
+
+### The structural part matters more than the colours
+
+For a revision site the bigger wins are not chromatic: one task per screen, a
+visible finish line, no autoplay, no hover-triggered menus, and the primary
+action in the same place every time. Colour reinforces that hierarchy rather
+than competing with it.
+
+`src/app/theme.test.ts` parses `globals.css` and asserts every ratio above, so
+the stylesheet is the single source of truth and a change that breaks one of
+these fails the build.
+
 ## How it is put together
 
 ```
