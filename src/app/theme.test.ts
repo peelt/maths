@@ -64,6 +64,13 @@ function hue(hex: string): number {
   return ((h * 60) % 360 + 360) % 360;
 }
 
+/** How saturated a colour is in 0-255 terms: the spread across its channels. */
+function chroma(hex: string): number {
+  const clean = hex.replace("#", "").trim();
+  const channels = [0, 2, 4].map((i) => parseInt(clean.slice(i, i + 2), 16));
+  return Math.max(...channels) - Math.min(...channels);
+}
+
 /** The shorter way round the colour wheel between two hues. */
 function hueGap(a: string, b: string): number {
   const d = Math.abs(hue(a) - hue(b));
@@ -136,6 +143,13 @@ describe.each(THEMES)("theme: %s", (theme) => {
     expect(ratio("--text-muted", "--surface")).toBeGreaterThanOrEqual(4.5);
   });
 
+  it("passes AA for muted text on the canvas as well as the card", () => {
+    // Muted text sits directly on the canvas in the header, the footer and
+    // under headings. The original mist canvas left it at 4.19:1 — below AA —
+    // and no test looked, because only the card was being checked.
+    expect(ratio("--text-muted", "--bg")).toBeGreaterThanOrEqual(4.5);
+  });
+
   it("gives borders enough contrast to read as a boundary", () => {
     // WCAG 1.4.11 wants 3:1 for meaningful non-text UI; card edges are what
     // separate one task from the next here, so they are meaningful.
@@ -179,6 +193,24 @@ describe.each(THEMES)("theme: %s", (theme) => {
     expect(hueGap(t["--plot-a"], t["--plot-b"])).toBeGreaterThanOrEqual(60);
     expect(ratio("--plot-a", "--surface")).toBeGreaterThanOrEqual(3);
     expect(ratio("--plot-b", "--surface")).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe("the default light theme", () => {
+  const t = tokens('[data-theme="mist"]');
+
+  it("keeps the canvas near-neutral rather than strongly tinted", () => {
+    // The layer separation in point 1 has to come from lightness, not tint.
+    // Buying it with saturation instead produced a canvas that was reported
+    // as too strong to read text against. "warm" is where a real tint lives.
+    expect(chroma(t["--bg"])).toBeLessThanOrEqual(12);
+    expect(chroma(t["--surface-2"])).toBeLessThanOrEqual(16);
+  });
+
+  it("keeps the canvas light", () => {
+    // Stated as contrast against black so the bound is in the same units as
+    // everything else here: a canvas this light leaves room for muted text.
+    expect(contrast(t["--bg"], "#000000")).toBeGreaterThanOrEqual(15);
   });
 });
 
