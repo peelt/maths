@@ -1,5 +1,5 @@
 import type { QuestionTemplate } from "@/lib/questions/types";
-import { leading, signed } from "./format";
+import { factor, leading, signed } from "./format";
 
 /**
  * Question templates for Year 2 Pure: sequences and series.
@@ -31,9 +31,9 @@ export const pureSequencesQuestions: QuestionTemplate[] = [
         answer: { type: "numeric", value: u4 },
         hint: "Work up one term at a time. There is no shortcut formula here — a recurrence relation has to be iterated.",
         solution: [
-          { mark: "M1", text: `$u_{2}=${a}\\times${u1}${signed(b)}=${u2}$`, why: "Substituting $n=1$. The subscript is the instruction: $u_{n+1}$ is built from the term before it." },
-          { mark: "A1", text: `$u_{3}=${a}\\times${u2}${signed(b)}=${u3}$` },
-          { mark: "A1", text: `$u_{4}=${a}\\times${u3}${signed(b)}=${u4}$` },
+          { mark: "M1", text: `$u_{2}=${a}\\times${factor(u1)}${signed(b)}=${u2}$`, why: "Substituting $n=1$. The subscript is the instruction: $u_{n+1}$ is built from the term before it." },
+          { mark: "A1", text: `$u_{3}=${a}\\times${factor(u2)}${signed(b)}=${u3}$` },
+          { mark: "A1", text: `$u_{4}=${a}\\times${factor(u3)}${signed(b)}=${u4}$` },
         ],
         trap: "Treating this like an nth term formula and substituting $n=4$ directly. A recurrence relation defines each term from the previous one, so you must climb the ladder.",
       };
@@ -59,8 +59,8 @@ export const pureSequencesQuestions: QuestionTemplate[] = [
         hint: "Split the sum into two pieces. The second is the same constant added to itself over and over.",
         solution: [
           { mark: "M1", text: `$\\displaystyle\\sum_{r=1}^{${n}}\\big(${leading(a, "r")}${signed(b)}\\big)=${a}\\sum_{r=1}^{${n}}r${signed(b, `\\times ${n}`)}$`, why: "The sum of a sum splits, and a constant multiplier comes outside. The constant term is added once for each of the $" + n + "$ values of $r$." },
-          { mark: "M1", text: `$\\displaystyle\\sum_{r=1}^{${n}}r=\\frac{${n}\\times${n + 1}}{2}=${triangular}$`, why: "This is an arithmetic series with first term 1 and last term $" + n + "$, so the sum is the number of terms times the average of the ends." },
-          { mark: "A1", text: `$${a}\\times${triangular}${signed(b * n)}=${total}$` },
+          { mark: "M1", text: `$\\displaystyle\\sum_{r=1}^{${n}}r=\\frac{${n}\\times${factor(n + 1)}}{2}=${triangular}$`, why: "This is an arithmetic series with first term 1 and last term $" + n + "$, so the sum is the number of terms times the average of the ends." },
+          { mark: "A1", text: `$${a}\\times${factor(triangular)}${signed(b * n)}=${total}$` },
         ],
         trap: `Forgetting that the constant is added ${n} times, not once.`,
       };
@@ -86,7 +86,7 @@ export const pureSequencesQuestions: QuestionTemplate[] = [
         hint: "The sum formula is in the booklet. Identify $a$, $d$ and $n$ before you substitute anything.",
         solution: [
           { mark: "M1", text: `$S_{n}=\\dfrac{n}{2}\\big(2a+(n-1)d\\big)$ with $a=${a}$, $d=${d}$, $n=${n}$`, why: "This formula is GIVEN in the booklet — quoting it costs nothing, so there is no reason to guess it." },
-          { mark: "M1", text: `$S_{${n}}=\\dfrac{${n}}{2}\\big(${2 * a}${signed((n - 1) * d)}\\big)=\\dfrac{${n}}{2}\\times${2 * a + (n - 1) * d}$` },
+          { mark: "M1", text: `$S_{${n}}=\\dfrac{${n}}{2}\\big(${2 * a}${signed((n - 1) * d)}\\big)=\\dfrac{${n}}{2}\\times${factor(2 * a + (n - 1) * d)}$` },
           { mark: "A1", text: `$S_{${n}}=${sum}$`, why: `As a check, the last term is $${last}$, and $\\dfrac{${n}}{2}(${a}+${last})$ gives the same total.` },
         ],
         trap: `Using $n$ where $(n-1)$ belongs. There are ${n} terms but only ${n - 1} gaps between them.`,
@@ -112,7 +112,7 @@ export const pureSequencesQuestions: QuestionTemplate[] = [
         answer: { type: "numeric", value: n },
         hint: "Substitute into the sum formula and rearrange. You will get a quadratic in $n$.",
         solution: [
-          { mark: "M1", text: `$\\dfrac{n}{2}\\big(${2 * a}+(n-1)\\times${d}\\big)=${sum}$`, why: "Substituting the known values into the given sum formula, leaving $n$ as the unknown." },
+          { mark: "M1", text: `$\\dfrac{n}{2}\\big(${2 * a}+(n-1)\\times${factor(d)}\\big)=${sum}$`, why: "Substituting the known values into the given sum formula, leaving $n$ as the unknown." },
           { mark: "M1", text: `$n\\big(${2 * a - d}${signed(d, "n")}\\big)=${2 * sum} \\Rightarrow ${leading(d, "n^{2}")}${signed(2 * a - d, "n")}-${2 * sum}=0$`, why: "Multiplying by 2 clears the fraction. Always do this before expanding — it keeps the numbers whole." },
           { mark: "dM1", text: `Solving the quadratic gives $n=${n}$ or a negative value.` },
           { mark: "A1", text: `$n=${n}$`, why: "The negative root is rejected: $n$ counts terms, so it must be a positive whole number. Saying so is worth a mark." },
@@ -221,8 +221,8 @@ export const pureSequencesQuestions: QuestionTemplate[] = [
         hint: "A fixed extra amount each month means a constant difference, so this is an arithmetic series.",
         solution: [
           { mark: "B1", text: `Arithmetic with $a=${start}$, $d=${rise}$, $n=${years}$.`, why: "A fixed extra amount is a common difference. A fixed percentage would have made it geometric." },
-          { mark: "M1", text: `$S_{${years}}=\\dfrac{${years}}{2}\\big(2\\times${start}+${years - 1}\\times${rise}\\big)$` },
-          { mark: "M1", text: `$=\\dfrac{${years}}{2}\\times${2 * start + (years - 1) * rise}$` },
+          { mark: "M1", text: `$S_{${years}}=\\dfrac{${years}}{2}\\big(2\\times${factor(start)}+${years - 1}\\times${factor(rise)}\\big)$` },
+          { mark: "M1", text: `$=\\dfrac{${years}}{2}\\times${factor(2 * start + (years - 1) * rise)}$` },
           { mark: "A1", text: `Total $=\\pounds${total}$`, why: `The final month's deposit is $\\pounds${finalMonth}$, which is a useful sanity check on the size of the total.` },
         ],
         trap: `Adding $\\pounds${rise}$ in the first month too. The first month is $\\pounds${start}$ exactly; the rise starts from month two, which is why the formula uses $(n-1)$.`,

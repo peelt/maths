@@ -6,6 +6,9 @@ import { pureSequencesQuestions } from "./pure-sequences";
 import { pureTrigonometryQuestions } from "./pure-trigonometry";
 import { pureDifferentiationQuestions } from "./pure-differentiation";
 import { pureIntegrationQuestions } from "./pure-integration";
+import { pureFunctionsQuestions } from "./pure-functions";
+import { pureExponentialsQuestions } from "./pure-exponentials";
+import { pureVectorsQuestions } from "./pure-vectors";
 import { statisticsQuestions } from "./statistics";
 import { mechanicsQuestions } from "./mechanics";
 
@@ -25,6 +28,9 @@ export const questionTemplates: QuestionTemplate[] = [
   ...pureTrigonometryQuestions,
   ...pureDifferentiationQuestions,
   ...pureIntegrationQuestions,
+  ...pureFunctionsQuestions,
+  ...pureExponentialsQuestions,
+  ...pureVectorsQuestions,
   ...statisticsQuestions,
   ...mechanicsQuestions,
 ];
@@ -37,6 +43,9 @@ export {
   pureTrigonometryQuestions,
   pureDifferentiationQuestions,
   pureIntegrationQuestions,
+  pureFunctionsQuestions,
+  pureExponentialsQuestions,
+  pureVectorsQuestions,
   statisticsQuestions,
   mechanicsQuestions,
 };

@@ -66,3 +66,15 @@ export function fraction(numerator: number, denominator: number): string {
   // which is how it would be written by hand and in the mark scheme.
   return n < 0 ? `-\\frac{${-n}}{${d}}` : `\\frac{${n}}{${d}}`;
 }
+
+/**
+ * A factor written after a multiplication sign, bracketed when it is negative.
+ *
+ * "3 \times -0.5" is how a machine writes it and "3 \times (-0.5)" is how a
+ * person does. The difference is small but it is exactly the kind of tell that
+ * makes generated questions feel untrustworthy.
+ */
+export function factor(value: number | string): string {
+  const text = String(value);
+  return text.startsWith("-") ? `(${text})` : text;
+}

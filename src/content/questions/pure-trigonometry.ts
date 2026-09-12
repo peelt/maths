@@ -1,5 +1,5 @@
 import type { QuestionTemplate } from "@/lib/questions/types";
-import { fraction, leading, signed } from "./format";
+import { factor, fraction, leading, signed } from "./format";
 
 /**
  * Question templates for Year 2 Pure: trigonometry beyond the sine and cosine
@@ -130,7 +130,7 @@ export const pureTrigonometryQuestions: QuestionTemplate[] = [
         hint: "There is a form of the double angle formula for cosine that uses only cosine. Pick that one and no further work is needed.",
         solution: [
           { mark: "M1", text: `$\\cos 2\\theta=2\\cos^{2}\\theta-1$`, why: "The double angle formulae are NOT in the booklet. They follow from the compound angle formulae, which are: putting $A=B=\\theta$ into $\\cos(A+B)$ gives this in one line." },
-          { mark: "M1", text: `$=2\\times${fraction(adj * adj, hyp * hyp)}-1=${fraction(2 * adj * adj, hyp * hyp)}-${fraction(hyp * hyp, hyp * hyp)}$` },
+          { mark: "M1", text: `$=2\\times${factor(fraction(adj * adj, hyp * hyp))}-1=${fraction(2 * adj * adj, hyp * hyp)}-${fraction(hyp * hyp, hyp * hyp)}$` },
           { mark: "A1", text: `$\\cos 2\\theta=${fraction(2 * adj * adj - hyp * hyp, hyp * hyp)}$`, why: `The value of $\\sin\\theta$ was never needed, and the sign of $\\theta$'s quadrant does not matter either — squaring removes it.` },
         ],
         trap: "Writing $\\cos 2\\theta=2\\cos\\theta$. Doubling the angle is not doubling the value — check it at $\\theta=0$, where the left side is 1 and the right side is 2.",
@@ -234,9 +234,14 @@ export const pureTrigonometryQuestions: QuestionTemplate[] = [
         answer: { type: "numeric", value: height, unit: "m" },
         hint: "The angle is in radians. Check your calculator is in radian mode before you evaluate anything.",
         solution: [
-          { mark: "M1", text: `$\\dfrac{2\\pi\\times${t}}{${period}}=${((2 * Math.PI * t) / period).toFixed(4)}$ radians` },
+          { mark: "M1", text: `$\\dfrac{2\\pi\\times${factor(t)}}{${period}}=${((2 * Math.PI * t) / period).toFixed(4)}$ radians` },
           { mark: "M1", text: `$\\cos(${((2 * Math.PI * t) / period).toFixed(4)})=${Math.cos((2 * Math.PI * t) / period).toFixed(4)}$` },
-          { mark: "M1", text: `$h=${centre}-${radius}\\times${Math.cos((2 * Math.PI * t) / period).toFixed(4)}$` },
+          {
+            mark: "M1",
+            // The cosine is negative for more than half the wheel's turn, so
+            // it is bracketed rather than written bare after \times.
+            text: `$h=${centre}-${radius}\\times(${Math.cos((2 * Math.PI * t) / period).toFixed(4)})$`,
+          },
           { mark: "A1", text: `$h=${height.toFixed(3)}$ m (3 s.f.)`, why: `The model is sensible: the height swings between $${centre - radius}$ m and $${centre + radius}$ m, and the minus sign in front of the cosine means the capsule starts at the bottom, which is where you would board it.` },
         ],
         trap: "Working in degrees. The $2\\pi$ is the giveaway that this is radians — in degree mode the answer comes out near the starting height every time.",

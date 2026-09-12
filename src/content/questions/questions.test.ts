@@ -67,6 +67,12 @@ describe("question bank", () => {
         const text = [q.prompt, q.hint ?? "", q.trap ?? "", ...q.solution.map((s) => s.text)].join(" ");
         // "+ -3" or "- -3" is the classic giveaway of a generated question.
         expect(text, `${id} seed ${q.seed}`).not.toMatch(/[+-]\s*-\s*\d/);
+        // So is a bare negative straight after a multiplication sign: a value
+        // that can go negative needs bracketing, as "3 \times -0.5" would be
+        // written "3 \times (-0.5)" by hand.
+        expect(text, `${id} seed ${q.seed}: negative value not bracketed after \\times`).not.toMatch(
+          /\\(?:times|cdot)\s*-\s*\d/,
+        );
         // A bare "undefined" or "NaN" in student-facing text means a value
         // failed to interpolate. Nothing here should say those words in prose
         // either — a mark scheme says "not in the domain of", which is both

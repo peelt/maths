@@ -1,5 +1,5 @@
 import type { QuestionTemplate } from "@/lib/questions/types";
-import { leading, signed } from "./format";
+import { factor, leading, signed } from "./format";
 
 /**
  * Question templates for Year 2 Pure differentiation: first principles, second
@@ -79,7 +79,7 @@ export const pureDifferentiationQuestions: QuestionTemplate[] = [
         hint: "Differentiate the outside, leaving the inside alone, then multiply by the derivative of the inside.",
         solution: [
           { mark: "M1", text: `Let $u=${leading(a, "x")}${signed(b)}$, so $y=u^{${n}}$ and $\\dfrac{du}{dx}=${a}$.`, why: "Naming the inner function makes the structure explicit. The chain rule is NOT in the booklet, so the method must be shown clearly." },
-          { mark: "M1", text: `$\\dfrac{dy}{dx}=\\dfrac{dy}{du}\\times\\dfrac{du}{dx}=${n}u^{${n - 1}}\\times${a}$` },
+          { mark: "M1", text: `$\\dfrac{dy}{dx}=\\dfrac{dy}{du}\\times\\dfrac{du}{dx}=${n}u^{${n - 1}}\\times${factor(a)}$` },
           { mark: "A1", text: `$\\dfrac{dy}{dx}=${a * n}\\left(${leading(a, "x")}${signed(b)}\\right)^{${n - 1}}$` },
         ],
         trap: `Forgetting the factor of $${a}$ from the inside. Without it the answer is wrong by a constant multiple every time — and it is the single most common slip in Year 2 differentiation.`,
