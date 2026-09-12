@@ -59,6 +59,7 @@ Configure Supabase and sign-in becomes required.
 | `npm run verify:auth` | Builds with Supabase configured and checks route protection actually redirects |
 | `npm run verify:admin-sql` | Applies the admin migration to a throwaway Postgres and tests the gate |
 | `npm run lint` | Lint |
+| `npm run typecheck` | Generates Next's route types, then `tsc --noEmit` |
 
 ## Deploying
 
