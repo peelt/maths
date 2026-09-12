@@ -120,8 +120,9 @@ export const pureTrigonometryQuestions: QuestionTemplate[] = [
     marks: 3,
     difficulty: 2,
     generate(rng) {
-      const [opp, adj, hyp] = rng.pick(TRIPLES);
-      // cos 2θ = 2cos²θ − 1, kept exact by using a Pythagorean triple.
+      // Only the adjacent and hypotenuse are needed: cos 2θ = 2cos²θ − 1
+      // reaches the answer without ever touching sin θ.
+      const [, adj, hyp] = rng.pick(TRIPLES);
       const value = (2 * adj * adj - hyp * hyp) / (hyp * hyp);
       return {
         prompt: `Given that $\\cos\\theta=${fraction(adj, hyp)}$, find the exact value of $\\cos 2\\theta$.`,
