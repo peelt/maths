@@ -510,3 +510,12 @@ test("the clock counts up, and stops while feedback is on screen", async ({ page
   expect(await used()).toBe(atFeedback);
   expect(atFeedback).toBeGreaterThanOrEqual(running);
 });
+
+test("the sign-in log is closed by default", async ({ page }) => {
+  // With no Supabase configured there are no accounts, no identity to check,
+  // and nothing to show — so the page must not exist rather than render an
+  // empty table. Closed by default is the only safe failure for this one.
+  const response = await page.goto("/admin");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("table")).toHaveCount(0);
+});

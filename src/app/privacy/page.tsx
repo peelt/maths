@@ -45,6 +45,11 @@ export default function PrivacyPage() {
             You can. The database enforces, at the row level, that your records are readable only by
             your own account — another student signed in on the same site cannot see them.
           </p>
+          <p className="mt-2 text-sm text-muted">
+            The person who runs this site can see a list of the email addresses that have signed in
+            and the last date and time each one did. That is all they can see: not your answers, not
+            your progress, not your scores.
+          </p>
         </Card>
 
         <Card>

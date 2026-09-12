@@ -57,6 +57,7 @@ Configure Supabase and sign-in becomes required.
 | `npm test` | Unit tests (marking, scheduling, question bank integrity) |
 | `npm run e2e` | End-to-end tests, desktop and mobile |
 | `npm run verify:auth` | Builds with Supabase configured and checks route protection actually redirects |
+| `npm run verify:admin-sql` | Applies the admin migration to a throwaway Postgres and tests the gate |
 | `npm run lint` | Lint |
 
 ## Deploying
@@ -72,8 +73,8 @@ Configure Supabase and sign-in becomes required.
 Students sign in with a **magic link**: they type an email address, click the
 link that arrives, and they are in. No password is ever created.
 
-1. Create a Supabase project and run `supabase/migrations/0001_initial_schema.sql`
-   in the SQL editor.
+1. Create a Supabase project and run the migrations in `supabase/migrations/`
+   in order, in the SQL editor.
 2. **Authentication → Emails → SMTP Settings.** Custom SMTP is **required**, not
    optional: Supabase's built-in sender is capped at **2 emails per hour**, which
    is unusable with more than one student. For Postmark:
@@ -108,6 +109,48 @@ link that arrives, and they are in. No password is ever created.
    NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon public key>
    ```
+
+### The sign-in log
+
+`/admin` lists every account, its email address, and the last date and time it
+signed in. It is closed to everyone until an administrator is named, and naming
+one is the **one step that cannot live in this repository**, because this
+repository is public and the address is a real person's:
+
+```sql
+insert into public.admins (email) values ('you@example.com')
+on conflict (email) do nothing;
+```
+
+Run that once in the SQL editor. Until you do, `/admin` returns 404 for
+everyone — closed by default.
+
+How it is gated, since it is the only place one account can see anything about
+another:
+
+- `public.admins` has row level security on and **no policies at all**, so
+  nothing reachable with the publishable key can read it, list who is on it, or
+  add to it. Only the `security definer` functions consult it.
+- `is_admin()` checks the caller against `auth.users` and requires a confirmed
+  email — the authoritative record, not the JWT's claim.
+- `admin_sign_ins()` raises rather than returning an empty list to a non-admin,
+  so a broken gate shows up immediately instead of looking like "nobody has
+  signed in".
+- `/admin` returns **404**, not a forbidden page, to anyone else. A page that
+  announces itself to people who cannot enter is telling them something they did
+  not need to know.
+- No new write path, and no service role key. Supabase already records
+  `last_sign_in_at`, so there is nothing for a student to forge, and the log was
+  complete for existing accounts the moment the migration ran.
+
+`npm run verify:admin-sql` applies the migration to a throwaway cluster and
+asserts all of that, including that a signed-in student is refused. It earned
+its keep immediately: the first version revoked `EXECUTE` from `PUBLIC` but not
+from `anon`, and Supabase's default privileges grant it to `anon` directly, so
+the revoke did nothing.
+
+What it does **not** show is a row per visit — Postgres keeps only the most
+recent sign-in for each user. "Who, and when last" is the question it answers.
 
 **On keys.** The anon key is designed to be public and to sit in the browser;
 row level security is what actually protects the data. The **service role key is

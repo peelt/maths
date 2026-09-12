@@ -50,6 +50,14 @@ jobs:
       - name: Verify route protection
         run: npm run verify:auth
 
+      # The /admin gate is implemented in SQL, and nothing else here can check
+      # it: the unit tests cover formatting and the Playwright suite runs with
+      # no backend. This applies the migration to a throwaway cluster and
+      # asserts a student cannot read the sign-in log. It caught a real gap —
+      # a revoke that missed Supabase's direct grant to anon.
+      - name: Verify the admin SQL gate
+        run: npm run verify:admin-sql
+
   e2e:
     name: End-to-end
     runs-on: ubuntu-latest

@@ -70,3 +70,21 @@ export async function getCurrentEmail(): Promise<string | null> {
   const { data } = await client.auth.getUser();
   return data.user?.email ?? null;
 }
+
+/**
+ * Is the signed-in user an admin?
+ *
+ * Asked of the database, because the answer lives there — the admin list is a
+ * table, not a constant in this repository, which is public. This is only used
+ * to decide whether to show a link: the page itself is gated server-side and by
+ * the database function behind it, so a false answer here reveals nothing and a
+ * forged true answer reaches a 404.
+ */
+export async function isAdmin(): Promise<boolean> {
+  if (!supabaseConfigured()) return false;
+  const client = getSupabaseClient();
+  if (!client) return false;
+  const { data, error } = await client.rpc("is_admin");
+  if (error) return false;
+  return data === true;
+}

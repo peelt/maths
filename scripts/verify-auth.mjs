@@ -36,6 +36,12 @@ const CHECKS = [
     redirectsTo: "/signin",
     why: "a nested route must be protected too, not just top-level ones",
   },
+  {
+    path: "/admin",
+    status: 307,
+    redirectsTo: "/signin",
+    why: "the sign-in log must never be reachable without a session",
+  },
 ];
 
 function run(command, args) {
