@@ -36,9 +36,10 @@ export function PracticeSession({ topicSlug, topicName }: { topicSlug: string; t
   if (questions.length === 0) {
     return (
       <div className="rounded-xl border border-border bg-surface p-6 text-center">
-        <p className="font-semibold">No questions for this topic yet.</p>
+        <p className="font-semibold">No questions could be built for this topic.</p>
         <p className="mt-1 text-sm text-muted">
-          The question bank is being built out starting with Year 1 Pure.
+          Every spec point has questions, so this means something went wrong rather than that the
+          topic is unfinished. Try another topic, and the rest of the site is unaffected.
         </p>
       </div>
     );

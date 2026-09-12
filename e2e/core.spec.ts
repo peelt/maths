@@ -183,3 +183,46 @@ test("a confirm link reports a same-browser failure distinctly", async ({ page }
   await page.goto("/auth/confirm?code=not-a-real-code");
   await expect(page).toHaveURL(/\/signin\?error=(wrong-device|unavailable)/);
 });
+
+test("the exam guide links to the mark scheme drill", async ({ page }) => {
+  await page.goto("/exam");
+  await expect(page.getByRole("link", { name: /Drill the mark scheme/ })).toBeVisible();
+});
+
+test("a mark scheme drill can be answered and gives the meaning of the code", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByRole("heading", { name: "Mark scheme drills" })).toBeVisible();
+
+  // The set is built after mount, so wait for the first question.
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+
+  // Pick the first option and check it. Right or wrong, an explanation follows.
+  await page.locator("fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Next|Finish/ })).toBeVisible();
+});
+
+test("a mark scheme drill runs to the end and offers another set", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+
+  for (let i = 0; i < 6; i++) {
+    await page.locator("fieldset button").first().click();
+    await page.getByRole("button", { name: "Check", exact: true }).click();
+    await page.getByRole("button", { name: /Next|Finish/ }).click();
+  }
+
+  await expect(page.getByText(/Mark scheme drill · complete/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Another set" })).toBeVisible();
+});
+
+test("the drill page does not scroll sideways on a phone", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});

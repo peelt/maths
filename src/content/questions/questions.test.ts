@@ -73,6 +73,14 @@ describe("question bank", () => {
         expect(text, `${id} seed ${q.seed}: negative value not bracketed after \\times`).not.toMatch(
           /\\(?:times|cdot)\s*-\s*\d/,
         );
+        // JavaScript's exponential notation leaking into LaTeX: "1.024e-2"
+        // renders as 1.024 times the constant e, minus 2 — a different number
+        // entirely. Use the `scientific` helper, which writes 1.024 \times
+        // 10^{-2}. Legitimate exponentials are "e^{...}", so this pattern
+        // (digit, e, sign, digit) only matches the leak.
+        expect(text, `${id} seed ${q.seed}: exponential notation leaked into LaTeX`).not.toMatch(
+          /\de[+-]\d/,
+        );
         // A bare "undefined" or "NaN" in student-facing text means a value
         // failed to interpolate. Nothing here should say those words in prose
         // either — a mark scheme says "not in the domain of", which is both

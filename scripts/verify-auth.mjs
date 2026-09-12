@@ -30,6 +30,12 @@ const CHECKS = [
   { path: "/", status: 307, redirectsTo: "/signin", why: "the dashboard must be protected" },
   { path: "/topics", status: 307, redirectsTo: "/signin", why: "topics must be protected" },
   { path: "/progress", status: 307, redirectsTo: "/signin", why: "progress must be protected" },
+  {
+    path: "/exam/drills",
+    status: 307,
+    redirectsTo: "/signin",
+    why: "a nested route must be protected too, not just top-level ones",
+  },
 ];
 
 function run(command, args) {
