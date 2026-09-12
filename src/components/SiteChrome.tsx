@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { FormulaSheet } from "./FormulaSheet";
 import { AccountStatus } from "./AccountStatus";
+import { AppearanceControls } from "./AppearanceControls";
 
 const NAV = [
   { href: "/", label: "Today" },
@@ -69,16 +70,19 @@ export function SiteChrome({ children }: { children: ReactNode }) {
                 </Link>
               );
             })}
-            <button
-              onClick={() => setSheetOpen(true)}
-              className="ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs text-muted transition-colors hover:bg-surface-2 hover:text-text sm:ml-1 sm:px-2.5 sm:text-sm"
-              aria-haspopup="dialog"
-            >
-              Formulae
-              <kbd className="hidden rounded border border-border bg-surface-2 px-1 text-[10px] font-semibold sm:inline">
-                f
-              </kbd>
-            </button>
+            <div className="ml-auto flex shrink-0 items-center gap-1 sm:ml-1">
+              <button
+                onClick={() => setSheetOpen(true)}
+                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-2.5 sm:text-sm"
+                aria-haspopup="dialog"
+              >
+                Formulae
+                <kbd className="hidden rounded border border-border bg-surface-2 px-1 text-[10px] font-semibold sm:inline">
+                  f
+                </kbd>
+              </button>
+              <AppearanceControls />
+            </div>
           </nav>
         </div>
       </header>

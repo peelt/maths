@@ -4,71 +4,204 @@
 /*
  * Design tokens.
  *
- * The palette is deliberately calm and high contrast. This is a study tool
- * used for long stretches, often late, by someone who finds visual clutter
- * costly — so there is one accent colour carrying the primary action, muted
- * surfaces, and no decoration that does not carry meaning.
+ * Built for a student with ADHD, and the palette follows what the evidence
+ * actually supports rather than a general preference for "calm colours":
+ *
+ *  1. LAYER CONTRAST CARRIES MOST OF THE BENEFIT. Children with ADHD made
+ *     fewer errors when the board and the wall behind it were different
+ *     colours, and worst of all in an all-white room. The web equivalent is a
+ *     card that is visibly distinct from its canvas. The previous palette had
+ *     a canvas-to-card ratio of 1.04:1 — white on white, the exact condition
+ *     that performed worst — and is now at least 1.25:1 in every theme.
+ *
+ *  2. NOTHING MEANINGFUL RESTS ON BLUE VERSUS YELLOW. ADHD is associated with
+ *     impaired blue-yellow discrimination, and attention tasks take markedly
+ *     longer under a blue/yellow scheme than a green/red one. Correct and
+ *     incorrect are green and red, always alongside a word. The three paper
+ *     badges used to be indigo, teal and amber — an indigo-versus-amber
+ *     distinction — and are now all one neutral, because each already says
+ *     "Pure" or "Statistics" in words and the colour was adding noise.
+ *
+ *  3. SOFTENED BASE CONTRAST. Pure black on pure white raises visual stress.
+ *     Body text was 17.4:1 here; it now sits near 8:1 — comfortably past AAA
+ *     for body text, reached with charcoal rather than black.
+ *
+ *  4. ONE DIRECTIONAL ACCENT. Muted amber means "do this next" and nothing
+ *     else. It is never used for status, and status is never amber.
+ *
+ * Every ratio above is asserted in src/app/theme.test.ts, which parses THIS
+ * file — so the stylesheet stays the single source of truth and a change that
+ * breaks one of these fails the build.
  */
+
+/* ── Mist: the default light theme ─────────────────────────────────────── */
 :root {
-  --bg: #fbfaf8;
-  --surface: #ffffff;
-  --surface-2: #f3f1ee;
-  --border: #e2dfda;
-  --text: #1c1a17;
-  --text-muted: #6b655d;
+  --bg: #d9e4ec;
+  --surface: #fbfdfe;
+  --surface-2: #c6d7e4;
+  --border: #8da2b1;
+  --border-soft: #b9cad6;
+  --text: #414d57;
+  --text-muted: #5c6e7e;
 
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
-  --accent-soft: #eef2ff;
-  --on-accent: #ffffff;
+  /* The one directional accent. "Do this next", never status. */
+  --accent: #8a5a0b;
+  --accent-fill: #d9a441;
+  --accent-fill-hover: #c68f2c;
+  --on-accent: #2a2314;
+  --accent-soft: #faf0dc;
+  --accent-border: #d9b978;
 
-  --correct: #15803d;
-  --correct-soft: #f0fdf4;
-  --correct-border: #bbf7d0;
+  /* Feedback. Green and red only, and never the only signal. */
+  --correct: #1c6b3a;
+  --correct-soft: #e3f3e8;
+  --correct-border: #8cc4a0;
 
-  --wrong: #b91c1c;
-  --wrong-soft: #fef2f2;
-  --wrong-border: #fecaca;
+  --wrong: #a62430;
+  --wrong-soft: #fbe9ea;
+  --wrong-border: #de9aa1;
 
-  --warn: #b45309;
-  --warn-soft: #fffbeb;
-  --warn-border: #fde68a;
+  /* Informational, deliberately not alarming and not amber. */
+  --note: #3f5468;
+  --note-soft: #e7eff6;
+  --note-border: #a2bcd0;
 
-  --pure: #4f46e5;
-  --statistics: #0f766e;
-  --mechanics: #b45309;
+  /*
+   * Plot series. Not semantic: these must never be read as status, so they
+   * avoid both the green/red feedback pair and the blue/yellow axis.
+   */
+  --plot-a: #17595c;
+  --plot-b: #c96f9c;
+  --plot-c: #6b6f76;
 }
 
+/* No-JavaScript dark fallback. An explicit choice below overrides this. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #14161a;
-    --surface: #1b1e24;
-    --surface-2: #23272e;
-    --border: #333841;
-    --text: #eceef1;
-    --text-muted: #9aa1ac;
+    --bg: #171c22;
+    --surface: #262f3a;
+    --surface-2: #303b47;
+    --border: #5d6975;
+    --border-soft: #414d59;
+    --text: #bac1c8;
+    --text-muted: #93a2b1;
 
-    --accent: #818cf8;
-    --accent-hover: #a5b4fc;
-    --accent-soft: #232842;
-    --on-accent: #14161a;
+    --accent: #e7b563;
+    --accent-fill: #d9a441;
+    --accent-fill-hover: #e7b563;
+    --on-accent: #1b1408;
+    --accent-soft: #312917;
+    --accent-border: #6b5526;
 
-    --correct: #4ade80;
-    --correct-soft: #16281c;
-    --correct-border: #2f5738;
+    --correct: #6fcf8e;
+    --correct-soft: #18291e;
+    --correct-border: #2f5a3c;
 
-    --wrong: #f87171;
-    --wrong-soft: #2c1919;
-    --wrong-border: #5d2c2c;
+    --wrong: #f08c8c;
+    --wrong-soft: #2b1a1b;
+    --wrong-border: #5e3234;
 
-    --warn: #fbbf24;
-    --warn-soft: #2a2212;
-    --warn-border: #5a4718;
+    --note: #a9bdd0;
+    --note-soft: #1f2832;
+    --note-border: #3c4c5c;
 
-    --pure: #818cf8;
-    --statistics: #2dd4bf;
-    --mechanics: #fbbf24;
+    --plot-a: #3f9ea1;
+    --plot-b: #f0b3ce;
+    --plot-c: #9aa3ad;
   }
+}
+
+/*
+ * Explicit choices. These come after the media query so they win at equal
+ * specificity — choosing light on a device set to dark must stick.
+ */
+[data-theme="mist"] {
+  --bg: #d9e4ec;
+  --surface: #fbfdfe;
+  --surface-2: #c6d7e4;
+  --border: #8da2b1;
+  --border-soft: #b9cad6;
+  --text: #414d57;
+  --text-muted: #5c6e7e;
+  --accent: #8a5a0b;
+  --accent-fill: #d9a441;
+  --accent-fill-hover: #c68f2c;
+  --on-accent: #2a2314;
+  --accent-soft: #faf0dc;
+  --accent-border: #d9b978;
+  --correct: #1c6b3a;
+  --correct-soft: #e3f3e8;
+  --correct-border: #8cc4a0;
+  --wrong: #a62430;
+  --wrong-soft: #fbe9ea;
+  --wrong-border: #de9aa1;
+  --note: #3f5468;
+  --note-soft: #e7eff6;
+  --note-border: #a2bcd0;
+  --plot-a: #17595c;
+  --plot-b: #c96f9c;
+  --plot-c: #6b6f76;
+}
+
+/*
+ * Warm: a cream-tinted light theme. Tinted backgrounds are the single most
+ * requested accommodation across ADHD, dyslexia and autism guidance, and the
+ * preference varies enough between people that it has to be a choice.
+ */
+[data-theme="warm"] {
+  --bg: #e8dccb;
+  --surface: #fdf8f1;
+  --surface-2: #dcccb4;
+  --border: #ac9980;
+  --border-soft: #cdbba1;
+  --text: #4d473f;
+  --text-muted: #655b4c;
+  --accent: #8a5a0b;
+  --accent-fill: #d9a441;
+  --accent-fill-hover: #c68f2c;
+  --on-accent: #2a2314;
+  --accent-soft: #f7ecd6;
+  --accent-border: #d3b274;
+  --correct: #1f6b3c;
+  --correct-soft: #e6f1e6;
+  --correct-border: #96c29e;
+  --wrong: #a62430;
+  --wrong-soft: #f9e7e4;
+  --wrong-border: #d79e96;
+  --note: #4a4034;
+  --note-soft: #efe6d9;
+  --note-border: #bca88b;
+  --plot-a: #17595c;
+  --plot-b: #c96f9c;
+  --plot-c: #6f675c;
+}
+
+[data-theme="dark"] {
+  --bg: #171c22;
+  --surface: #262f3a;
+  --surface-2: #303b47;
+  --border: #5d6975;
+  --border-soft: #414d59;
+  --text: #bac1c8;
+  --text-muted: #93a2b1;
+  --accent: #e7b563;
+  --accent-fill: #d9a441;
+  --accent-fill-hover: #e7b563;
+  --on-accent: #1b1408;
+  --accent-soft: #312917;
+  --accent-border: #6b5526;
+  --correct: #6fcf8e;
+  --correct-soft: #18291e;
+  --correct-border: #2f5a3c;
+  --wrong: #f08c8c;
+  --wrong-soft: #2b1a1b;
+  --wrong-border: #5e3234;
+  --note: #a9bdd0;
+  --note-soft: #1f2832;
+  --note-border: #3c4c5c;
+  --plot-a: #3f9ea1;
+  --plot-b: #f0b3ce;
+  --plot-c: #9aa3ad;
 }
 
 @theme inline {
@@ -76,11 +209,14 @@
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
   --color-text: var(--text);
   --color-muted: var(--text-muted);
   --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-fill-hover: var(--accent-fill-hover);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-border: var(--accent-border);
   --color-on-accent: var(--on-accent);
   --color-correct: var(--correct);
   --color-correct-soft: var(--correct-soft);
@@ -88,16 +224,37 @@
   --color-wrong: var(--wrong);
   --color-wrong-soft: var(--wrong-soft);
   --color-wrong-border: var(--wrong-border);
-  --color-warn: var(--warn);
-  --color-warn-soft: var(--warn-soft);
-  --color-warn-border: var(--warn-border);
-  --color-pure: var(--pure);
-  --color-statistics: var(--statistics);
-  --color-mechanics: var(--mechanics);
+  --color-note: var(--note);
+  --color-note-soft: var(--note-soft);
+  --color-note-border: var(--note-border);
 }
 
 html {
   color-scheme: light dark;
+  /* Slightly larger than default: less crowding, easier to hold your place. */
+  font-size: 16.5px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="mist"],
+[data-theme="warm"] {
+  color-scheme: light;
+}
+
+/*
+ * Text size is a user control, not a fixed choice. Scaling the root carries
+ * every rem-based size in the app with it, so spacing keeps its proportions
+ * instead of text growing inside boxes that do not.
+ */
+[data-text-size="large"] {
+  font-size: 18.5px;
+}
+
+[data-text-size="larger"] {
+  font-size: 20.5px;
 }
 
 body {
@@ -105,8 +262,7 @@ body {
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  /* Slightly larger than default: less crowding, easier to hold your place. */
-  font-size: 16.5px;
+  font-size: 1rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }

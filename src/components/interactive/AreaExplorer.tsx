@@ -124,7 +124,7 @@ export function AreaExplorer() {
           step={1}
           value={n}
           onChange={(event) => setN(Number(event.target.value))}
-          className="w-full accent-[var(--accent)]"
+          className="w-full accent-[var(--accent-fill)]"
         />
       </div>
 

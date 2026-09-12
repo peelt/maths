@@ -109,7 +109,7 @@ export function MarkSchemeDrill() {
               : "Worth doing again — these rules are worth marks in every single paper."}
         </p>
         {streakMessage ? (
-          <p className="mt-4 inline-block rounded-full border border-accent/30 bg-accent-soft px-4 py-1.5 text-sm font-semibold text-accent">
+          <p className="mt-4 inline-block rounded-full border border-correct-border bg-correct-soft px-4 py-1.5 text-sm font-semibold text-correct">
             {streakMessage}
           </p>
         ) : null}
@@ -122,7 +122,7 @@ export function MarkSchemeDrill() {
               setCorrectCount(0);
               setPhase("answering");
             }}
-            className="rounded-lg bg-accent px-5 py-3 font-semibold text-on-accent hover:bg-accent-hover"
+            className="rounded-lg bg-accent-fill px-5 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
           >
             Another set
           </button>
@@ -158,7 +158,7 @@ export function MarkSchemeDrill() {
           aria-valuemax={total}
         >
           <div
-            className="h-full rounded-full bg-accent transition-[width] duration-300"
+            className="h-full rounded-full bg-accent-fill transition-[width] duration-300"
             style={{ width: `${((index + 1) / total) * 100}%` }}
           />
         </div>
@@ -243,7 +243,7 @@ export function MarkSchemeDrill() {
           <button
             onClick={submit}
             disabled={choice === null}
-            className="mt-6 rounded-lg bg-accent px-5 py-2.5 font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-40"
+            className="mt-6 rounded-lg bg-accent-fill px-5 py-2.5 font-semibold text-on-accent transition-colors hover:bg-accent-fill-hover disabled:opacity-40"
           >
             Check
           </button>
@@ -280,7 +280,7 @@ export function MarkSchemeDrill() {
             <button
               onClick={next}
               autoFocus
-              className="mt-5 rounded-lg bg-accent px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-hover"
+              className="mt-5 rounded-lg bg-accent-fill px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-fill-hover"
             >
               {isLast ? "Finish" : "Next"}
             </button>

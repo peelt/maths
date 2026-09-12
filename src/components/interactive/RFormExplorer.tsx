@@ -45,8 +45,8 @@ export function RFormExplorer() {
         <Curve fn={(t) => b * Math.cos(t)} color="var(--text-muted)" width={1.5} opacity={0.5} />
         {/* The sum, and the single wave it is identical to — drawn dashed on
             top, so any disagreement would be immediately visible. */}
-        <Curve fn={sum} color="var(--accent)" width={3} />
-        <Curve fn={combined} color="var(--warn)" width={2} dashed />
+        <Curve fn={sum} color="var(--plot-a)" width={3} />
+        <Curve fn={combined} color="var(--plot-b)" width={2} dashed />
       </Plot>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -62,7 +62,7 @@ export function RFormExplorer() {
             step={1}
             value={a}
             onChange={(event) => setA(Number(event.target.value))}
-            className="w-full accent-[var(--accent)]"
+            className="w-full accent-[var(--accent-fill)]"
           />
         </div>
         <div>
@@ -77,7 +77,7 @@ export function RFormExplorer() {
             step={1}
             value={b}
             onChange={(event) => setB(Number(event.target.value))}
-            className="w-full accent-[var(--accent)]"
+            className="w-full accent-[var(--accent-fill)]"
           />
         </div>
       </div>

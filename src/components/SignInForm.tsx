@@ -113,7 +113,7 @@ export function SignInForm({ next, linkError }: Props) {
       ) : null}
 
       {!configured ? (
-        <p className="mt-4 rounded-lg border border-warn-border bg-warn-soft px-4 py-3 text-sm text-warn">
+        <p className="mt-4 rounded-lg border border-note-border bg-note-soft px-4 py-3 text-sm text-note">
           Sign-in is not configured on this deployment, so progress is saved in this browser instead.
           Everything else works normally.
         </p>
@@ -122,7 +122,7 @@ export function SignInForm({ next, linkError }: Props) {
       <button
         type="submit"
         disabled={status === "sending" || !email.trim()}
-        className="mt-5 w-full rounded-lg bg-accent px-5 py-3 font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-40"
+        className="mt-5 w-full rounded-lg bg-accent-fill px-5 py-3 font-semibold text-on-accent transition-colors hover:bg-accent-fill-hover disabled:opacity-40"
       >
         {status === "sending" ? "Sending…" : "Email me a link"}
       </button>

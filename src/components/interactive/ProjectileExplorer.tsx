@@ -67,9 +67,9 @@ export function ProjectileExplorer() {
       >
         <PlotPath points={path} color="var(--text-muted)" width={2} dashed />
         {/* Horizontal component — constant length for the whole flight. */}
-        <PlotSegment from={{ x, y }} to={{ x: x + ux * arrowX, y }} color="var(--accent)" width={3.5} />
+        <PlotSegment from={{ x, y }} to={{ x: x + ux * arrowX, y }} color="var(--plot-a)" width={3.5} />
         {/* Vertical component — shrinks, vanishes at the top, then grows downward. */}
-        <PlotSegment from={{ x, y }} to={{ x, y: y + vy * arrowY }} color="var(--warn)" width={3.5} />
+        <PlotSegment from={{ x, y }} to={{ x, y: y + vy * arrowY }} color="var(--plot-b)" width={3.5} />
         <PlotPoint x={x} y={y} />
       </Plot>
 
@@ -86,7 +86,7 @@ export function ProjectileExplorer() {
             step={1}
             value={speed}
             onChange={(event) => setSpeed(Number(event.target.value))}
-            className="w-full accent-[var(--accent)]"
+            className="w-full accent-[var(--accent-fill)]"
           />
         </div>
         <div>
@@ -101,7 +101,7 @@ export function ProjectileExplorer() {
             step={1}
             value={angle}
             onChange={(event) => setAngle(Number(event.target.value))}
-            className="w-full accent-[var(--accent)]"
+            className="w-full accent-[var(--accent-fill)]"
           />
         </div>
         <div>
@@ -116,7 +116,7 @@ export function ProjectileExplorer() {
             step={0.01}
             value={clampedT}
             onChange={(event) => setT(Number(event.target.value))}
-            className="w-full accent-[var(--accent)]"
+            className="w-full accent-[var(--accent-fill)]"
           />
         </div>
       </div>

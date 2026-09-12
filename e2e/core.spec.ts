@@ -40,7 +40,7 @@ test("answering a question gives immediate feedback and a mark scheme", async ({
     await page.getByRole("button", { name: "Check" }).click();
   } else {
     // A multiple choice question — pick the first option.
-    await page.locator("fieldset button").first().click();
+    await page.locator("main fieldset button").first().click();
     await page.getByRole("button", { name: "Check" }).click();
   }
 
@@ -80,7 +80,7 @@ test("progress survives a reload", async ({ page }) => {
     await input.fill("1");
     await page.getByRole("button", { name: "Check" }).click();
   } else {
-    await page.locator("fieldset button").first().click();
+    await page.locator("main fieldset button").first().click();
     await page.getByRole("button", { name: "Check" }).click();
   }
 
@@ -142,7 +142,7 @@ test("the progress page reports what you have done", async ({ page }) => {
     await input.fill("1");
     await page.getByRole("button", { name: "Check" }).click();
   } else {
-    await page.locator("fieldset button").first().click();
+    await page.locator("main fieldset button").first().click();
     await page.getByRole("button", { name: "Check" }).click();
   }
   await expect(page.getByRole("button", { name: /Next question|Finish/ })).toBeVisible();
@@ -197,7 +197,7 @@ test("a mark scheme drill can be answered and gives the meaning of the code", as
   await expect(page.getByText(/1 of 6/)).toBeVisible();
 
   // Pick the first option and check it. Right or wrong, an explanation follows.
-  await page.locator("fieldset button").first().click();
+  await page.locator("main fieldset button").first().click();
   await page.getByRole("button", { name: "Check", exact: true }).click();
 
   await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
@@ -209,7 +209,7 @@ test("a mark scheme drill runs to the end and offers another set", async ({ page
   await expect(page.getByText(/1 of 6/)).toBeVisible();
 
   for (let i = 0; i < 6; i++) {
-    await page.locator("fieldset button").first().click();
+    await page.locator("main fieldset button").first().click();
     await page.getByRole("button", { name: "Check", exact: true }).click();
     await page.getByRole("button", { name: /Next|Finish/ }).click();
   }
@@ -229,7 +229,8 @@ test("the drill page does not scroll sideways on a phone", async ({ page }) => {
 
 test("a spec point offers a teaching note with a method and pitfalls", async ({ page }) => {
   await page.goto("/topics/differentiation");
-  const note = page.locator("details").first();
+  // Scoped to main: the header also has a <details> for display settings.
+  const note = page.locator("main details").first();
   // Collapsed by default, so the page stays scannable.
   await expect(note).not.toHaveAttribute("open", "");
   await note.locator("summary").click();
@@ -304,4 +305,74 @@ test("the projectile interactive keeps horizontal velocity constant", async ({ p
 
   // Horizontal velocity is unchanged by time — there is no horizontal force.
   expect(early).toBe(late);
+});
+
+test("the display panel offers light, tinted and dark, and the choice sticks", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Display settings").click();
+
+  // Every option is visible at once rather than hidden behind a cycling
+  // toggle, so the current state is always readable.
+  for (const name of ["System", "Mist", "Warm", "Dark"]) {
+    await expect(page.getByRole("button", { name: new RegExp(name) })).toBeVisible();
+  }
+
+  await page.getByRole("button", { name: /Dark/ }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+  // The choice must survive a reload, and apply before the first paint.
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("the saved theme is applied before the page paints", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => localStorage.setItem("appearance.theme", "warm"));
+
+  // Capture the attribute at the earliest possible moment on the next load.
+  await page.goto("/topics");
+  const earliest = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+  expect(earliest).toBe("warm");
+});
+
+test("text size scales the whole page, not just the text", async ({ page }) => {
+  await page.goto("/");
+  const rootSize = () => page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+  const before = await rootSize();
+
+  await page.getByLabel("Display settings").click();
+  await page.getByRole("button", { name: "Larger", exact: true }).click();
+
+  // Scaling the root carries every rem-based size with it, so spacing keeps
+  // its proportions instead of text growing inside boxes that do not.
+  expect(await rootSize()).toBeGreaterThan(before);
+  await expect(page.locator("html")).toHaveAttribute("data-text-size", "larger");
+});
+
+test("choosing a light theme overrides a device set to dark", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.getByLabel("Display settings").click();
+  await page.getByRole("button", { name: /Mist/ }).click();
+
+  // An explicit choice has to win over the media query, or picking light on a
+  // dark device would silently do nothing.
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(bg).toBe("rgb(217, 228, 236)");
+});
+
+test("the card is visibly distinct from the canvas in every theme", async ({ page }) => {
+  // The most supported ADHD-specific finding in the design brief: a distinct
+  // figure against its ground reduces errors, and all-white performs worst.
+  for (const theme of ["mist", "warm", "dark"]) {
+    await page.goto("/");
+    await page.evaluate((t) => localStorage.setItem("appearance.theme", t), theme);
+    await page.reload();
+
+    const { canvas, card } = await page.evaluate(() => {
+      const styles = getComputedStyle(document.documentElement);
+      return { canvas: styles.getPropertyValue("--bg").trim(), card: styles.getPropertyValue("--surface").trim() };
+    });
+    expect(canvas, theme).not.toBe(card);
+  }
 });

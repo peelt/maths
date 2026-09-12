@@ -80,13 +80,13 @@ export function UnitCircleExplorer() {
             <PlotSegment
               from={{ x: cos, y: 0 }}
               to={{ x: cos, y: sin }}
-              color={show === "sin" ? "var(--accent)" : "var(--border)"}
+              color={show === "sin" ? "var(--plot-b)" : "var(--border)"}
               width={show === "sin" ? 3.5 : 2}
             />
             <PlotSegment
               from={{ x: 0, y: 0 }}
               to={{ x: cos, y: 0 }}
-              color={show === "cos" ? "var(--accent)" : "var(--border)"}
+              color={show === "cos" ? "var(--plot-b)" : "var(--border)"}
               width={show === "cos" ? 3.5 : 2}
             />
             <PlotPoint x={cos} y={sin} />
@@ -106,7 +106,7 @@ export function UnitCircleExplorer() {
             <PlotSegment
               from={{ x: theta, y: 0 }}
               to={{ x: theta, y: height }}
-              color="var(--accent)"
+              color="var(--plot-b)"
               width={3.5}
             />
             <PlotPoint x={theta} y={height} />
@@ -126,7 +126,7 @@ export function UnitCircleExplorer() {
           step={0.01}
           value={theta}
           onChange={(event) => setTheta(Number(event.target.value))}
-          className="w-full accent-[var(--accent)]"
+          className="w-full accent-[var(--accent-fill)]"
         />
       </div>
 

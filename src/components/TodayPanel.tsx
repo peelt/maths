@@ -124,7 +124,7 @@ export function TodayPanel() {
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Link
           href={`/practice/${nextTopicSlug}`}
-          className="inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3.5 text-lg font-semibold text-on-accent transition-colors hover:bg-accent-hover"
+          className="inline-flex items-center justify-center rounded-lg bg-accent-fill px-6 py-3.5 text-lg font-semibold text-on-accent transition-colors hover:bg-accent-fill-hover"
         >
           Start
         </Link>

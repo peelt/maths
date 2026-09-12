@@ -99,7 +99,7 @@ export function TransformationExplorer() {
 
       <Plot xRange={[-5, 5]} yRange={[-6, 6]} label={`Graph showing ${config.label} against the original curve`}>
         <Curve fn={BASE} color="var(--text-muted)" width={2} dashed opacity={0.6} />
-        <Curve fn={config.apply(value)} color="var(--accent)" width={3} />
+        <Curve fn={config.apply(value)} color="var(--plot-a)" width={3} />
       </Plot>
 
       <div className="mt-4">
@@ -112,7 +112,7 @@ export function TransformationExplorer() {
             step={isMultiply ? 0.5 : 1}
             value={a}
             onChange={(event) => setA(Number(event.target.value))}
-            className="h-1.5 flex-1 cursor-pointer accent-[var(--accent)]"
+            className="h-1.5 flex-1 cursor-pointer accent-[var(--accent-fill)]"
             aria-label={`Value of a in ${config.label}`}
           />
         </label>

@@ -69,8 +69,8 @@ export function DerivativeExplorer() {
 
       <Plot xRange={[-4, 4]} yRange={[-5, 5]} label={`Tangent to ${curve.label} at x = ${x.toFixed(2)}`}>
         <Curve fn={curve.f} width={3} />
-        <StraightLine through={{ x, y }} gradient={gradient} color={stationary ? "var(--correct)" : "var(--warn)"} />
-        <PlotPoint x={x} y={y} color={stationary ? "var(--correct)" : "var(--warn)"} />
+        <StraightLine through={{ x, y }} gradient={gradient} color={stationary ? "var(--correct)" : "var(--plot-b)"} />
+        <PlotPoint x={x} y={y} color={stationary ? "var(--correct)" : "var(--plot-b)"} />
       </Plot>
 
       <div className="mt-4">
@@ -83,7 +83,7 @@ export function DerivativeExplorer() {
             step={0.05}
             value={x}
             onChange={(event) => setX(Number(event.target.value))}
-            className="h-1.5 flex-1 cursor-pointer accent-[var(--accent)]"
+            className="h-1.5 flex-1 cursor-pointer accent-[var(--accent-fill)]"
             aria-label="Position of the point on the curve"
           />
         </label>
