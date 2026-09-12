@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import katex from "katex";
+import { toHtml } from "@/components/Maths";
 import { generateQuestion, questionTemplates } from "@/lib/questions";
 import { markAnswer } from "@/lib/marking";
 import { allSpecPoints, getSpecPoint, allTopics } from "@/content/spec";
@@ -109,6 +110,26 @@ describe("question bank", () => {
             () => katex.renderToString(segment, { throwOnError: true }),
             `${id} seed ${q.seed}: $${segment}$`,
           ).not.toThrow();
+        }
+      }
+    });
+
+    it("renders with no dollar sign left on the page", () => {
+      // The source-level checks above all passed while $$ … $$ rendered with
+      // literal dollar signs and typeset the following sentence as maths. They
+      // could not have caught it: they check the LaTeX, never the output. This
+      // one renders what the student actually sees.
+      for (let i = 0; i < 12; i++) {
+        const q = generateQuestion(template, i * 60013 + 3);
+        const parts = [
+          q.prompt,
+          q.hint ?? "",
+          q.trap ?? "",
+          ...q.solution.map((s) => s.text),
+          ...q.solution.map((s) => s.why ?? ""),
+        ];
+        for (const part of parts) {
+          expect(toHtml(part), `${id} seed ${q.seed}`).not.toContain("$");
         }
       }
     });

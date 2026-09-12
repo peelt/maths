@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { allSpecPoints, allTopics, getSpecPoint, inYear, qualifiedCode, specStats } from "./index";
+import { toHtml } from "@/components/Maths";
 
 describe("9MA0 specification map", () => {
   it("covers every topic in the qualification", () => {
@@ -49,6 +50,20 @@ describe("9MA0 specification map", () => {
   it("assigns every spec point to at least one teaching year", () => {
     for (const point of allSpecPoints) {
       expect(inYear(point, 1) || inYear(point, 2)).toBe(true);
+    }
+  });
+});
+
+describe("specification text renders cleanly", () => {
+  it("leaves no dollar sign on the page", () => {
+    // Same invariant as the question bank and the teaching notes: check the
+    // rendered output, not just the LaTeX source.
+    for (const topic of allTopics) {
+      for (const point of topic.points) {
+        for (const part of [point.title, point.summary, point.examNote ?? ""]) {
+          expect(toHtml(part), qualifiedCode(topic.paper, point.code)).not.toContain("$");
+        }
+      }
     }
   });
 });

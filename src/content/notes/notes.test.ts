@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import katex from "katex";
 import { noteFor, teachingNotes } from "@/content/notes";
 import { allTopics, getSpecPoint } from "@/content/spec";
+import { toHtml } from "@/components/Maths";
 
 /** Pull out the maths between $ … $ delimiters. */
 function extractMaths(text: string): string[] {
@@ -95,5 +96,17 @@ describe("teaching notes", () => {
     expect(noteFor("pure", "7.4")).toBeDefined();
     expect(noteFor("pure", "7.4")!.method.length).toBeGreaterThan(0);
     expect(noteFor("statistics", "7.4")).toBeUndefined();
+  });
+});
+
+describe("teaching notes render cleanly", () => {
+  it("leaves no dollar sign on the page", () => {
+    // The same check the question bank now has. Source-level LaTeX tests
+    // cannot see a delimiter that renders wrongly; this renders the output.
+    for (const note of teachingNotes) {
+      for (const part of [note.idea, ...note.method, ...note.watchFor]) {
+        expect(toHtml(part), `${note.paper}:${note.specCode}`).not.toContain("$");
+      }
+    }
   });
 });
