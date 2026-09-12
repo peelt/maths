@@ -21,7 +21,7 @@ Built around three ideas:
 | **Question bank** | 107 parameterised templates covering **all 89 spec points**, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
 | **Teaching notes** | A note for every spec point: the idea, a numbered method, and the things that actually go wrong — collapsed by default so the page stays scannable |
 | **Mark scheme drills** | Practise reading a mark scheme: which step earns the method mark, what a dependent mark needs, what an arithmetic slip really costs |
-| **Interactives** | Graph transformations and the derivative-as-gradient, where seeing it move beats reading about it |
+| **Interactives** | Six, each targeting a specific misconception: the unit circle behind the trig graphs, integration as a limit of a sum, R form as one wave, projectile components, graph transformations, and the derivative as a gradient |
 | **Spaced repetition** | Every spec point is scheduled to come back before it is forgotten |
 | **Progress history** | What you have covered, per-topic accuracy and mastery, and the spec points worth going back to |
 | **Sign-in** | Magic link — an email address, no password |
@@ -198,9 +198,10 @@ is worse than one that admits its gaps.
 - Depth within a spec point. One template per spec point means one shape of
   question; a student who has seen it twice has seen the shape. The points with
   a single template are the obvious place to add next.
-- Interactives. Two so far, on graph transformations and the derivative as a
-  gradient — the two places where watching it move genuinely beats reading
-  about it.
+- Interactives. Six, covering the places where watching something move beats
+  reading about it. More would be possible — the normal distribution and
+  connected particles are the obvious candidates — but an interactive only
+  earns its place where a sentence genuinely cannot do the job.
 
 Tests assert both kinds of full coverage, so adding a spec point without
 questions or without a note fails the build rather than quietly leaving a gap.

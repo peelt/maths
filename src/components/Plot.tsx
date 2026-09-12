@@ -214,3 +214,132 @@ export function StraightLine({
     />
   );
 }
+
+/**
+ * A circle in data coordinates.
+ *
+ * Drawn as an ellipse using both scales independently, so it stays
+ * geometrically honest even when the axes are not equally scaled — a circle
+ * squashed into an oval would undermine the one thing a unit circle is for.
+ */
+export function PlotCircle({
+  cx = 0,
+  cy = 0,
+  r,
+  color = "var(--text-muted)",
+  width = 2,
+  dashed = false,
+}: {
+  cx?: number;
+  cy?: number;
+  r: number;
+  color?: string;
+  width?: number;
+  dashed?: boolean;
+}) {
+  const { x, y } = useScale();
+  return (
+    <ellipse
+      cx={x(cx)}
+      cy={y(cy)}
+      rx={Math.abs(x(cx + r) - x(cx))}
+      ry={Math.abs(y(cy + r) - y(cy))}
+      fill="none"
+      stroke={color}
+      strokeWidth={width}
+      strokeDasharray={dashed ? "5 4" : undefined}
+    />
+  );
+}
+
+/** A line segment between two points in data coordinates. */
+export function PlotSegment({
+  from,
+  to,
+  color = "var(--accent)",
+  width = 2,
+  dashed = false,
+}: {
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+  color?: string;
+  width?: number;
+  dashed?: boolean;
+}) {
+  const { x, y } = useScale();
+  return (
+    <line
+      x1={x(from.x)}
+      y1={y(from.y)}
+      x2={x(to.x)}
+      y2={y(to.y)}
+      stroke={color}
+      strokeWidth={width}
+      strokeLinecap="round"
+      strokeDasharray={dashed ? "5 4" : undefined}
+    />
+  );
+}
+
+/** A filled rectangle in data coordinates — the strips of a Riemann sum. */
+export function PlotRect({
+  x0,
+  x1,
+  y0,
+  y1,
+  fill = "var(--accent)",
+  opacity = 0.25,
+  stroke = "var(--accent)",
+}: {
+  x0: number;
+  x1: number;
+  y0: number;
+  y1: number;
+  fill?: string;
+  opacity?: number;
+  stroke?: string;
+}) {
+  const { x, y } = useScale();
+  const left = Math.min(x(x0), x(x1));
+  const top = Math.min(y(y0), y(y1));
+  return (
+    <rect
+      x={left}
+      y={top}
+      width={Math.abs(x(x1) - x(x0))}
+      height={Math.abs(y(y1) - y(y0))}
+      fill={fill}
+      opacity={opacity}
+      stroke={stroke}
+      strokeWidth={1}
+    />
+  );
+}
+
+/** A polyline through data points — a trajectory, or a sampled path. */
+export function PlotPath({
+  points,
+  color = "var(--accent)",
+  width = 2.5,
+  dashed = false,
+}: {
+  points: { x: number; y: number }[];
+  color?: string;
+  width?: number;
+  dashed?: boolean;
+}) {
+  const { x, y } = useScale();
+  if (points.length === 0) return null;
+  const d = points.map((p, i) => `${i === 0 ? "M" : "L"}${x(p.x).toFixed(2)},${y(p.y).toFixed(2)}`).join("");
+  return (
+    <path
+      d={d}
+      fill="none"
+      stroke={color}
+      strokeWidth={width}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeDasharray={dashed ? "6 5" : undefined}
+    />
+  );
+}
