@@ -18,8 +18,10 @@ Built around three ideas:
 |---|---|
 | **Specification map** | 19 topics, 89 spec points across Pure, Statistics and Mechanics, with exam guidance on each |
 | **Formula reference** | Split by whether a formula is **given in the exam booklet** or must be **memorised** — press <kbd>f</kbd> anywhere |
-| **Question bank** | 52 parameterised templates across all 19 topics, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
-| **Interactives** | Graph transformations and the derivative-as-gradient, where seeing it move beats reading about it |
+| **Question bank** | 107 parameterised templates covering **all 89 spec points**, generating fresh numbers every attempt, auto-marked, with mark-scheme-annotated solutions |
+| **Teaching notes** | A note for every spec point: the idea, a numbered method, and the things that actually go wrong — collapsed by default so the page stays scannable |
+| **Mark scheme drills** | Practise reading a mark scheme: which step earns the method mark, what a dependent mark needs, what an arithmetic slip really costs |
+| **Interactives** | Six, each targeting a specific misconception: the unit circle behind the trig graphs, integration as a limit of a sum, R form as one wave, projectile components, graph transformations, and the derivative as a gradient |
 | **Spaced repetition** | Every spec point is scheduled to come back before it is forgotten |
 | **Progress history** | What you have covered, per-topic accuracy and mastery, and the spec points worth going back to |
 | **Sign-in** | Magic link — an email address, no password |
@@ -182,17 +184,27 @@ is worse than one that admits its gaps.
 - The exam guide — papers, assessment objectives, mark scheme codes, the large
   data set, calculator requirements.
 
+- The question bank. 107 templates covering every one of the 89 spec points,
+  so nothing in the specification is invisible to the scheduler. Depth still
+  varies — Algebra and functions has the most question types, and several spec
+  points have exactly one — but no spec point has none.
+- Teaching notes. One for every spec point: the idea, a numbered method you
+  could follow under exam pressure, and the handful of things that go wrong.
+- Mark scheme drills, generated from the question bank plus authored questions
+  on the marking rules themselves.
+
 **Partial:**
 
-- The question bank. 52 templates covering all 19 topics and roughly a third of
-  the 89 spec points, weighted towards Year 1 Pure. Depth varies: Algebra and
-  functions has eleven question types, Moments has one.
-- Interactives. Two so far, on graph transformations and the derivative as a
-  gradient — the two places where watching it move genuinely beats reading
-  about it.
+- Depth within a spec point. One template per spec point means one shape of
+  question; a student who has seen it twice has seen the shape. The points with
+  a single template are the obvious place to add next.
+- Interactives. Six, covering the places where watching something move beats
+  reading about it. More would be possible — the normal distribution and
+  connected particles are the obvious candidates — but an interactive only
+  earns its place where a sentence genuinely cannot do the job.
 
-Every topic page states plainly whether a spec point can be practised yet, and
-the dashboard only offers topics that actually have questions.
+Tests assert both kinds of full coverage, so adding a spec point without
+questions or without a note fails the build rather than quietly leaving a gap.
 
 ---
 

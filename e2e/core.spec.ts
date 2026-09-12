@@ -183,3 +183,125 @@ test("a confirm link reports a same-browser failure distinctly", async ({ page }
   await page.goto("/auth/confirm?code=not-a-real-code");
   await expect(page).toHaveURL(/\/signin\?error=(wrong-device|unavailable)/);
 });
+
+test("the exam guide links to the mark scheme drill", async ({ page }) => {
+  await page.goto("/exam");
+  await expect(page.getByRole("link", { name: /Drill the mark scheme/ })).toBeVisible();
+});
+
+test("a mark scheme drill can be answered and gives the meaning of the code", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByRole("heading", { name: "Mark scheme drills" })).toBeVisible();
+
+  // The set is built after mount, so wait for the first question.
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+
+  // Pick the first option and check it. Right or wrong, an explanation follows.
+  await page.locator("fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Next|Finish/ })).toBeVisible();
+});
+
+test("a mark scheme drill runs to the end and offers another set", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+
+  for (let i = 0; i < 6; i++) {
+    await page.locator("fieldset button").first().click();
+    await page.getByRole("button", { name: "Check", exact: true }).click();
+    await page.getByRole("button", { name: /Next|Finish/ }).click();
+  }
+
+  await expect(page.getByText(/Mark scheme drill · complete/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Another set" })).toBeVisible();
+});
+
+test("the drill page does not scroll sideways on a phone", async ({ page }) => {
+  await page.goto("/exam/drills");
+  await expect(page.getByText(/1 of 6/)).toBeVisible();
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("a spec point offers a teaching note with a method and pitfalls", async ({ page }) => {
+  await page.goto("/topics/differentiation");
+  const note = page.locator("details").first();
+  // Collapsed by default, so the page stays scannable.
+  await expect(note).not.toHaveAttribute("open", "");
+  await note.locator("summary").click();
+  await expect(note.getByText("Method")).toBeVisible();
+  await expect(note.getByText("Watch for")).toBeVisible();
+});
+
+test("the teaching note is in the served HTML, not only after hydration", async ({ request }) => {
+  // A <details> was chosen over a React toggle precisely so the content is
+  // present and readable before any JavaScript runs.
+  const response = await request.get("/topics/differentiation");
+  const html = await response.text();
+  expect(html).toContain("How it works");
+  expect(html).toContain("Watch for");
+});
+
+test("the unit circle interactive links the circle to the graph", async ({ page }) => {
+  await page.goto("/topics/trigonometry");
+  // The same explorer is registered against 5.1 and 5.3, so scope to one.
+  const panel = page.locator("li").filter({ hasText: "Where sine and cosine come from" }).first();
+  await expect(panel).toBeVisible();
+
+  await panel.getByRole("button", { name: "π/6", exact: true }).click();
+  await expect(panel.getByText("sin θ = 0.500")).toBeVisible();
+  await expect(panel.getByText("cos θ = 0.866")).toBeVisible();
+  // Pythagoras on the radius must hold at every angle.
+  await expect(panel.getByText("sin²+cos² = 1.000")).toBeVisible();
+});
+
+test("the R form interactive shows the maximum is R, not a + b", async ({ page }) => {
+  await page.goto("/topics/trigonometry");
+  const panel = page.locator("li").filter({ hasText: "Two waves make one" }).first();
+  await expect(panel).toBeVisible();
+  // Defaults are a = 3, b = 4, so R = 5 while a + b = 7.
+  await expect(panel.getByText("5.000").first()).toBeVisible();
+  await expect(panel.getByText("a + b, for comparison")).toBeVisible();
+});
+
+test("the area interactive converges on the exact integral as strips increase", async ({ page }) => {
+  await page.goto("/topics/integration");
+  // Registered against 8.3 and 8.4; take the first.
+  const panel = page.locator("li").filter({ hasText: "Area under a curve, by rectangles" }).first();
+  await expect(panel).toBeVisible();
+
+  const slider = panel.locator('input[type="range"]');
+  const errorOf = async () => {
+    const text = await panel.getByText("Error", { exact: true }).locator("..").innerText();
+    return Math.abs(Number(text.split("\n").pop()));
+  };
+
+  await slider.fill("4");
+  const coarse = await errorOf();
+  await slider.fill("60");
+  const fine = await errorOf();
+
+  // The whole point of the interactive: more strips, less error.
+  expect(fine).toBeLessThan(coarse);
+});
+
+test("the projectile interactive keeps horizontal velocity constant", async ({ page }) => {
+  await page.goto("/topics/kinematics");
+  const panel = page.locator("li").filter({ hasText: "Horizontal and vertical are independent" }).first();
+  await expect(panel).toBeVisible();
+
+  const horizontal = panel.getByText("Horizontal velocity", { exact: true }).locator("..");
+  const time = panel.locator("#time");
+
+  await time.fill("0.2");
+  const early = await horizontal.innerText();
+  await time.fill("2.5");
+  const late = await horizontal.innerText();
+
+  // Horizontal velocity is unchanged by time — there is no horizontal force.
+  expect(early).toBe(late);
+});

@@ -66,3 +66,32 @@ export function fraction(numerator: number, denominator: number): string {
   // which is how it would be written by hand and in the mark scheme.
   return n < 0 ? `-\\frac{${-n}}{${d}}` : `\\frac{${n}}{${d}}`;
 }
+
+/**
+ * A factor written after a multiplication sign, bracketed when it is negative.
+ *
+ * "3 \times -0.5" is how a machine writes it and "3 \times (-0.5)" is how a
+ * person does. The difference is small but it is exactly the kind of tell that
+ * makes generated questions feel untrustworthy.
+ */
+export function factor(value: number | string): string {
+  const text = String(value);
+  return text.startsWith("-") ? `(${text})` : text;
+}
+
+/**
+ * A number in scientific notation, as LaTeX.
+ *
+ * JavaScript's toExponential gives "1.024e-2", which rendered as maths reads
+ * as 1.024 times the constant e, minus 2 — a different number, and a confusing
+ * one to meet inside a mark scheme. This writes it the way it is written by
+ * hand: 1.024 \times 10^{-2}.
+ */
+export function scientific(value: number, digits = 3): string {
+  if (!Number.isFinite(value)) return String(value);
+  if (value === 0) return "0";
+  const [mantissa, exponent] = value.toExponential(digits).split("e");
+  const power = Number(exponent);
+  if (power === 0) return mantissa;
+  return `${mantissa}\\times 10^{${power}}`;
+}

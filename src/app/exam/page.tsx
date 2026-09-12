@@ -108,6 +108,19 @@ export default function ExamPage() {
             </div>
           ))}
         </dl>
+
+        <Link
+          href="/exam/drills"
+          className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-accent/40 bg-accent-soft p-5 transition-colors hover:bg-accent-soft/70"
+        >
+          <span>
+            <span className="block font-bold text-accent">Drill the mark scheme →</span>
+            <span className="mt-1 block text-sm text-muted">
+              Reading what the codes mean is not the same as spotting which line of your own working
+              earns which mark. Six questions, real mark schemes.
+            </span>
+          </span>
+        </Link>
       </section>
 
       <section className="mb-10">

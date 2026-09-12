@@ -1,6 +1,6 @@
 import type { QuestionTemplate } from "@/lib/questions/types";
 import { binomialPmf, choose, normalCdf, standardDeviation, sxx } from "./numeric";
-import { signed } from "./format";
+import { scientific, signed } from "./format";
 
 /**
  * Question templates for Paper 3, Section A: Statistics.
@@ -251,7 +251,7 @@ export const statisticsQuestions: QuestionTemplate[] = [
             text: `$\\mathrm{P}(X=${k})=\\binom{${n}}{${k}}(${p})^{${k}}(${(1 - p).toFixed(2)})^{${n - k}}$`,
             why: "The formula is in the booklet. In the exam you would normally get this straight from the calculator's binomial PD function — worth finding it on his actual model before the exam.",
           },
-          { mark: "M1", text: `$=${choose(n, k)}\\times${Math.pow(p, k).toExponential(3)}\\times${Math.pow(1 - p, n - k).toExponential(3)}$` },
+          { mark: "M1", text: `$=${choose(n, k)}\\times${scientific(Math.pow(p, k))}\\times${scientific(Math.pow(1 - p, n - k))}$` },
           { mark: "A1", text: `$=${value.toFixed(4)}$` },
         ],
         trap: "Confusing P(X = k) with P(X ≤ k). The calculator has separate PD and CD functions, and choosing the wrong one is a very common slip.",

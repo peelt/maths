@@ -6,6 +6,7 @@ import { questionTemplates, specPointsWithQuestions } from "@/lib/questions";
 import { Maths } from "@/components/Maths";
 import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
+import { noteFor } from "@/content/notes";
 
 export function generateStaticParams() {
   return allTopics.map((topic) => ({ slug: topic.slug }));
@@ -50,8 +51,9 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
         </Link>
       ) : (
         <p className="mb-10 rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm text-muted">
-          No practice questions for this topic yet — the bank is being built out starting with Year 1
-          Pure. The spec breakdown below is complete and usable for revision now.
+          No practice questions could be built for this topic. Every spec point has questions, so
+          this means something has gone wrong rather than that the topic is unfinished — the spec
+          breakdown below is unaffected.
         </p>
       )}
 
@@ -59,6 +61,7 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
         {topic.points.map((point) => {
           const hasQuestions = covered.has(`${topic.paper}:${point.code}`);
           const interactive = interactiveFor(topic.paper, point.code);
+          const note = noteFor(topic.paper, point.code);
           return (
             <li key={point.code} id={point.code} className="rounded-xl border border-border bg-surface p-5">
               <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -85,6 +88,51 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
                   </p>
                   <Maths className="text-sm leading-relaxed [&_p]:m-0">{point.examNote}</Maths>
                 </div>
+              ) : null}
+
+              {note ? (
+                /*
+                 * Collapsed by default, and a plain <details> rather than a
+                 * React toggle: it works before hydration, it is keyboard
+                 * accessible for free, and the page stays scannable. A topic
+                 * page that opens as a wall of prose is one that does not get
+                 * read, which matters more than usual here.
+                 */
+                <details className="group mt-4 rounded-lg border border-border bg-surface-2">
+                  <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold marker:content-none">
+                    <span className="text-accent group-open:hidden">How it works ▸</span>
+                    <span className="hidden text-accent group-open:inline">How it works ▾</span>
+                  </summary>
+                  <div className="border-t border-border px-4 py-4">
+                    <Maths className="text-[0.95rem] leading-relaxed [&_p]:m-0">{note.idea}</Maths>
+
+                    <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wider text-muted">
+                      Method
+                    </p>
+                    <ol className="space-y-2">
+                      {note.method.map((step, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span className="mt-0.5 h-fit shrink-0 rounded bg-surface px-1.5 py-0.5 font-mono text-xs font-bold tabular-nums">
+                            {i + 1}
+                          </span>
+                          <Maths className="min-w-0 flex-1 text-sm leading-relaxed [&_p]:m-0">{step}</Maths>
+                        </li>
+                      ))}
+                    </ol>
+
+                    <p className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wider text-warn">
+                      Watch for
+                    </p>
+                    <ul className="space-y-2">
+                      {note.watchFor.map((item, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-warn" />
+                          <Maths className="min-w-0 flex-1 text-sm leading-relaxed [&_p]:m-0">{item}</Maths>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
               ) : null}
 
               {interactive ? (

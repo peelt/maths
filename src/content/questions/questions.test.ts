@@ -64,17 +64,46 @@ describe("question bank", () => {
     it("never renders a malformed number or sign", () => {
       for (let i = 0; i < VARIANTS; i++) {
         const q = generateQuestion(template, i * 31337 + 5);
-        const text = [q.prompt, ...q.solution.map((s) => s.text)].join(" ");
+        const text = [q.prompt, q.hint ?? "", q.trap ?? "", ...q.solution.map((s) => s.text)].join(" ");
         // "+ -3" or "- -3" is the classic giveaway of a generated question.
         expect(text, `${id} seed ${q.seed}`).not.toMatch(/[+-]\s*-\s*\d/);
-        expect(text).not.toMatch(/undefined|NaN|Infinity/);
+        // So is a bare negative straight after a multiplication sign: a value
+        // that can go negative needs bracketing, as "3 \times -0.5" would be
+        // written "3 \times (-0.5)" by hand.
+        expect(text, `${id} seed ${q.seed}: negative value not bracketed after \\times`).not.toMatch(
+          /\\(?:times|cdot)\s*-\s*\d/,
+        );
+        // JavaScript's exponential notation leaking into LaTeX: "1.024e-2"
+        // renders as 1.024 times the constant e, minus 2 — a different number
+        // entirely. Use the `scientific` helper, which writes 1.024 \times
+        // 10^{-2}. Legitimate exponentials are "e^{...}", so this pattern
+        // (digit, e, sign, digit) only matches the leak.
+        expect(text, `${id} seed ${q.seed}: exponential notation leaked into LaTeX`).not.toMatch(
+          /\de[+-]\d/,
+        );
+        // A bare "undefined" or "NaN" in student-facing text means a value
+        // failed to interpolate. Nothing here should say those words in prose
+        // either — a mark scheme says "not in the domain of", which is both
+        // correct and unambiguous.
+        expect(text, `${id} seed ${q.seed}: a value failed to interpolate, or prose used a reserved word`).not.toMatch(
+          /undefined|NaN|Infinity/,
+        );
       }
     });
 
     it("writes valid LaTeX in prompts and solutions", () => {
       for (let i = 0; i < 12; i++) {
         const q = generateQuestion(template, i * 60013 + 3);
-        const text = [q.prompt, ...q.solution.map((s) => s.text), ...q.solution.map((s) => s.why ?? "")].join(" ");
+        // Hints and traps carry LaTeX too, and are shown to the student just
+        // as prominently as the solution — an unclosed brace there breaks the
+        // page at exactly the moment they got something wrong.
+        const text = [
+          q.prompt,
+          q.hint ?? "",
+          q.trap ?? "",
+          ...q.solution.map((s) => s.text),
+          ...q.solution.map((s) => s.why ?? ""),
+        ].join(" ");
         for (const segment of extractMaths(text)) {
           expect(
             () => katex.renderToString(segment, { throwOnError: true }),
@@ -94,12 +123,23 @@ describe("question bank", () => {
 });
 
 describe("question bank coverage", () => {
-  it("reports honestly which spec points can be practised", () => {
+  it("has at least one question for every spec point", () => {
+    // The scheduler can only ever surface a spec point that has questions, so
+    // an uncovered point is invisible to spaced repetition rather than merely
+    // thin — a student could revise diligently and never be shown it. This is
+    // an assertion rather than a report so that adding a spec point without
+    // questions fails here instead of quietly leaving a hole in the course.
     const covered = new Set(questionTemplates.map((t) => `${t.paper}:${t.specCode}`));
-    const total = allSpecPoints.length;
-    // Not a pass/fail target — this is a visible record of where the bank is.
-    console.log(`Question coverage: ${covered.size} of ${total} spec points across ${allTopics.length} topics`);
-    expect(covered.size).toBeGreaterThan(0);
+    const missing: string[] = [];
+    for (const topic of allTopics) {
+      for (const point of topic.points) {
+        if (!covered.has(`${topic.paper}:${point.code}`)) {
+          missing.push(`${topic.paper}:${point.code} (${point.title})`);
+        }
+      }
+    }
+    expect(missing, `spec points with no practice: ${missing.join(", ")}`).toEqual([]);
+    expect(covered.size).toBe(allSpecPoints.length);
   });
 });
 
