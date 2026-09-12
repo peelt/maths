@@ -352,13 +352,28 @@ test("text size scales the whole page, not just the text", async ({ page }) => {
 test("choosing a light theme overrides a device set to dark", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
+
+  /** How light the page actually is, 0 to 1, from its rendered background. */
+  const brightness = () =>
+    page.evaluate(() => {
+      const [r, g, b] = getComputedStyle(document.body)
+        .backgroundColor.match(/\d+/g)!
+        .map(Number);
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    });
+
+  const onDarkDevice = await brightness();
+  expect(onDarkDevice).toBeLessThan(0.3);
+
   await page.getByLabel("Display settings").click();
   await page.getByRole("button", { name: /Mist/ }).click();
 
   // An explicit choice has to win over the media query, or picking light on a
-  // dark device would silently do nothing.
-  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  expect(bg).toBe("rgb(217, 228, 236)");
+  // dark device would silently do nothing. Asserted as "the page went light"
+  // rather than against a literal colour, so a palette change cannot make this
+  // fail without anything actually being broken — which is what it just did.
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "mist");
+  expect(await brightness()).toBeGreaterThan(0.8);
 });
 
 test("the card is visibly distinct from the canvas in every theme", async ({ page }) => {

@@ -1,0 +1,82 @@
+# Everything a contributor can run locally, run on every pull request.
+#
+# Split into two jobs because they want different builds. `checks` runs the
+# fast feedback plus the auth verification, which builds with deliberately
+# fake Supabase credentials into its own output directory. `e2e` needs the
+# ordinary unconfigured build and a browser, so it is slower and runs beside
+# the others rather than after them.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push supersedes the run in flight for the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, types, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # Route protection only exists once Supabase is configured, so the
+      # Playwright suite's unconfigured build can never exercise it. This
+      # builds with unreachable credentials and asserts that a failed session
+      # lookup denies access rather than granting it.
+      - name: Verify route protection
+        run: npm run verify:auth
+
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - name: Playwright
+        run: npm run e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
