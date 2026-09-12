@@ -167,3 +167,19 @@ test("the sign-in form is in the served HTML, not only after hydration", async (
   expect(html).toMatch(/<input[^>]+type="email"/);
   expect(html).not.toContain("Loading…");
 });
+
+test("a confirm link with no token explains it is a configuration problem", async ({ page }) => {
+  // Hitting /auth/confirm with neither token_hash nor code is what happens when
+  // the Supabase email template has not been pointed at this route. The student
+  // did nothing wrong, so the message must not imply a fresh link will help.
+  await page.goto("/auth/confirm");
+  await expect(page).toHaveURL(/\/signin\?error=misconfigured/);
+  await expect(page.getByText(/email template needs configuring/)).toBeVisible();
+});
+
+test("a confirm link reports a same-browser failure distinctly", async ({ page }) => {
+  // A PKCE code that cannot be exchanged — the cross-device failure. It must
+  // read differently from an expired link, because the remedy is different.
+  await page.goto("/auth/confirm?code=not-a-real-code");
+  await expect(page).toHaveURL(/\/signin\?error=(wrong-device|unavailable)/);
+});

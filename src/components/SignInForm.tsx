@@ -29,6 +29,12 @@ const LINK_ERRORS: Record<string, string> = {
   expired: "That link has expired or has already been used. Enter your email for a fresh one.",
   invalid: "That link was not valid. Enter your email to get a new one.",
   unavailable: "Sign-in is not available at the moment. Please try again shortly.",
+  // Says what actually went wrong rather than implying the student did
+  // something wrong — this one is a configuration problem, not a bad link.
+  misconfigured:
+    "That link did not carry a sign-in token, which usually means the email template needs configuring. Requesting a new link is unlikely to help until it is.",
+  "wrong-device":
+    "That link has to be opened in the same browser that requested it. Request a fresh one on this device, or open it on the device you asked from.",
 };
 
 export function SignInForm({ next, linkError }: Props) {

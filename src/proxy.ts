@@ -47,7 +47,16 @@ export async function proxy(request: NextRequest) {
   // Verifies and refreshes the session. Must be called before any redirect
   // decision, or the refreshed cookies are never written.
   const { data } = await supabase.auth.getClaims();
-  const signedIn = Boolean(data?.claims);
+
+  // An ANONYMOUS session does not count as signed in.
+  //
+  // An earlier version of this app created anonymous Supabase users silently on
+  // page load. Those sessions are still valid JWTs, so without this check a
+  // browser holding one would sail past the sign-in page it is now supposed to
+  // meet. The same applies to any anonymous session created while that setting
+  // remains enabled in the Supabase project.
+  const claims = data?.claims;
+  const signedIn = Boolean(claims) && claims?.is_anonymous !== true;
 
   const { pathname } = request.nextUrl;
   if (!signedIn && !isPublicPath(pathname)) {
