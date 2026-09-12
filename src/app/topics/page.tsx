@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { allTopics, paperLabels, specStats, type Paper } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
 import { PageHeading } from "@/components/ui";
+import { TopicIllustration } from "@/components/illustration/topics";
 
 export const metadata: Metadata = {
   title: "Topics",
@@ -45,19 +46,31 @@ export default function TopicsPage() {
                         href={`/topics/${topic.slug}`}
                         className="group block h-full rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/50 hover:bg-surface-2"
                       >
-                        <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-xs text-muted">{topic.number}</span>
-                          <span className="font-semibold group-hover:text-accent">{topic.name}</span>
+                        <div className="flex items-start gap-3">
+                          <TopicIllustration
+                            slug={topic.slug}
+                            className="mt-0.5 h-10 w-[3.6rem] shrink-0 opacity-80 transition-opacity group-hover:opacity-100"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-baseline gap-2">
+                              <span className="font-mono text-xs text-muted">{topic.number}</span>
+                              <span className="font-semibold group-hover:text-accent">{topic.name}</span>
+                            </div>
+                            <p className="mt-1.5 text-sm text-muted">{topic.blurb}</p>
+                            <p className="mt-3 text-xs text-muted">
+                              {topic.points.length} spec point{topic.points.length === 1 ? "" : "s"}
+                              {/*
+                               * Neutral, not amber: this is a count, not an
+                               * action. Every topic is practisable now, so it
+                               * is close to redundant, but it still differs
+                               * per topic so it is kept.
+                               */}
+                              <span className="ml-2 rounded-full border border-border-soft bg-surface-2 px-2 py-0.5 font-medium text-muted">
+                                {practisable} practisable
+                              </span>
+                            </p>
+                          </div>
                         </div>
-                        <p className="mt-1.5 text-sm text-muted">{topic.blurb}</p>
-                        <p className="mt-3 text-xs text-muted">
-                          {topic.points.length} spec point{topic.points.length === 1 ? "" : "s"}
-                          {practisable > 0 ? (
-                            <span className="ml-2 rounded-full border border-accent/30 bg-accent-soft px-2 py-0.5 font-medium text-accent">
-                              {practisable} practisable
-                            </span>
-                          ) : null}
-                        </p>
                       </Link>
                     </li>
                   );

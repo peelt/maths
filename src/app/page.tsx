@@ -4,6 +4,8 @@ import { allTopics, specStats } from "@/content/spec";
 import { formulaStats } from "@/content/formulae";
 import { questionTemplates, specPointsWithQuestions } from "@/lib/questions";
 import { PaperBadge } from "@/components/ui";
+import { HeroFigure } from "@/components/illustration/HeroFigure";
+import { TopicIllustration } from "@/components/illustration/topics";
 
 export default function HomePage() {
   const covered = specPointsWithQuestions();
@@ -11,11 +13,50 @@ export default function HomePage() {
     t.points.some((p) => covered.has(`${t.paper}:${p.code}`)),
   );
 
+  /*
+   * On a phone the hero comes SECOND, so the one primary action is the first
+   * thing on screen. Measured: with the hero on top, "Start" landed at 738px
+   * on a 640px-tall phone — below the fold, which defeats the whole point of
+   * resolving the page to a single button. From sm upwards there is room for
+   * both and the hero leads.
+   *
+   * Reordering visual against DOM order is normally an accessibility problem,
+   * but the hero holds no focusable elements, so tab order is unaffected.
+   */
   return (
-    <div className="space-y-10">
-      <TodayPanel />
+    <div className="flex flex-col gap-10">
+      {/*
+       * The figure is positioned absolutely, so it adds no height of its own.
+       * The text sets the height of the band; the picture fills what is left.
+       */}
+      <section className="relative isolate order-2 overflow-hidden rounded-2xl border border-border bg-surface sm:order-1">
+        <HeroFigure className="pointer-events-none absolute inset-y-0 right-0 hidden h-full w-[74%] sm:block" />
+        <div className="relative max-w-lg px-5 py-5 sm:px-8 sm:py-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+            Pearson Edexcel · 9MA0
+          </p>
+          <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-balance sm:mt-2 sm:text-4xl">
+            A Level Maths, one short session at a time
+          </h1>
+          <p className="mt-2 text-pretty text-sm text-muted sm:mt-3 sm:text-base">
+            All {specStats.points} spec points, {questionTemplates.length} question types marked as
+            you go with the mark scheme shown, and a plan for what to revise next.
+          </p>
+        </div>
+        {/*
+         * On a phone there is no room beside the text, so the figure becomes a
+         * band underneath it instead of a background. Overlapping them was
+         * measurably worse: the curve and gridlines ran straight through the
+         * heading.
+         */}
+        <HeroFigure faded={false} className="pointer-events-none block h-24 w-full sm:hidden" />
+      </section>
 
-      <section>
+      <div className="order-1 sm:order-2">
+        <TodayPanel />
+      </div>
+
+      <section className="order-3">
         <h2 className="mb-4 text-lg font-bold">Ready to practise now</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {practisableTopics.map((topic) => {
@@ -26,21 +67,31 @@ export default function HomePage() {
                 href={`/practice/${topic.slug}`}
                 className="group rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/50 hover:bg-surface-2"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="font-semibold group-hover:text-accent">{topic.name}</span>
-                  <PaperBadge paper={topic.paper} />
+                <div className="flex items-start gap-3">
+                  <TopicIllustration
+                    slug={topic.slug}
+                    className="mt-0.5 h-9 w-13 shrink-0 opacity-80 transition-opacity group-hover:opacity-100"
+                  />
+                  <div className="min-w-0 flex-1">
+                    {/* Wraps rather than overflowing: the illustration plus a
+                        two-part paper badge does not fit one row at 360px. */}
+                    <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
+                      <span className="font-semibold group-hover:text-accent">{topic.name}</span>
+                      <PaperBadge paper={topic.paper} />
+                    </div>
+                    <p className="mt-1.5 text-sm text-muted">
+                      {count} question type{count === 1 ? "" : "s"} · {topic.points.length} spec
+                      point{topic.points.length === 1 ? "" : "s"}
+                    </p>
+                  </div>
                 </div>
-                <p className="mt-1.5 text-sm text-muted">
-                  {count} question type{count === 1 ? "" : "s"} · {topic.points.length} spec point
-                  {topic.points.length === 1 ? "" : "s"}
-                </p>
               </Link>
             );
           })}
         </div>
       </section>
 
-      <section className="rounded-xl border border-border bg-surface-2 p-6">
+      <section className="order-4 rounded-xl border border-border bg-surface-2 p-6">
         <h2 className="text-lg font-bold">What is in here</h2>
         <dl className="mt-4 grid gap-5 sm:grid-cols-3">
           <div>
@@ -67,12 +118,12 @@ export default function HomePage() {
           </div>
         </dl>
         <p className="mt-5 border-t border-border pt-4 text-sm text-muted">
-          The full specification is mapped and browsable. The question bank is being built out
-          topic by topic, starting with Year 1 Pure —{" "}
+          Every spec point has questions and a teaching note, so nothing in the specification is
+          invisible to the review schedule.{" "}
           <Link href="/topics" className="text-accent underline underline-offset-4">
-            every topic page
+            Browse the whole specification
           </Link>{" "}
-          says exactly what is available and what is not yet.
+          to see what each topic actually asks of you.
         </p>
       </section>
     </div>

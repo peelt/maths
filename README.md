@@ -153,6 +153,32 @@ Plot series get their own tokens, deliberately outside both the green/red
 feedback pair and the blue/yellow axis, and separated in lightness as well as
 hue so two curves stay distinguishable.
 
+### Illustrations, and why they are not decoration
+
+Every topic carries a small figure and the homepage carries a larger one. Each
+is a visual signature of what the topic actually is — a tangent for
+differentiation, a shaded area for integration, a pivoted beam for moments, a
+convergent bar series for geometric sums. That distinction is the whole point:
+on a page built to reduce competing demands on attention, a picture that
+carries no information is just one more thing to look at.
+
+Three constraints they are held to, each with a test:
+
+- **The curves are sampled from the real functions**, not eyeballed as Bézier
+  approximations. It costs nothing at build time and it means the picture of a
+  parabola is a parabola. The homepage tangent uses the exact derivative.
+- **They never use the action accent.** Nineteen amber figures would be
+  nineteen things claiming to be the next thing to do. They use the plot
+  tokens, with structure in the border colour, so they recede until looked at.
+- **They are `aria-hidden`.** The topic name sits beside every one of them in
+  text, so to a screen reader they are duplication.
+
+The homepage figure is positioned absolutely and contributes no height of its
+own, and on a phone the hero moves BELOW the task panel. That is measured
+rather than assumed: with the hero on top, the primary action landed at 738px
+on a 640px-tall phone — below the fold, which defeats the point of resolving
+the page to a single button.
+
 ### Choice, because preference varies
 
 Light, tinted and dark themes plus three text sizes, under **Display** in the
