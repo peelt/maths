@@ -226,3 +226,22 @@ test("the drill page does not scroll sideways on a phone", async ({ page }) => {
   );
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test("a spec point offers a teaching note with a method and pitfalls", async ({ page }) => {
+  await page.goto("/topics/differentiation");
+  const note = page.locator("details").first();
+  // Collapsed by default, so the page stays scannable.
+  await expect(note).not.toHaveAttribute("open", "");
+  await note.locator("summary").click();
+  await expect(note.getByText("Method")).toBeVisible();
+  await expect(note.getByText("Watch for")).toBeVisible();
+});
+
+test("the teaching note is in the served HTML, not only after hydration", async ({ request }) => {
+  // A <details> was chosen over a React toggle precisely so the content is
+  // present and readable before any JavaScript runs.
+  const response = await request.get("/topics/differentiation");
+  const html = await response.text();
+  expect(html).toContain("How it works");
+  expect(html).toContain("Watch for");
+});

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import katex from "katex";
 import { noteFor, teachingNotes } from "@/content/notes";
-import { getSpecPoint } from "@/content/spec";
+import { allTopics, getSpecPoint } from "@/content/spec";
 
 /** Pull out the maths between $ … $ delimiters. */
 function extractMaths(text: string): string[] {
@@ -72,6 +72,23 @@ describe("teaching notes", () => {
       // textbook page, which is the thing this is meant not to be.
       expect(total, `${key} is too long to be a note (${total} chars)`).toBeLessThan(2600);
     }
+  });
+
+  it("has a note for every spec point", () => {
+    // Same reasoning as the question bank's coverage test: a spec point with
+    // no note is one a student meets as a single line of specification prose
+    // and nothing else. Asserting it means adding a spec point without a note
+    // fails here rather than quietly leaving a hole.
+    const have = new Set(teachingNotes.map((n) => `${n.paper}:${n.specCode}`));
+    const missing: string[] = [];
+    for (const topic of allTopics) {
+      for (const point of topic.points) {
+        if (!have.has(`${topic.paper}:${point.code}`)) {
+          missing.push(`${topic.paper}:${point.code} (${point.title})`);
+        }
+      }
+    }
+    expect(missing, `spec points with no teaching note: ${missing.join(", ")}`).toEqual([]);
   });
 
   it("looks a note up by paper and code", () => {

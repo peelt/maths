@@ -1,5 +1,10 @@
 import type { Paper } from "@/content/spec";
 import { differentiationNotes } from "./differentiation";
+import { integrationNotes } from "./integration";
+import { pureRestNotes } from "./pure-rest";
+import { algebraNotes } from "./algebra";
+import { appliedNotes } from "./applied";
+import { trigonometryNotes } from "./trigonometry";
 import type { TeachingNote } from "./types";
 
 export * from "./types";
@@ -7,11 +12,19 @@ export * from "./types";
 /**
  * Teaching notes, keyed by spec point.
  *
- * Coverage is partial and the UI says so rather than pretending otherwise: a
- * spec point without a note simply shows its summary and exam note, exactly as
- * before.
+ * Every one of the 89 spec points has a note, and a test asserts it. The UI
+ * still renders gracefully without one — a spec point with no note shows its
+ * summary and exam note exactly as before — so adding a spec point does not
+ * break the page, it just fails the suite until a note is written.
  */
-export const teachingNotes: TeachingNote[] = [...differentiationNotes];
+export const teachingNotes: TeachingNote[] = [
+  ...algebraNotes,
+  ...appliedNotes,
+  ...differentiationNotes,
+  ...integrationNotes,
+  ...pureRestNotes,
+  ...trigonometryNotes,
+];
 
 const byKey = new Map(teachingNotes.map((n) => [`${n.paper}:${n.specCode}`, n]));
 
