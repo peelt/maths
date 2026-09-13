@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getProgressStore, streakIsLive, type Streak } from "@/lib/progress";
-import { dueCount, sortByPriority, type ReviewState } from "@/lib/scheduling";
+import { isDue, sortByPriority, type ReviewState } from "@/lib/scheduling";
 import { allTopics, getSpecPoint, getTopic } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
 import { readCurrentTopic } from "@/lib/currentTopic";
+import { sinceLastPractised } from "@/lib/timing";
 
 /**
  * The one thing to do next.
@@ -31,7 +32,14 @@ interface State {
   loading: boolean;
   /** The topic the student said they are covering. Null until they say. */
   chosen: string | null;
-  due: number;
+  /**
+   * One specific topic worth going back to, or null.
+   *
+   * Named, not counted. "Some earlier topics are ready for another look" told
+   * the student nothing they could act on; "Integration, 12 days ago" is a
+   * thing to click.
+   */
+  revisit: { name: string; slug: string; when: string } | null;
   streak: Streak | null;
   nextTopicSlug: string;
   nextTopicName: string;
@@ -64,7 +72,7 @@ export function TodayPanel() {
   const [state, setState] = useState<State>({
     loading: true,
     chosen: null,
-    due: 0,
+    revisit: null,
     streak: null,
     nextTopicSlug: defaultTopic().slug,
     nextTopicName: defaultTopic().name,
@@ -80,7 +88,6 @@ export function TodayPanel() {
       if (cancelled) return;
 
       const covered = practisable();
-      const due = dueCount(states);
 
       // Prefer the most urgent spec point that can actually be practised.
       const prioritised = sortByPriority(states).filter((s: ReviewState) => covered.has(s.specPoint));
@@ -114,10 +121,31 @@ export function TodayPanel() {
         reason = "Your topic right now";
       }
 
+      /*
+       * One topic worth going back to — never the one Start already opens on,
+       * or the line would suggest what the button beside it already does.
+       */
+      const revisit = (() => {
+        for (const candidate of prioritised) {
+          if (!isDue(candidate)) continue;
+          const [paper, code] = candidate.specPoint.split(":");
+          const found = getSpecPoint(paper as "pure" | "statistics" | "mechanics", code);
+          if (!found || found.topic.slug === slug) continue;
+          const last = candidate.lastReviewed ? new Date(candidate.lastReviewed).getTime() : NaN;
+          const days = (Date.now() - last) / 86_400_000;
+          return {
+            name: found.topic.name,
+            slug: found.topic.slug,
+            when: sinceLastPractised(days),
+          };
+        }
+        return null;
+      })();
+
       setState({
         loading: false,
         chosen,
-        due,
+        revisit,
         streak,
         nextTopicSlug: slug,
         nextTopicName: name,
@@ -130,7 +158,7 @@ export function TodayPanel() {
     };
   }, []);
 
-  const { loading, chosen, due, streak, nextTopicSlug, nextTopicName, reason } = state;
+  const { loading, chosen, revisit, streak, nextTopicSlug, nextTopicName, reason } = state;
   const live = streak ? streakIsLive(streak) : false;
 
   return (
@@ -160,23 +188,29 @@ export function TodayPanel() {
 
       {!loading && !chosen ? (
         <p className="mt-4 text-sm text-muted">
-          Doing something particular in class? Open the topic and say so — this panel will open on
-          it from then on.
+          Covering something else in class? Open that topic and press{" "}
+          <span className="font-medium text-text">I&rsquo;m covering this in class</span> — then
+          this page starts there every time.
         </p>
       ) : null}
 
       {/*
-        The offer, deliberately without a number. A count of what is waiting is
-        a backlog, and a backlog is the thing that ends the session before it
-        starts; "there is some" is all the student needs to decide.
+        One named topic, not a count. "Some earlier topics are ready for
+        another look" gave the student nothing to act on, and a number of them
+        would be a backlog — which is the thing that ends the session before it
+        starts. A single topic and when they last did it is both concrete and
+        finite.
       */}
-      {!loading && due > 0 ? (
+      {!loading && revisit ? (
         <p className="mt-4 text-sm text-muted">
-          Some earlier topics are ready for another look whenever you fancy it —{" "}
-          <Link href="/progress" className="text-accent underline underline-offset-2">
-            see what you have covered
-          </Link>
-          .
+          You last practised{" "}
+          <Link
+            href={`/practice/${revisit.slug}`}
+            className="font-medium text-accent underline underline-offset-2"
+          >
+            {revisit.name}
+          </Link>{" "}
+          {revisit.when}.
         </p>
       ) : null}
 
