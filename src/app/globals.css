@@ -14,6 +14,15 @@
  *     a canvas-to-card ratio of 1.04:1 — white on white, the exact condition
  *     that performed worst — and is now at least 1.25:1 in every theme.
  *
+ *     What that separation must NOT be spent on is tint. The first attempt
+ *     bought the 1.25 step by going both darker and bluer at once, and the
+ *     result was reported as too strong to read against. The step is now
+ *     bought almost entirely from lightness — the default canvas is a
+ *     near-neutral cool grey, chroma 10 rather than 19, and light enough
+ *     that muted text on it clears AA, which it did not before at 4.19:1.
+ *     The saturated tinted option is a deliberate choice under "warm", not
+ *     the default. Both facts are asserted in the tests.
+ *
  *  2. NOTHING MEANINGFUL RESTS ON BLUE VERSUS YELLOW. ADHD is associated with
  *     impaired blue-yellow discrimination, and attention tasks take markedly
  *     longer under a blue/yellow scheme than a green/red one. Correct and
@@ -36,13 +45,13 @@
 
 /* ── Mist: the default light theme ─────────────────────────────────────── */
 :root {
-  --bg: #d9e4ec;
-  --surface: #fbfdfe;
-  --surface-2: #c6d7e4;
-  --border: #8da2b1;
-  --border-soft: #b9cad6;
+  --bg: #e1e6eb;
+  --surface: #ffffff;
+  --surface-2: #d0d7de;
+  --border: #8f9ba5;
+  --border-soft: #c0c7ce;
   --text: #414d57;
-  --text-muted: #5c6e7e;
+  --text-muted: #54606c;
 
   /* The one directional accent. "Do this next", never status. */
   --accent: #8a5a0b;
@@ -116,13 +125,13 @@
  * specificity — choosing light on a device set to dark must stick.
  */
 [data-theme="mist"] {
-  --bg: #d9e4ec;
-  --surface: #fbfdfe;
-  --surface-2: #c6d7e4;
-  --border: #8da2b1;
-  --border-soft: #b9cad6;
+  --bg: #e1e6eb;
+  --surface: #ffffff;
+  --surface-2: #d0d7de;
+  --border: #8f9ba5;
+  --border-soft: #c0c7ce;
   --text: #414d57;
-  --text-muted: #5c6e7e;
+  --text-muted: #54606c;
   --accent: #8a5a0b;
   --accent-fill: #d9a441;
   --accent-fill-hover: #c68f2c;

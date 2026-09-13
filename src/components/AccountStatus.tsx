@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getCurrentEmail, signOut } from "@/lib/auth";
+import { getCurrentEmail, isAdmin, signOut } from "@/lib/auth";
 import { getProgressStore, resetProgressStoreCache } from "@/lib/progress";
 import { supabaseConfigured } from "@/lib/supabase/client";
 
@@ -24,6 +24,9 @@ export function AccountStatus() {
   const [state, setState] = useState<State>({ kind: "checking" });
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  // Only decides whether to show a link. The page behind it is gated by the
+  // database, so this is convenience rather than a boundary.
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,6 +38,9 @@ export function AccountStatus() {
       const email = await getCurrentEmail();
       if (cancelled) return;
       setState(email ? { kind: "signed-in", email } : { kind: "signed-out" });
+      if (!email) return;
+      const isAdminUser = await isAdmin();
+      if (!cancelled && isAdminUser) setAdmin(true);
     })();
     return () => {
       cancelled = true;
@@ -110,6 +116,12 @@ export function AccountStatus() {
         <Link href="/privacy" className="underline underline-offset-2 hover:text-text">
           What we store
         </Link>
+
+        {admin ? (
+          <Link href="/admin" className="underline underline-offset-2 hover:text-text">
+            Sign-in log
+          </Link>
+        ) : null}
       </div>
     </div>
   );

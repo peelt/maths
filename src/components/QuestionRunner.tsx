@@ -7,6 +7,8 @@ import { markAnswer, type MarkResult } from "@/lib/marking";
 import { markCodeMeanings, type GeneratedQuestion } from "@/lib/questions";
 import { getProgressStore, recordActivity } from "@/lib/progress";
 import { createReviewState, review, type Grade } from "@/lib/scheduling";
+import { PaceClock } from "./PaceClock";
+import { allowanceSeconds, paceSummary } from "@/lib/timing";
 
 /**
  * A practice session.
@@ -24,6 +26,9 @@ interface Props {
   questions: GeneratedQuestion[];
   topicName: string;
   topicSlug: string;
+  /** Show the exam-pace clock. Off by default; see PaceToggle for why. */
+  timed: boolean;
+  onTimedChange: (timed: boolean) => void;
 }
 
 type Phase = "answering" | "feedback" | "done";
@@ -35,7 +40,32 @@ function inferGrade(correct: boolean, usedHint: boolean, seconds: number): Grade
   return seconds <= 45 ? "easy" : "good";
 }
 
-export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
+/**
+ * Turning exam pace on and off.
+ *
+ * Off by default, and switchable at any point in a set rather than chosen up
+ * front. A question asked before the first piece of maths is one more decision
+ * between opening the site and doing any work, and decisions are the expensive
+ * part. The choice is remembered, so it is asked once at most.
+ */
+function PaceToggle({ timed, onChange }: { timed: boolean; onChange: (timed: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={timed}
+      onClick={() => onChange(!timed)}
+      className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+        timed
+          ? "border-border bg-surface-2 text-text"
+          : "border-border-soft text-muted hover:bg-surface-2"
+      }`}
+    >
+      {timed ? "Exam pace on" : "Exam pace off"}
+    </button>
+  );
+}
+
+export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimedChange }: Props) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("answering");
   const [input, setInput] = useState("");
@@ -44,6 +74,8 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
   const [showSolution, setShowSolution] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [streakMessage, setStreakMessage] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [insidePace, setInsidePace] = useState(0);
 
   // Timestamps are set on mount rather than during render: reading the clock
   // while rendering is impure, and a re-render would silently reset them.
@@ -63,6 +95,16 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
     questionStartedAt.current = Date.now();
     inputRef.current?.focus();
   }, [index]);
+
+  useEffect(() => {
+    // Only while a question is open: the clock has to stop when feedback is on
+    // screen, or reading the mark scheme would look like time spent thinking.
+    if (!timed || phase !== "answering") return;
+    const tick = () => setElapsed((Date.now() - questionStartedAt.current) / 1000);
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [timed, phase, index]);
 
   const finishSession = useCallback(
     async (finalCorrect: number) => {
@@ -108,6 +150,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
 
     const seconds = (Date.now() - questionStartedAt.current) / 1000;
     const specPoint = `${question.paper}:${question.specCode}`;
+    if (timed && seconds <= allowanceSeconds(question.marks)) setInsidePace((n) => n + 1);
 
     try {
       const store = await getProgressStore();
@@ -128,7 +171,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
     } catch {
       // Never let a storage failure interrupt a session in progress.
     }
-  }, [input, phase, question, usedHint]);
+  }, [input, phase, question, timed, usedHint]);
 
   const next = useCallback(() => {
     if (isLast) {
@@ -171,6 +214,8 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
               ? "Solid work — the ones you missed are now scheduled to come back."
               : "Hard set. Everything you missed is queued to return, which is exactly how it should work."}
         </p>
+        {timed ? <p className="mt-3 text-sm text-muted">{paceSummary(insidePace, total)}</p> : null}
+
         {streakMessage ? (
           <p className="mt-4 inline-block rounded-full border border-correct-border bg-correct-soft px-4 py-1.5 text-sm font-semibold text-correct">
             {streakMessage}
@@ -203,7 +248,7 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
   return (
     <div>
       <div className="mb-6">
-        <div className="mb-2 flex items-center justify-between text-sm">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
           <span className="font-medium text-muted">
             Question {index + 1} of {total}
           </span>
@@ -213,6 +258,12 @@ export function QuestionRunner({ questions, topicName, topicSlug }: Props) {
         </div>
         <div className="h-1.5 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={total}>
           <div className="h-full rounded-full bg-accent-fill transition-[width] duration-300" style={{ width: `${((index + 1) / total) * 100}%` }} />
+        </div>
+
+        {timed ? <PaceClock elapsed={elapsed} allowance={allowanceSeconds(question.marks)} /> : null}
+
+        <div className="mt-2 flex justify-end">
+          <PaceToggle timed={timed} onChange={onTimedChange} />
         </div>
       </div>
 

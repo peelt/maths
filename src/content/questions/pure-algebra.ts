@@ -351,7 +351,9 @@ export const pureAlgebraQuestions: QuestionTemplate[] = [
           expr: `\\mathrm{f}(x+${a})`,
           answer: `Translation ${a} units in the negative $x$ direction`,
           distractors: [`Translation ${a} units in the positive $x$ direction`, `Translation ${a} units in the positive $y$ direction`, `Stretch, scale factor ${a}, parallel to the $x$-axis`],
-          why: "Changes inside the bracket act on x and do the opposite of what they look like, so $+${a}$ shifts LEFT.",
+          // A template literal, not a plain string: written with quotes, the
+          // ${a} stayed literal and rendered as "+" followed by a stray "{a}$".
+          why: `Changes inside the bracket act on $x$ and do the opposite of what they look like, so $+${a}$ shifts LEFT.`,
         },
         {
           expr: `\\mathrm{f}(x)+${a}`,

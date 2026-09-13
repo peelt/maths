@@ -352,13 +352,28 @@ test("text size scales the whole page, not just the text", async ({ page }) => {
 test("choosing a light theme overrides a device set to dark", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
+
+  /** How light the page actually is, 0 to 1, from its rendered background. */
+  const brightness = () =>
+    page.evaluate(() => {
+      const [r, g, b] = getComputedStyle(document.body)
+        .backgroundColor.match(/\d+/g)!
+        .map(Number);
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    });
+
+  const onDarkDevice = await brightness();
+  expect(onDarkDevice).toBeLessThan(0.3);
+
   await page.getByLabel("Display settings").click();
   await page.getByRole("button", { name: /Mist/ }).click();
 
   // An explicit choice has to win over the media query, or picking light on a
-  // dark device would silently do nothing.
-  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  expect(bg).toBe("rgb(217, 228, 236)");
+  // dark device would silently do nothing. Asserted as "the page went light"
+  // rather than against a literal colour, so a palette change cannot make this
+  // fail without anything actually being broken — which is what it just did.
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "mist");
+  expect(await brightness()).toBeGreaterThan(0.8);
 });
 
 test("the card is visibly distinct from the canvas in every theme", async ({ page }) => {
@@ -439,4 +454,68 @@ test("the homepage does not scroll sideways on the narrowest phones", async ({ p
     );
     expect(overflow, `${width}px`).toBeLessThanOrEqual(1);
   }
+});
+
+test("exam pace is off until asked for, and then stays on", async ({ page }) => {
+  await page.goto("/practice/algebra-and-functions");
+
+  // Off by default. A clock nobody asked for is pressure, and the brief's
+  // whole point is that the timing is short practice rather than an ordeal.
+  const toggle = page.getByRole("button", { name: /Exam pace/ });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("progressbar", { name: "Time used on this question" })).toHaveCount(0);
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  const clock = page.getByRole("progressbar", { name: "Time used on this question" });
+  await expect(clock).toBeVisible();
+
+  // Remembered across visits, so it is a choice made once rather than a
+  // decision every single time the site is opened.
+  await page.goto("/practice/differentiation");
+  await expect(page.getByRole("button", { name: /Exam pace/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("progressbar", { name: "Time used on this question" })).toBeVisible();
+});
+
+test("the clock counts up, and stops while feedback is on screen", async ({ page }) => {
+  await page.goto("/practice/algebra-and-functions");
+  await page.getByRole("button", { name: /Exam pace/ }).click();
+
+  const used = () =>
+    page
+      .getByRole("progressbar", { name: "Time used on this question" })
+      .getAttribute("aria-valuenow")
+      .then(Number);
+
+  await page.waitForTimeout(1200);
+  const running = await used();
+
+  // Answer it — anything will do, since this is about the clock and not the
+  // marking. Feedback then has to freeze it: reading the mark scheme is not
+  // time spent thinking about the question, and counting it would make every
+  // pace figure meaningless.
+  // The set is random, so question one may be multiple choice rather than a
+  // typed answer. Handle both, or this passes until the day it does not.
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+
+  const atFeedback = await used();
+  await page.waitForTimeout(1500);
+  expect(await used()).toBe(atFeedback);
+  expect(atFeedback).toBeGreaterThanOrEqual(running);
+});
+
+test("the sign-in log is closed by default", async ({ page }) => {
+  // With no Supabase configured there are no accounts, no identity to check,
+  // and nothing to show — so the page must not exist rather than render an
+  // empty table. Closed by default is the only safe failure for this one.
+  const response = await page.goto("/admin");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("table")).toHaveCount(0);
 });
