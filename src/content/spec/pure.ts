@@ -321,7 +321,7 @@ export const pureTopics: Topic[] = [
         summary:
           "Use the identities tan x = sin x / cos x and sin^2 x + cos^2 x = 1, and the derived identities for sec^2 and cosec^2, to solve equations and prove further identities.",
         examNote:
-          "The two Pythagorean extensions are derived by dividing the main identity by cos^2 or sin^2 — worth being able to re-derive under pressure rather than trusting memory. These are in the formula booklet, so the marks are for using them well, not recalling them.",
+          "The Pythagorean identities are not printed in the formula booklet. Know sin^2 x + cos^2 x = 1, then divide through by cos^2 x to get 1 + tan^2 x = sec^2 x, or by sin^2 x to get 1 + cot^2 x = cosec^2 x. Deriving the other two in a line is safer than trusting memory, and the skill worth practising is spotting which form turns the equation or the proof in front of you into something solvable.",
         keywords: ["identities", "pythagorean", "sec squared", "cosec squared", "tan", "prove"],
       },
       {

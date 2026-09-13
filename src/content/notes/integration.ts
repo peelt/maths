@@ -98,7 +98,7 @@ export const integrationNotes: TeachingNote[] = [
     ],
     watchFor: [
       "Trying to integrate the fraction whole, as a log of the denominator. That is not a standard form and it is simply wrong.",
-      "A repeated factor $(x+a)^{2}$ needs THREE terms: $\\dfrac{A}{x+a}+\\dfrac{B}{(x+a)^{2}}$ plus whatever else is in the denominator.",
+      "A repeated factor $(x+a)^{2}$ contributes TWO terms: $\\dfrac{A}{x+a}+\\dfrac{B}{(x+a)^{2}}$. Include a separate term for every other factor in the denominator as well.",
       "If the numerator's degree is as high as the denominator's, divide first — partial fractions only work on a proper fraction.",
     ],
   },

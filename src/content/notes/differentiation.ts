@@ -23,17 +23,20 @@ export const differentiationNotes: TeachingNote[] = [
   {
     paper: "pure",
     specCode: "7.2",
-    idea: "For a power of $x$, differentiating means multiply by the power and then knock one off it. Every standard derivative you need beyond that ($e^{kx}$, $\\ln x$, $\\sin$, $\\cos$) is worth knowing cold, because they appear inside almost every harder question.",
+    idea: "For a power of $x$, differentiating means multiply by the power and then knock one off it. Every standard derivative you need beyond that ($e^{kx}$, $a^{kx}$, $\\ln x$, $\\sin$, $\\cos$, $\\tan$) is worth knowing cold, because they appear inside almost every harder question.",
     method: [
       "Rewrite every term as a power of $x$ first: $\\sqrt{x}$ is $x^{1/2}$, and $\\dfrac{1}{x^{3}}$ is $x^{-3}$.",
       "Apply $\\dfrac{d}{dx}\\left(x^{n}\\right)=nx^{\\,n-1}$ term by term.",
       "A constant differentiates to zero — it has no gradient.",
       "A constant multiplier is carried straight through: $\\dfrac{d}{dx}(5x^{3})=15x^{2}$.",
-      "The ones to know: $e^{kx}\\to ke^{kx}$, $\\ln x\\to\\dfrac{1}{x}$, $\\sin x\\to\\cos x$, $\\cos x\\to-\\sin x$.",
+      "The ones to know: $e^{kx}\\to ke^{kx}$, $\\ln x\\to\\dfrac{1}{x}$, $\\sin kx\\to k\\cos kx$, $\\cos kx\\to-k\\sin kx$.",
+      "For any other base, $\\dfrac{d}{dx}a^{kx}=ka^{kx}\\ln a$, for a constant $a>0$ and a constant $k$. The specification names this result explicitly and it is NOT in the booklet.",
+      "$\\dfrac{d}{dx}\\tan(kx)=k\\sec^{2}(kx)$. This one IS printed in the booklet, alongside the derivatives of $\\sec$, $\\cot$ and $\\operatorname{cosec}$.",
     ],
     watchFor: [
       "Negative and fractional powers. Subtracting one from $-3$ gives $-4$, not $-2$.",
       "Trigonometric derivatives only work in RADIANS. In degrees they are wrong by a factor.",
+      "For a general exponential base, dropping one of the two factors. $a^{kx}$ brings down BOTH the $k$ and the $\\ln a$. For $\\tan(kx)$, the chain-rule factor $k$ goes in front too.",
       "Rewriting as powers before you start. Trying to differentiate $\\dfrac{1}{x^{3}}$ as it stands is where the sign errors come from.",
     ],
   },
