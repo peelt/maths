@@ -7,6 +7,7 @@ import {
   formatClock,
   paceSummary,
   readPacePreference,
+  sinceLastPractised,
   writePacePreference,
 } from "./timing";
 
@@ -141,5 +142,29 @@ describe("the exam-pace preference", () => {
     expect(readPacePreference(hostile)).toBe(false);
     expect(() => writePacePreference(hostile, true)).not.toThrow();
     expect(() => writePacePreference(undefined, true)).not.toThrow();
+  });
+});
+
+describe("sinceLastPractised", () => {
+  it("reads as English, not as a number to decode", () => {
+    expect(sinceLastPractised(0)).toBe("earlier today");
+    expect(sinceLastPractised(0.4)).toBe("earlier today");
+    expect(sinceLastPractised(1)).toBe("yesterday");
+    expect(sinceLastPractised(1.9)).toBe("yesterday");
+    expect(sinceLastPractised(5)).toBe("5 days ago");
+    expect(sinceLastPractised(13)).toBe("13 days ago");
+  });
+
+  it("switches to weeks before the day count gets silly", () => {
+    // "37 days ago" is a number to work out; "5 weeks ago" is a feeling.
+    expect(sinceLastPractised(14)).toBe("2 weeks ago");
+    expect(sinceLastPractised(37)).toBe("5 weeks ago");
+    expect(sinceLastPractised(90)).toBe("a couple of months ago");
+  });
+
+  it("never prints a negative or a NaN at a student", () => {
+    // A clock that went backwards, or a record with no date on it.
+    expect(sinceLastPractised(-3)).toBe("a while ago");
+    expect(sinceLastPractised(Number.NaN)).toBe("a while ago");
   });
 });

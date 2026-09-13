@@ -94,3 +94,19 @@ export function writePacePreference(
     // Same again: the session continues, the choice just does not persist.
   }
 }
+
+/**
+ * How long ago something was last practised, in words.
+ *
+ * Written out rather than shown as a number of days because "12 days ago"
+ * needs no decoding, whereas a count of what is waiting invites the student to
+ * total it up into a backlog.
+ */
+export function sinceLastPractised(days: number): string {
+  if (!Number.isFinite(days) || days < 0) return "a while ago";
+  if (days < 1) return "earlier today";
+  if (days < 2) return "yesterday";
+  if (days < 14) return `${Math.floor(days)} days ago`;
+  if (days < 60) return `${Math.floor(days / 7)} weeks ago`;
+  return "a couple of months ago";
+}

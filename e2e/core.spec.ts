@@ -625,3 +625,62 @@ test("the explanation is still there once the answer is marked", async ({ page }
   await page.getByRole("button", { name: "Explain the method" }).click();
   await expect(page.locator("article")).toContainText(/METHOD/i);
 });
+
+test("the nudge to go back to a topic names it, rather than counting things", async ({ page }) => {
+  // The review record is seeded rather than earned. Driving the marking engine
+  // to make a spec point due needs a WRONG answer, and on a multiple-choice
+  // question the test cannot know which option that is — it passed or failed
+  // depending on which question came up. This test is about the wording, so it
+  // sets up the state it needs and leaves the engine to its own tests.
+  await page.goto("/");
+  await page.evaluate(() => {
+    const overdue = new Date(Date.now() - 12 * 86_400_000).toISOString();
+    localStorage.setItem(
+      "9ma0:reviews",
+      JSON.stringify([
+        {
+          specPoint: "pure:8.1",
+          intervalDays: 1,
+          difficulty: 5,
+          reps: 1,
+          lapses: 0,
+          due: overdue,
+          lastReviewed: overdue,
+          updatedAt: overdue,
+        },
+      ]),
+    );
+  });
+
+  // Class is on something else, so the suggestion is not what Start opens on.
+  await page.goto("/topics/differentiation");
+  await page.getByRole("button", { name: /covering this in class/i }).click();
+
+  await page.goto("/");
+  await expect(page.getByText("Your topic right now")).toBeVisible();
+
+  // Named and clickable, not "some earlier topics are ready for another look".
+  const nudge = page.getByText(/You last practised/);
+  await expect(nudge).toBeVisible();
+  // Scoped to the sentence: "Integration" also names a card further down the
+  // page, and an unscoped role lookup matches both.
+  await expect(nudge.getByRole("link", { name: "Integration" })).toHaveAttribute(
+    "href",
+    "/practice/integration",
+  );
+  await expect(nudge).toContainText("12 days ago");
+  // And it must never suggest the topic Start already opens on.
+  await expect(nudge).not.toContainText("Differentiation");
+});
+
+test("the copy says what to press, not what a panel is", async ({ page }) => {
+  // "this panel will open on it from then on" meant nothing to a student.
+  await page.goto("/");
+  // Wait for the panel to settle. Both lines render only once the stored
+  // preference has been read, so reading the page too early finds neither —
+  // which is exactly how this test failed on the phone project first time.
+  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+  const main = await page.locator("main").innerText();
+  expect(main).not.toMatch(/\bpanel\b/i);
+  expect(main).toContain("I’m covering this in class");
+});
