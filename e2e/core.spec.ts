@@ -584,3 +584,44 @@ test("the dashboard never frames revision as a debt", async ({ page }) => {
   expect(main).not.toMatch(/due for review/i);
   expect(main).not.toMatch(/\d+ spec points? ready for review/i);
 });
+
+test("being stuck mid-question does not mean leaving the session", async ({ page }) => {
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
+  const article = page.locator("article");
+  const question = (await article.innerText()).split("\n")[0];
+
+  // The explanation comes to the question. Leaving for the topic page would
+  // build a brand new set on the way back, so "read up and carry on" used to
+  // cost you your place.
+  await page.getByRole("button", { name: "Explain this" }).click();
+  await expect(article).toContainText(/METHOD/i);
+  await expect(article).toContainText(/WATCH FOR/i);
+  expect(await article.innerText()).toContain(question);
+
+  // Opening the method must not hand over the hint as well: that is separate
+  // help the student did not ask for.
+  await expect(page.getByRole("button", { name: "Nudge me" })).toBeVisible();
+
+  // And it folds away, still without navigating.
+  await page.getByRole("button", { name: "Hide" }).click();
+  await expect(article).not.toContainText(/WATCH FOR/i);
+  expect(await article.innerText()).toContain(question);
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+});
+
+test("the explanation is still there once the answer is marked", async ({ page }) => {
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+
+  // Getting it wrong is exactly when the method is wanted most.
+  await page.getByRole("button", { name: "Explain the method" }).click();
+  await expect(page.locator("article")).toContainText(/METHOD/i);
+});

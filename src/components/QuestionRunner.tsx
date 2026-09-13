@@ -9,6 +9,8 @@ import { getProgressStore, recordActivity } from "@/lib/progress";
 import { createReviewState, review, type Grade } from "@/lib/scheduling";
 import { PaceClock } from "./PaceClock";
 import { allowanceSeconds, paceSummary } from "@/lib/timing";
+import { noteFor } from "@/content/notes";
+import { TeachingNoteBody } from "./TeachingNoteBody";
 
 /**
  * A practice session.
@@ -34,9 +36,9 @@ interface Props {
 type Phase = "answering" | "feedback" | "done";
 
 /** Infer a scheduling grade from what actually happened. */
-function inferGrade(correct: boolean, usedHint: boolean, seconds: number): Grade {
+function inferGrade(correct: boolean, assisted: boolean, seconds: number): Grade {
   if (!correct) return "again";
-  if (usedHint) return "hard";
+  if (assisted) return "hard";
   return seconds <= 45 ? "easy" : "good";
 }
 
@@ -71,7 +73,23 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
   const [input, setInput] = useState("");
   const [result, setResult] = useState<MarkResult | null>(null);
   const [usedHint, setUsedHint] = useState(false);
+  /**
+   * Whether this answer had help, for scheduling only.
+   *
+   * Separate from usedHint, which reveals the hint text. Opening the method
+   * should tell the scheduler the answer was assisted WITHOUT also handing
+   * over the hint the student did not ask for.
+   */
+  const [assisted, setAssisted] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
+  /**
+   * The teaching note for this question's spec point, opened in place.
+   *
+   * Being stuck used to mean leaving the session for the topic page, and
+   * coming back built a brand new set — so "read the explainer and carry on"
+   * cost you your place. The explanation comes to the question instead.
+   */
+  const [showNote, setShowNote] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [streakMessage, setStreakMessage] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
@@ -88,6 +106,7 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
   }, []);
 
   const question = questions[index];
+  const note = question ? noteFor(question.paper, question.specCode) : undefined;
   const total = questions.length;
   const isLast = index === total - 1;
 
@@ -167,11 +186,11 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
 
       const states = await store.getReviewStates();
       const existing = states.find((s) => s.specPoint === specPoint) ?? createReviewState(specPoint);
-      await store.saveReviewState(review(existing, inferGrade(marked.correct, usedHint, seconds)));
+      await store.saveReviewState(review(existing, inferGrade(marked.correct, assisted, seconds)));
     } catch {
       // Never let a storage failure interrupt a session in progress.
     }
-  }, [input, phase, question, timed, usedHint]);
+  }, [assisted, input, phase, question, timed]);
 
   const next = useCallback(() => {
     if (isLast) {
@@ -183,7 +202,9 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
     setInput("");
     setResult(null);
     setUsedHint(false);
+    setAssisted(false);
     setShowSolution(false);
+    setShowNote(false);
     setPhase("answering");
   }, [correctCount, finishSession, isLast]);
 
@@ -347,10 +368,29 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
             </button>
             {question.hint && !usedHint ? (
               <button
-                onClick={() => setUsedHint(true)}
+                onClick={() => {
+                  setUsedHint(true);
+                  setAssisted(true);
+                }}
                 className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted hover:bg-surface-2"
               >
                 Nudge me
+              </button>
+            ) : null}
+            {note && !showNote ? (
+              <button
+                onClick={() => {
+                  setShowNote(true);
+                  // Opening the method BEFORE answering is the same signal as
+                  // taking a hint: the question comes back sooner. Opening it
+                  // after the answer is marked is just reading, and counts for
+                  // nothing. It does NOT reveal the hint — that is a separate
+                  // piece of help the student has not asked for.
+                  setAssisted(true);
+                }}
+                className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted hover:bg-surface-2"
+              >
+                Explain this
               </button>
             ) : null}
           </div>
@@ -360,6 +400,38 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
           <div className="mt-4 rounded-lg border border-border bg-surface-2 px-4 py-3">
             <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">Hint</p>
             <Maths className="text-sm [&_p]:m-0">{question.hint}</Maths>
+          </div>
+        ) : null}
+
+        {showNote && note ? (
+          <div className="rise mt-4 rounded-lg border border-border bg-surface-2 p-4">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                How spec {question.specCode} works
+              </p>
+              <button
+                onClick={() => setShowNote(false)}
+                className="text-xs font-medium text-muted underline underline-offset-2 hover:text-text"
+              >
+                Hide
+              </button>
+            </div>
+            <TeachingNoteBody note={note} />
+            {/*
+              For when the note is not enough. It leaves the session, which
+              costs the current set, so it is the quiet option rather than the
+              obvious one — and it lands on this exact spec point rather than
+              the top of the topic.
+            */}
+            <p className="mt-5 border-t border-border pt-3 text-xs text-muted">
+              <Link
+                href={`/topics/${topicSlug}#${question.specCode}`}
+                className="text-accent underline underline-offset-2"
+              >
+                Open the full topic
+              </Link>{" "}
+              — this leaves the session and starts a new set next time.
+            </p>
           </div>
         ) : null}
 
@@ -375,14 +447,28 @@ export function QuestionRunner({ questions, topicName, topicSlug, timed, onTimed
               {result.correct ? "Correct." : "Not quite."}
             </div>
 
-            {!showSolution ? (
-              <button
-                onClick={() => setShowSolution(true)}
-                className="mt-3 text-sm font-medium text-accent underline underline-offset-4"
-              >
-                Show the worked solution
-              </button>
-            ) : (
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+              {!showSolution ? (
+                <button
+                  onClick={() => setShowSolution(true)}
+                  className="text-sm font-medium text-accent underline underline-offset-4"
+                >
+                  Show the worked solution
+                </button>
+              ) : null}
+              {note && !showNote ? (
+                // No scheduling penalty here: the answer is already marked, so
+                // this is reading rather than help.
+                <button
+                  onClick={() => setShowNote(true)}
+                  className="text-sm font-medium text-accent underline underline-offset-4"
+                >
+                  Explain the method
+                </button>
+              ) : null}
+            </div>
+
+            {!showSolution ? null : (
               <div className="mt-4 rounded-lg border border-border bg-surface-2 p-4">
                 <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-muted">
                   Where the marks are
