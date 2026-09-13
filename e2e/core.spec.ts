@@ -396,7 +396,10 @@ test("the homepage has exactly one h1, and the figure is decorative", async ({ p
   await page.goto("/");
   // The homepage had no h1 at all before the hero was added.
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.locator("h1")).toContainText("A Level Maths");
+  // Asserted as "there is one, and it is the hero" rather than against its
+  // wording, so renaming the heading cannot fail a test about page structure.
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator("h1")).toContainText("one short session at a time");
 
   // The figure repeats nothing a screen reader needs, so it must be hidden.
   const figures = page.locator("main section svg");
@@ -537,4 +540,47 @@ test("the header carries the logo, and it is still called what the site is calle
   const box = await mark.boundingBox();
   expect(box!.width).toBeGreaterThan(14);
   expect(box!.height).toBeGreaterThan(14);
+});
+
+test("the student picks the topic they are covering, and it leads from then on", async ({ page }) => {
+  await page.goto("/");
+
+  // Before choosing, the panel suggests something and invites a choice.
+  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+
+  await page.goto("/topics/differentiation");
+  const toggle = page.getByRole("button", { name: /covering this in class/i });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+
+  // The dashboard now opens on it, and Start goes there.
+  await page.goto("/");
+  await expect(page.getByText("Your topic right now")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Differentiation" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start" })).toHaveAttribute(
+    "href",
+    "/practice/differentiation",
+  );
+
+  // And it can be handed back.
+  await page.goto("/topics/differentiation");
+  await page.getByRole("button", { name: /covering this in class/i }).click();
+  await page.goto("/");
+  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+  await expect(page.getByText("Your topic right now")).toHaveCount(0);
+});
+
+test("the dashboard never frames revision as a debt", async ({ page }) => {
+  // The wording is the feature here. "Due", "overdue" and a count of what is
+  // waiting turn a revision site into a pile of homework, which is the thing
+  // most likely to end the session before it starts.
+  await page.goto("/");
+  // Prove the panel actually rendered first: an assertion that some words are
+  // absent passes just as happily on a blank page.
+  await expect(page.getByRole("link", { name: "Start" })).toBeVisible();
+  const main = await page.locator("main").innerText();
+  expect(main).not.toMatch(/\boverdue\b/i);
+  expect(main).not.toMatch(/due for review/i);
+  expect(main).not.toMatch(/\d+ spec points? ready for review/i);
 });
