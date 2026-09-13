@@ -244,11 +244,13 @@ test("the drill page does not scroll sideways on a phone", async ({ page }) => {
 
 test("a spec point offers a teaching note with a method and pitfalls", async ({ page }) => {
   await page.goto("/topics/differentiation");
-  // Scoped to main: the header also has a <details> for display settings.
-  const note = page.locator("main details").first();
+  // Named rather than positional. This used to take the first <details> in
+  // main, which broke the moment the page grew another disclosure above the
+  // spec list — a test should say which control it means.
+  const note = page.locator("main details").filter({ hasText: "How it works" }).first();
   // Collapsed by default, so the page stays scannable.
   await expect(note).not.toHaveAttribute("open", "");
-  await note.locator("summary").click();
+  await note.locator("summary").first().click();
   await expect(note.getByText("Method")).toBeVisible();
   await expect(note.getByText("Watch for")).toBeVisible();
 });
@@ -698,4 +700,143 @@ test("the dashboard explains itself without jargon", async ({ page }) => {
   expect(main).not.toMatch(/\bpanel\b/i);
   // The button this used to talk about is gone; nothing may still mention it.
   expect(main).not.toMatch(/covering this in class/i);
+});
+
+test("the companion panel starts closed and opens without loading anything", async ({ page }) => {
+  // The strong claim in this feature is a privacy one: a student reading a
+  // topic page tells YouTube nothing until they ask for the video. A thumbnail
+  // would break that as surely as the player would, so the assertion is that
+  // NO request leaves for a third party — not that no iframe exists.
+  const thirdParty: string[] = [];
+  page.on("request", (request) => {
+    const host = new URL(request.url()).host;
+    if (!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) thirdParty.push(host);
+  });
+
+  await page.goto("/topics/differentiation");
+
+  const panel = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  expect(await panel.evaluate((el: HTMLDetailsElement) => el.open), "panel starts open").toBe(false);
+
+  // The invitation is readable while the panel is shut, or nobody opens it.
+  await expect(page.getByText("Stuck? Try a different way of seeing this topic.")).toBeVisible();
+
+  await panel.locator("summary").first().click();
+  const tips = panel.locator("details").filter({ hasNot: page.locator("summary", { hasText: "explanation" }) });
+  const stuckOn = page.getByText("I forget the extra factor in the chain rule.");
+  await expect(stuckOn).toBeVisible();
+
+  // Every tip closed to start with, and more than one may be open at once.
+  await expect(page.getByText("Think of the chain rule as two connected gears")).toBeHidden();
+  await stuckOn.click();
+  await expect(page.getByText("Think of the chain rule as two connected gears")).toBeVisible();
+  await page.getByText("I do not understand why the product rule has two terms.").click();
+  await expect(page.getByText("Think of the chain rule as two connected gears")).toBeVisible();
+  expect(await tips.count()).toBeGreaterThanOrEqual(3);
+
+  // The answer waits to be asked for.
+  await expect(page.getByText("It is 18.")).toBeHidden();
+  await page.getByText("Reveal explanation").click();
+  await expect(page.getByText("It is 18.")).toBeVisible();
+  await expect(page.getByText("Hide explanation")).toBeVisible();
+
+  expect(thirdParty, "something was fetched before Load video was pressed").toEqual([]);
+});
+
+test("the video loads only when asked, and the watch link outlives it", async ({ page }) => {
+  await page.goto("/topics/differentiation");
+  const panel = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  await panel.locator("summary").first().click();
+
+  // The full length is labelled as the whole video, not as what to watch.
+  await expect(page.getByText("3Blue1Brown · 16:50 long")).toBeVisible();
+  // The caveat stays on screen: this one is not an exam-method lesson.
+  await expect(page.getByText(/A conceptual animation, not an exam-method lesson/)).toBeVisible();
+
+  const watch = page.getByRole("link", { name: "Watch on YouTube" });
+  await expect(watch).toHaveAttribute("href", "https://www.youtube.com/watch?v=9vKqVkMQHKk");
+  await expect(watch).toHaveAttribute("rel", /noopener/);
+
+  await expect(page.locator("iframe")).toHaveCount(0);
+  await page.getByRole("button", { name: "Load video" }).click();
+
+  const frame = page.locator("iframe");
+  await expect(frame).toHaveCount(1);
+  await expect(frame).toHaveAttribute("src", /^https:\/\/www\.youtube-nocookie\.com\/embed\/9vKqVkMQHKk\?/);
+  await expect(frame).toHaveAttribute("title", /paradox of the derivative/);
+  // Still there, because embedded playback can be refused by the video's owner.
+  await expect(watch).toBeVisible();
+});
+
+test("the companion panel keeps its hands off progress", async ({ page }) => {
+  await page.goto("/topics/integration");
+  const before = await page.evaluate(() =>
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("9ma0:"))
+      .map((k) => `${k}=${localStorage.getItem(k)}`)
+      .sort(),
+  );
+
+  const panel = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  await panel.locator("summary").first().click();
+  await page.getByText("An integral feels like algebra without a meaning.").click();
+  await page.getByText("Reveal explanation").click();
+  await page.getByRole("button", { name: "Load video" }).click();
+  await page.waitForTimeout(300);
+
+  const after = await page.evaluate(() =>
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("9ma0:"))
+      .map((k) => `${k}=${localStorage.getItem(k)}`)
+      .sort(),
+  );
+  // Reading is not practising. Nothing here may mark a spec point, record an
+  // attempt, move a review date or touch the streak.
+  expect(after).toEqual(before);
+});
+
+test("the companion panel resets when you move to another topic", async ({ page }) => {
+  await page.goto("/topics/vectors");
+  const panel = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  await panel.locator("summary").first().click();
+  await page.getByRole("button", { name: "Load video" }).click();
+  await expect(page.locator("iframe")).toHaveCount(1);
+
+  // Client-side navigation, which is the case where stale state survives.
+  await page.getByRole("link", { name: "← All topics" }).click();
+  await page.getByRole("link", { name: /Moments/ }).first().click();
+  await expect(page.getByRole("heading", { name: "Moments", level: 1 })).toBeVisible();
+
+  const next = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  expect(await next.evaluate((el: HTMLDetailsElement) => el.open), "panel carried over open").toBe(false);
+  await expect(page.locator("iframe")).toHaveCount(0);
+});
+
+test("the companion panel works from the keyboard alone", async ({ page }) => {
+  await page.goto("/topics/trigonometry");
+  const panel = page.locator("main details").filter({ hasText: "Stuck? Try a different way" }).first();
+  const summary = panel.locator("summary").first();
+
+  // A real <summary>, so it is in the tab order and announces its own state
+  // without any of that being hand-written — which is why this is a <details>
+  // and not a div with a click handler.
+  await summary.focus();
+  await expect(summary).toBeFocused();
+  await page.keyboard.press("Enter");
+  expect(await panel.evaluate((el: HTMLDetailsElement) => el.open)).toBe(true);
+
+  // What matters to someone using a screen reader is not a flag but whether
+  // the content is in the accessibility tree at all: closed, none of it should
+  // be reachable; open, all of it should be. A div-with-a-click-handler that
+  // merely hides text visually fails this.
+  const opened = await panel.ariaSnapshot();
+  expect(opened).toContain("Radians feel like an arbitrary alternative to degrees.");
+
+  await page.keyboard.press("Enter");
+  expect(await panel.ariaSnapshot()).not.toContain("Radians feel like an arbitrary alternative");
+  expect(await panel.evaluate((el: HTMLDetailsElement) => el.open)).toBe(false);
+
+  // And the focus ring the rest of the site uses applies here too.
+  const outline = await summary.evaluate((el) => getComputedStyle(el).outlineWidth);
+  expect(outline).not.toBe("0px");
 });

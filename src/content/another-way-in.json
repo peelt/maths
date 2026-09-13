@@ -1,0 +1,1071 @@
+{
+  "schema_version": "1.0",
+  "title": "Maths A Level: Another Way In: Website Content Data",
+  "content_title": "Maths A Level: Another Way In",
+  "qualification": "Pearson Edexcel A-level Mathematics 9MA0",
+  "language": "en-GB",
+  "section_label": "Another way in",
+  "intro_markdown": "Sometimes a method makes more sense when you see it from a different angle. These short explanations are companions to the topic notes, not a replacement for them: pick the idea that matches where you are stuck, then try the small check.",
+  "publication_status": "Draft content; not applied to the live website",
+  "review_date": "2026-09-13",
+  "math_format": "LaTeX with \\( ... \\) inline and \\[ ... \\] display delimiters",
+  "topics": [
+    {
+      "slug": "proof",
+      "title": "Proof",
+      "strand": "Pure",
+      "specification_topic_number": 1,
+      "site_url": "https://www.mathsalevel.ai/topics/proof",
+      "intro_markdown": "If proofs feel like a leap from the question to the answer, concentrate on the small steps that make the conclusion unavoidable. You do not need a clever sentence; you need a chain with no missing links.",
+      "tips": [
+        {
+          "id": "proof-tip-1",
+          "stuck_on": "I can check examples, but I cannot make an argument cover every case.",
+          "title": "Give different numbers different names",
+          "body_markdown": "Two even numbers can be written as \\(2r\\) and \\(2s\\), where \\(r\\) and \\(s\\) are integers. Their sum is \\(2(r+s)\\), which is even because \\(r+s\\) is an integer.\n\nWhy not write both numbers as \\(2r\\)? That quietly assumes they are equal. Giving the numbers separate names lets your argument cover every pair, not just matching pairs."
+        },
+        {
+          "id": "proof-tip-2",
+          "stuck_on": "I do not know what makes a proof convincing.",
+          "title": "Ask what makes the result unavoidable",
+          "body_markdown": "To show that \\(n(n+1)\\) is even for every integer \\(n\\), imagine two neighbouring integers. One must be even, so their product has a factor of 2.\n\nThat is the useful move: find a property that every allowed case shares. Calculating \\(1\\times2\\), \\(2\\times3\\) and \\(3\\times4\\) might suggest the claim, but the neighbouring-integers argument explains why it cannot fail."
+        },
+        {
+          "id": "proof-tip-3",
+          "stuck_on": "I do not know which numbers to try for a counterexample.",
+          "title": "Look for awkward cases on purpose",
+          "body_markdown": "If you suspect a statement is false, do not test numbers at random. Try zero, one, negative numbers or boundary values, provided they belong to the stated domain.\n\nFor example, “\\(x^2>x\\) for every positive real \\(x\\)” fails at \\(x=\\tfrac12\\), since \\(\\tfrac14<\\tfrac12\\). A carefully chosen small number can reveal the hidden assumption much faster than a page of algebra."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Someone claims that the sum of two odd integers is odd. Rewrite the two integers as \\(2r+1\\) and \\(2s+1\\): what does their sum tell you?",
+        "answer_markdown": "Their sum is \\(2(r+s+1)\\), so it is even. The algebra explains the result for every pair of odd integers."
+      },
+      "videos": [
+        {
+          "topic_slug": "proof",
+          "topic_title": "Proof",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "Proof by Contradiction: log₂5 is irrational",
+          "channel": "Eddie Woo",
+          "watch_url": "https://www.youtube.com/watch?v=2x97gB48uro",
+          "video_id": "2x97gB48uro",
+          "duration_seconds": 477,
+          "embed_url": "https://www.youtube-nocookie.com/embed/2x97gB48uro",
+          "start_seconds": null,
+          "teaching_benefit": "See why assuming the opposite of a claim can lead to a valid proof by contradiction.",
+          "lesson_subtopic": "Proof by contradiction applied to the irrationality of log base 2 of 5",
+          "scope_note": "An Australian classroom example using logarithms; references to its syllabus are not references to Edexcel.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=2x97gB48uro"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "algebra-and-functions",
+      "title": "Algebra and functions",
+      "strand": "Pure",
+      "specification_topic_number": 2,
+      "site_url": "https://www.mathsalevel.ai/topics/algebra-and-functions",
+      "intro_markdown": "When an expression looks complicated, you often do not need a new technique. You need to decide which parts should be treated as single objects.",
+      "tips": [
+        {
+          "id": "algebra-and-functions-tip-1",
+          "stuck_on": "The expression looks too complicated to recognise.",
+          "title": "Put a temporary label on the difficult-looking part",
+          "body_markdown": "Consider \\(e^{2x}-5e^x+6=0\\). Since \\(e^{2x}=(e^x)^2\\), temporarily call \\(e^x\\) by the name \\(u\\).\n\nThe equation becomes \\(u^2-5u+6=0\\), giving \\(u=2\\) or \\(u=3\\). Now remove the label: \\(x=\\ln2\\) or \\(x=\\ln3\\). Remember that \\(u=e^x>0\\), so a negative value of \\(u\\) would have to be rejected. The exponential did not change the quadratic structure; it disguised it."
+        },
+        {
+          "id": "algebra-and-functions-tip-2",
+          "stuck_on": "I am unsure what I can cancel.",
+          "title": "Cancellation works on whole factors",
+          "body_markdown": "Think of a fraction as one complete numerator divided by one complete denominator. In \\(\\frac{3x+6}{3}\\), the numerator is \\(3(x+2)\\), so the whole factor of 3 cancels and leaves \\(x+2\\).\n\nIn \\(\\frac{x+6}{3}\\), there is no factor of 3 multiplying the whole numerator. Dividing both terms gives \\(\\frac{x}{3}+2\\), not \\(x+2\\). Ask “what multiplies the entire top?” before crossing anything out."
+        },
+        {
+          "id": "algebra-and-functions-tip-3",
+          "stuck_on": "Combined graph transformations confuse me.",
+          "title": "Track one landmark instead of memorising a movement",
+          "body_markdown": "Suppose \\(f(4)=7\\), and the new graph is \\(y=f(2x-6)\\). To track this particular landmark, make the input reaching \\(f\\) equal to 4.\n\nSolve \\(2x-6=4\\), giving \\(x=5\\). The point \\((4,7)\\) on the original graph becomes \\((5,7)\\) on the new one. Following a known point can make a combined transformation much easier to understand."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "If \\(f(3)=5\\), where does that landmark appear on \\(y=f(x+2)-1\\)? Work out what must enter \\(f\\), then what happens to its output.",
+        "answer_markdown": "The new point is \\((1,4)\\): \\(1+2=3\\), and \\(5-1=4\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "algebra-and-functions",
+          "topic_title": "Algebra and functions",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "The intuitive idea of a function",
+          "channel": "Dr. Trefor Bazett",
+          "watch_url": "https://www.youtube.com/watch?v=G8qvOZ9DE3c",
+          "video_id": "G8qvOZ9DE3c",
+          "duration_seconds": 351,
+          "embed_url": "https://www.youtube-nocookie.com/embed/G8qvOZ9DE3c",
+          "start_seconds": null,
+          "teaching_benefit": "Picture a function as an instruction or machine with exactly one output for each allowed input.",
+          "lesson_subtopic": "What a function is: instruction, graph and machine views, plus the one-output-per-input constraint",
+          "scope_note": "Conceptual background from a discrete-mathematics course, not a lesson on Edexcel graph transformations.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=G8qvOZ9DE3c"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "coordinate-geometry",
+      "title": "Coordinate geometry",
+      "strand": "Pure",
+      "specification_topic_number": 3,
+      "site_url": "https://www.mathsalevel.ai/topics/coordinate-geometry",
+      "intro_markdown": "An equation can be read as instructions for placing or moving a point. Try translating the symbols into a small geometric story before calculating.",
+      "tips": [
+        {
+          "id": "coordinate-geometry-tip-1",
+          "stuck_on": "Parametric equations do not look like a line to me.",
+          "title": "A line can be a walk, not just a gradient",
+          "body_markdown": "The equations \\(x=2+3t\\), \\(y=-1+2t\\) start at \\((2,-1)\\) when \\(t=0\\). Increasing \\(t\\) by 1 moves you 3 units right and 2 units up.\n\nThat single repeated movement produces a straight line. It also explains the gradient \\(2/3\\): the vertical change is 2 for a horizontal change of 3. The parameter describes how the point travels along the line."
+        },
+        {
+          "id": "coordinate-geometry-tip-2",
+          "stuck_on": "I mix up a circle's radius and diameter.",
+          "title": "Build a circle from its diameter",
+          "body_markdown": "If a diameter runs from \\(A(-1,2)\\) to \\(B(5,6)\\), the centre is halfway between them: \\((2,4)\\). From the centre to either endpoint, the horizontal and vertical changes are 3 and 2.\n\nSo \\(r^2=3^2+2^2=13\\), and the equation is \\((x-2)^2+(y-4)^2=13\\). Working from centre to endpoint helps prevent accidentally using the full diameter as the radius."
+        },
+        {
+          "id": "coordinate-geometry-tip-3",
+          "stuck_on": "I get a Cartesian equation but lose part of the original curve.",
+          "title": "Eliminating the parameter can erase a restriction",
+          "body_markdown": "Take \\(x=t^2\\), \\(y=t\\), with \\(t\\geq0\\). Eliminating \\(t\\) gives \\(x=y^2\\), but that equation alone also permits negative \\(y\\).\n\nThe original description does not: \\(y=t\\geq0\\). Keep \\(y\\geq0\\) alongside the Cartesian equation. Think of elimination as compressing the description, then check whether any important information got left behind."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "A circle has diameter endpoints \\((0,0)\\) and \\((6,8)\\). What are its centre and radius?",
+        "answer_markdown": "The centre is \\((3,4)\\), and the radius is 5. Its equation is \\((x-3)^2+(y-4)^2=25\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "coordinate-geometry",
+          "topic_title": "Coordinate geometry",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "A-Level Maths: C2-01 [Circles: Introducing the Equation of the Circle]",
+          "channel": "TLMaths",
+          "watch_url": "https://www.youtube.com/watch?v=G6C0lbELl2Y",
+          "video_id": "G6C0lbELl2Y",
+          "duration_seconds": 233,
+          "embed_url": "https://www.youtube-nocookie.com/embed/G6C0lbELl2Y",
+          "start_seconds": null,
+          "teaching_benefit": "See the circle equation built from distance and Pythagoras rather than introduced as a rule to memorise.",
+          "lesson_subtopic": "Deriving the equation of a circle from centre, radius and Pythagoras",
+          "scope_note": "A short UK A-level introduction to centre-radius form; completing the square is a separate skill.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=G6C0lbELl2Y"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sequences-and-series",
+      "title": "Sequences and series",
+      "strand": "Pure",
+      "specification_topic_number": 4,
+      "site_url": "https://www.mathsalevel.ai/topics/sequences-and-series",
+      "intro_markdown": "The main source of confusion is often not the formula but what is being counted. A quick timeline or picture can settle that before you start.",
+      "tips": [
+        {
+          "id": "sequences-and-series-tip-1",
+          "stuck_on": "I keep getting the exponent one too high or too low.",
+          "title": "Count changes, not labels",
+          "body_markdown": "A machine is worth £1,000 initially and retains 80% of its value each year. After three yearly changes, its value is \\(1000(0.8)^3=£512\\).\n\nIf you label the initial value \\(V_0\\), the exponent after \\(n\\) years is \\(n\\). If you call that initial value the first term \\(u_1\\), then \\(u_n=1000(0.8)^{n-1}\\). The labels differ; the number of multiplications does not."
+        },
+        {
+          "id": "sequences-and-series-tip-2",
+          "stuck_on": "I do not see how infinitely many terms can have a finite sum.",
+          "title": "Picture the part still missing",
+          "body_markdown": "Imagine colouring half a strip, then half of what remains, then half of what remains again. The coloured amounts are \\(\\tfrac12,\\tfrac14,\\tfrac18,\\ldots\\).\n\nAfter \\(n\\) steps, the uncoloured part is \\(2^{-n}\\), so the coloured total is \\(1-2^{-n}\\). This makes the infinite sum feel less mysterious: the leftover can be made arbitrarily small, even though no finite step removes it completely."
+        },
+        {
+          "id": "sequences-and-series-tip-3",
+          "stuck_on": "I do not know when a short binomial approximation is useful.",
+          "title": "Find the actual small quantity in a binomial expansion",
+          "body_markdown": "For \\(\\frac1{\\sqrt{4+x}}\\), first write \\(\\frac12(1+\\frac{x}{4})^{-1/2}\\). The quantity being expanded is \\(x/4\\), not \\(x\\).\n\nThe first two terms give \\(\\frac12-\\frac{x}{16}\\). The infinite expansion converges for \\(|x|<4\\), but a short truncation is most useful when \\(|x|/4\\) is small. “The series converges” and “two terms are accurate enough” are different claims."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "The first displayed term is 100, and each next term is half the previous one. How many halvings produce the fourth term, and what is it?",
+        "answer_markdown": "Three halvings give 12.5. The exponent counts the gaps between the first and fourth terms."
+      },
+      "videos": [
+        {
+          "topic_slug": "sequences-and-series",
+          "topic_title": "Sequences and series",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "Finite geometric series formula justification | High School Math | Khan Academy",
+          "channel": "Khan Academy",
+          "watch_url": "https://www.youtube.com/watch?v=Cf0-6ngH2gs",
+          "video_id": "Cf0-6ngH2gs",
+          "duration_seconds": 434,
+          "embed_url": "https://www.youtube-nocookie.com/embed/Cf0-6ngH2gs",
+          "start_seconds": null,
+          "teaching_benefit": "Watch the geometric-sum formula emerge by multiplying a sum and subtracting so the middle terms cancel.",
+          "lesson_subtopic": "Justifying the formula for the sum of a finite geometric series",
+          "scope_note": "US high-school notation differs slightly from the site's notation; this covers geometric sums, not arithmetic sums or binomial expansion.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=Cf0-6ngH2gs"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "trigonometry",
+      "title": "Trigonometry",
+      "strand": "Pure",
+      "specification_topic_number": 5,
+      "site_url": "https://www.mathsalevel.ai/topics/trigonometry",
+      "intro_markdown": "Trigonometry becomes easier when angles are quantities you can follow, rather than triggers for a memorised rule. Look for the circle, the input angle or the shape of the expression.",
+      "tips": [
+        {
+          "id": "trigonometry-tip-1",
+          "stuck_on": "Radians feel like an arbitrary alternative to degrees.",
+          "title": "A radian measures an arc using the radius as its ruler",
+          "body_markdown": "An angle of 1 radian cuts off an arc whose length equals the radius. On a circle of radius 5, an angle of 0.2 radians therefore cuts off an arc of length 1.\n\nThis is why radians fit naturally into small-angle ideas: on a unit circle, a small angle and its arc length have the same numerical value. The short arc and its vertical rise are then close, which helps explain \\(\\sin\\theta\\approx\\theta\\)."
+        },
+        {
+          "id": "trigonometry-tip-2",
+          "stuck_on": "I lose track of the angle inside the trig function.",
+          "title": "Follow the entire angle, not just the letter",
+          "body_markdown": "In \\(y=\\sin(2x-\\pi/3)\\), the sine function receives the angle \\(2x-\\pi/3\\). To find where it reaches its first maximum after \\(x=0\\), ask when that input first equals \\(\\pi/2\\).\n\nSolving \\(2x-\\pi/3=\\pi/2\\) gives \\(x=5\\pi/12\\). Thinking about what enters sine is often clearer than trying to apply several graph movements at once."
+        },
+        {
+          "id": "trigonometry-tip-3",
+          "stuck_on": "I know identities but cannot decide which one to use.",
+          "title": "Let the target suggest the identity",
+          "body_markdown": "Suppose you want to simplify \\(\\frac{1-\\cos2x}{\\sin2x}\\). The numerator can become \\(2\\sin^2x\\), while the denominator becomes \\(2\\sin x\\cos x\\).\n\nNow the common factor leaves \\(\\frac{\\sin x}{\\cos x}=\\tan x\\), wherever the original fraction is defined. The useful question was not “which identities do I remember?” but “which versions will create matching factors?”"
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "For \\(y=\\cos(3x)\\), how far must \\(x\\) increase for the input angle to complete one full turn? Use radians.",
+        "answer_markdown": "\\(3x\\) must increase by \\(2\\pi\\), so the period in \\(x\\) is \\(2\\pi/3\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "trigonometry",
+          "topic_title": "Trigonometry",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "Trigonometry on the Unit Circle (1 of 3: Introduction)",
+          "channel": "Eddie Woo",
+          "watch_url": "https://www.youtube.com/watch?v=ILRrqghJzdE",
+          "video_id": "ILRrqghJzdE",
+          "duration_seconds": 664,
+          "embed_url": "https://www.youtube-nocookie.com/embed/ILRrqghJzdE",
+          "start_seconds": null,
+          "teaching_benefit": "Connect the familiar triangle ratios with coordinates on a circle.",
+          "lesson_subtopic": "From trigonometric ratios in a right-angled triangle to the unit circle definition",
+          "scope_note": "An Australian classroom introduction using degrees; keep the site's radian work alongside it.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=ILRrqghJzdE"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "exponentials-and-logarithms",
+      "title": "Exponentials and logarithms",
+      "strand": "Pure",
+      "specification_topic_number": 6,
+      "site_url": "https://www.mathsalevel.ai/topics/exponentials-and-logarithms",
+      "intro_markdown": "A logarithm is easier to handle when you read it as a question, not an unfamiliar symbol. Exponential models become clearer when you choose a time interval you can picture.",
+      "tips": [
+        {
+          "id": "exponentials-and-logarithms-tip-1",
+          "stuck_on": "Logarithms feel like unfamiliar symbols rather than numbers.",
+          "title": "Read a logarithm as “what power?”",
+          "body_markdown": "\\(\\log_2 8=3\\) asks which power of 2 gives 8. The same question works for less familiar answers: \\(\\log_2\\sqrt2=\\tfrac12\\) and \\(\\log_2(\\tfrac14)=-2\\).\n\nA negative logarithm is not a problem. It describes a positive input smaller than 1 when the base is greater than 1. The input must be positive, but the answer does not have to be."
+        },
+        {
+          "id": "exponentials-and-logarithms-tip-2",
+          "stuck_on": "I cannot picture what a log scale does.",
+          "title": "Equal steps on a log scale mean equal multiplications",
+          "body_markdown": "The numbers 10, 100 and 1,000 are not equally spaced on an ordinary number line. Their base-10 logarithms, 1, 2 and 3, are.\n\nA log scale turns “multiply by 10” into “move one step”. This is the intuition behind straightening exponential data: repeated multiplication becomes a constant additive change after taking logarithms."
+        },
+        {
+          "id": "exponentials-and-logarithms-tip-3",
+          "stuck_on": "I cannot connect an exponential constant to a growth or decay story.",
+          "title": "Give an exponential model a familiar clock",
+          "body_markdown": "If an amount decays exponentially, halving every three hours, write \\(Q(t)=Q_0\\,2^{-t/3}\\), with \\(t\\) in hours. At \\(t=3\\) there has been one halving; at \\(t=6\\), two.\n\nThe same model is \\(Q(t)=Q_0e^{-(\\ln2)t/3}\\). The less familiar constant \\(-\\ln2/3\\) is simply the familiar three-hour halving pattern written using base \\(e\\)."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "An amount grows exponentially, doubling every four days. What multiplier applies after six days?",
+        "answer_markdown": "\\(2^{6/4}=2^{3/2}=2\\sqrt2\\). The exponent counts how many four-day intervals have elapsed, including partial intervals."
+      },
+      "videos": [
+        {
+          "topic_slug": "exponentials-and-logarithms",
+          "topic_title": "Exponentials and logarithms",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "Introduction to Logarithms (1 of 2: Rethinking Exponentials)",
+          "channel": "Eddie Woo",
+          "watch_url": "https://www.youtube.com/watch?v=2V5h5gMMVGo",
+          "video_id": "2V5h5gMMVGo",
+          "duration_seconds": 477,
+          "embed_url": "https://www.youtube-nocookie.com/embed/2V5h5gMMVGo",
+          "start_seconds": null,
+          "teaching_benefit": "See a logarithm introduced as a question about an unknown exponent.",
+          "lesson_subtopic": "Logarithms as the inverse of exponentiation",
+          "scope_note": "An introductory Australian lesson; logarithm laws and exponential modelling need the accompanying topic notes.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=2V5h5gMMVGo"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "differentiation",
+      "title": "Differentiation",
+      "strand": "Pure",
+      "specification_topic_number": 7,
+      "site_url": "https://www.mathsalevel.ai/topics/differentiation",
+      "intro_markdown": "The rules become less arbitrary when you connect them to small changes. Ask what one tiny change in the input does to the output.",
+      "tips": [
+        {
+          "id": "differentiation-tip-1",
+          "stuck_on": "I can calculate a derivative but do not know what it tells me.",
+          "title": "Use the derivative as a local exchange rate",
+          "body_markdown": "For \\(y=x^2\\), the derivative at \\(x=3\\) is 6. Near that point, an increase of 0.01 in \\(x\\) should produce approximately \\(6(0.01)=0.06\\) in \\(y\\).\n\nSo \\(3.01^2\\) is approximately \\(9.06\\); its exact value is \\(9.0601\\). The derivative is describing the best local straight-line change, not claiming the whole curve is a straight line."
+        },
+        {
+          "id": "differentiation-tip-2",
+          "stuck_on": "I forget the extra factor in the chain rule.",
+          "title": "Think of the chain rule as two connected gears",
+          "body_markdown": "Let \\(u=3x\\) and \\(y=u^2\\). A small change in \\(x\\) changes \\(u\\) three times as much, and a small change in \\(u\\) changes \\(y\\) at a rate of \\(2u\\).\n\nMultiply the two rates: \\(\\frac{dy}{dx}=\\frac{dy}{du}\\frac{du}{dx}=2u\\times3=18x\\). The extra factor is not a correction to remember afterwards; it measures how quickly the inside is moving."
+        },
+        {
+          "id": "differentiation-tip-3",
+          "stuck_on": "I do not understand why the product rule has two terms.",
+          "title": "The product rule has two terms because two sides change",
+          "body_markdown": "First picture a rectangle whose positive side lengths \\(u(x)\\) and \\(v(x)\\) both grow. When \\(x\\) increases a little, area is added along both sides.\n\nOne strip contributes approximately \\(v\\,\\Delta u\\), and the other \\(u\\,\\Delta v\\). The tiny corner \\(\\Delta u\\,\\Delta v\\) becomes negligible when forming the derivative. That is why the area rate is \\(vu'+uv'\\), rather than \\(u'v'\\). The same algebra handles decreasing sides through negative changes."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "If \\(y=(3x)^2\\), what is the derivative at \\(x=1\\)? Check using both the chain rule and expansion.",
+        "answer_markdown": "It is 18. Expanding gives \\(y=9x^2\\), so \\(dy/dx=18x\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "differentiation",
+          "topic_title": "Differentiation",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "The paradox of the derivative | Chapter 2, Essence of calculus",
+          "channel": "3Blue1Brown",
+          "watch_url": "https://www.youtube.com/watch?v=9vKqVkMQHKk",
+          "video_id": "9vKqVkMQHKk",
+          "duration_seconds": 1010,
+          "embed_url": "https://www.youtube-nocookie.com/embed/9vKqVkMQHKk",
+          "start_seconds": null,
+          "teaching_benefit": "Explore what an instantaneous rate of change means through very small changes in time and position.",
+          "lesson_subtopic": "What an instantaneous rate of change means; ds/dt as a limit of small nudges",
+          "scope_note": "A conceptual animation, not an exam-method lesson; it spends more time on limits than a typical revision explanation.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=9vKqVkMQHKk"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "integration",
+      "title": "Integration",
+      "strand": "Pure",
+      "specification_topic_number": 8,
+      "site_url": "https://www.mathsalevel.ai/topics/integration",
+      "intro_markdown": "Instead of asking only “which rule fits?”, ask what is accumulating or what derivative could have produced the expression. Those questions often reveal the method.",
+      "tips": [
+        {
+          "id": "integration-tip-1",
+          "stuck_on": "An integral feels like algebra without a meaning.",
+          "title": "Attach units to a tiny piece",
+          "body_markdown": "Suppose water enters a tank at \\(6-t\\) litres per minute, for \\(0\\leq t\\leq2\\). A short time interval contributes approximately \\((6-t)\\Delta t\\) litres.\n\nAdding those contributions gives \\(\\int_0^2(6-t)\\,dt=10\\) litres. This is the meaning of the integral before you do any algebra: rate multiplied by a small time, accumulated over the interval."
+        },
+        {
+          "id": "integration-tip-2",
+          "stuck_on": "I change the expression in a substitution but get stuck with dx.",
+          "title": "A substitution must replace the little measuring step too",
+          "body_markdown": "In \\(\\int\\frac{2x}{x^2+1}\\,dx\\), set \\(u=x^2+1\\). Then \\(du=2x\\,dx\\), so the numerator and the small \\(x\\)-step together become the small \\(u\\)-step.\n\nThe integral is now \\(\\int\\frac1u\\,du=\\ln u+C=\\ln(x^2+1)+C\\). A substitution changes both the expression and the way the interval is measured; replacing only the bracket is not the whole change."
+        },
+        {
+          "id": "integration-tip-3",
+          "stuck_on": "Integration by parts feels like a formula chosen at random.",
+          "title": "Try a candidate, then repair its unwanted derivative",
+          "body_markdown": "To integrate \\(xe^x\\), notice that differentiating \\(xe^x\\) gives \\(xe^x+e^x\\). That is the expression you want plus one unwanted extra.\n\nSubtract \\(e^x\\) from the candidate, because its derivative removes the extra term. Thus \\(\\int xe^x\\,dx=(x-1)e^x+C\\). This is integration by parts seen as “candidate plus repair”, rather than as a formula to deploy blindly."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Find \\(\\int3(3x+2)^4\\,dx\\). Which part can become the new variable, including its small measuring step?",
+        "answer_markdown": "With \\(u=3x+2\\), \\(du=3\\,dx\\), giving \\((3x+2)^5/5+C\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "integration",
+          "topic_title": "Integration",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "Integration and the fundamental theorem of calculus | Chapter 8, Essence of calculus",
+          "channel": "3Blue1Brown",
+          "watch_url": "https://www.youtube.com/watch?v=rfG8ce4nNh0",
+          "video_id": "rfG8ce4nNh0",
+          "duration_seconds": 1246,
+          "embed_url": "https://www.youtube-nocookie.com/embed/rfG8ce4nNh0",
+          "start_seconds": null,
+          "teaching_benefit": "Connect accumulated tiny contributions with area and the fundamental theorem of calculus.",
+          "lesson_subtopic": "Area under a graph as accumulated v(t)·dt, the fundamental theorem, and signed (negative) area",
+          "scope_note": "A longer conceptual animation; the published chapters mark the fundamental theorem at 11:18 and signed area at 17:45.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=rfG8ce4nNh0"
+          ],
+          "verified_chapters": [
+            {
+              "label": "Fundamental theorem of calculus",
+              "start_seconds": 678
+            },
+            {
+              "label": "Signed area",
+              "start_seconds": 1065
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "numerical-methods",
+      "title": "Numerical methods",
+      "strand": "Pure",
+      "specification_topic_number": 9,
+      "site_url": "https://www.mathsalevel.ai/topics/numerical-methods",
+      "intro_markdown": "A numerical method is a process for improving a guess, not a guarantee attached to a calculator button. Try to see what the process does to the error.",
+      "tips": [
+        {
+          "id": "numerical-methods-tip-1",
+          "stuck_on": "I do not understand why one iteration works and another fails.",
+          "title": "The same equation can produce very different journeys",
+          "body_markdown": "To find the positive solution of \\(x^2=2\\), try \\(x_{n+1}=2/x_n\\) starting from 1. The guesses are \\(1,2,1,2,\\ldots\\): they never settle.\n\nNow try \\(x_{n+1}=\\tfrac12(x_n+2/x_n)\\). Starting from 1 gives \\(1,1.5,1.4167,\\ldots\\), heading towards \\(\\sqrt2\\). Both rearrangements have the same positive fixed point, but they move guesses around it differently."
+        },
+        {
+          "id": "numerical-methods-tip-2",
+          "stuck_on": "I cannot tell whether a near-zero function value is accurate enough.",
+          "title": "A small output error is not always a small input error",
+          "body_markdown": "For \\(f(x)=0.001(x-10)\\), the value at \\(x=0\\) is only \\(-0.01\\). Yet the root is 10 units away.\n\nThe graph is very shallow, so a small vertical gap can hide a large horizontal gap. This is why “\\(f(x)\\) is nearly zero” is not, by itself, proof that your root is accurate to the requested number of decimal places."
+        },
+        {
+          "id": "numerical-methods-tip-3",
+          "stuck_on": "I forget where the trapezium-rule weights come from.",
+          "title": "The trapezium-rule weights count shared edges",
+          "body_markdown": "Two neighbouring trapezia have areas \\(\\tfrac h2(y_0+y_1)\\) and \\(\\tfrac h2(y_1+y_2)\\). Adding them counts the middle height \\(y_1\\) twice.\n\nAcross the whole interval, every internal height belongs to two trapezia, while each endpoint belongs to one. That is where the pattern \\(1,2,2,\\ldots,2,1\\) comes from; it is not an arbitrary set of coefficients."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Does the iteration \\(x_{n+1}=2/x_n\\), starting from \\(x_0=1\\), fail because \\(\\sqrt2\\) is not a solution?",
+        "answer_markdown": "No. The solution exists, but this starting value and iteration produce a two-value cycle rather than convergence."
+      },
+      "videos": [
+        {
+          "topic_slug": "numerical-methods",
+          "topic_title": "Numerical methods",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "A-Level Maths: I2-02 Locating Roots: Cobweb and Staircase Diagrams",
+          "channel": "TLMaths",
+          "watch_url": "https://www.youtube.com/watch?v=gfKu1ILeVdg",
+          "video_id": "gfKu1ILeVdg",
+          "duration_seconds": 348,
+          "embed_url": "https://www.youtube-nocookie.com/embed/gfKu1ILeVdg",
+          "start_seconds": null,
+          "teaching_benefit": "See an iteration as a path between a curve and the line y = x, rather than just a list of calculator outputs.",
+          "lesson_subtopic": "Cobweb and staircase diagrams for fixed-point iteration and convergence",
+          "scope_note": "A short UK A-level explanation of cobweb and staircase diagrams, not a complete guide to numerical methods.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=gfKu1ILeVdg"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "vectors",
+      "title": "Vectors",
+      "strand": "Pure",
+      "specification_topic_number": 10,
+      "site_url": "https://www.mathsalevel.ai/topics/vectors",
+      "intro_markdown": "Think of position vectors as addresses and displacement vectors as journeys. The arithmetic becomes clearer when you keep those two jobs separate.",
+      "tips": [
+        {
+          "id": "vectors-tip-1",
+          "stuck_on": "I am unsure why subtracting two positions gives a displacement.",
+          "title": "Move the origin and the journey stays the same",
+          "body_markdown": "From \\(A(2,1)\\) to \\(B(5,5)\\), the displacement is \\((3,4)\\). If a different choice of origin shifts both coordinate pairs by the same vector \\(\\mathbf c\\), their difference is unchanged.\n\nAlgebraically, \\((\\mathbf b+\\mathbf c)-(\\mathbf a+\\mathbf c)=\\mathbf b-\\mathbf a\\). This explains why subtracting positions gives something physical about the journey, independent of where the map puts zero."
+        },
+        {
+          "id": "vectors-tip-2",
+          "stuck_on": "I reverse the weights when dividing a line segment.",
+          "title": "A point partway along a segment is a weighted mixture",
+          "body_markdown": "To travel one third of the way from \\(A\\) to \\(B\\), start at \\(A\\), then add one third of the journey: \\(\\mathbf p=\\mathbf a+\\tfrac13(\\mathbf b-\\mathbf a)\\).\n\nEquivalently, \\(\\mathbf p=\\tfrac23\\mathbf a+\\tfrac13\\mathbf b\\). Notice which weight is larger: the point is closer to \\(A\\). Thinking “start plus fraction of journey” is safer than trying to memorise a ratio formula."
+        },
+        {
+          "id": "vectors-tip-3",
+          "stuck_on": "I lose track of signs around a vector diagram.",
+          "title": "A closed walk gives you a built-in check",
+          "body_markdown": "Walking from \\(A\\) to \\(B\\), then \\(B\\) to \\(C\\), then \\(C\\) back to \\(A\\) must produce zero overall displacement. Therefore \\(\\overrightarrow{AB}+\\overrightarrow{BC}+\\overrightarrow{CA}=\\mathbf0\\).\n\nIf your algebra for a geometric diagram does not close, inspect the arrow directions. A reversed journey changes the sign of the whole vector, not just one component."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Find the point one third of the way from \\(A(1,2)\\) to \\(B(7,5)\\). Start with the displacement rather than averaging the coordinates.",
+        "answer_markdown": "The displacement is \\((6,3)\\); one third is \\((2,1)\\). Adding that to \\(A\\) gives \\((3,3)\\)."
+      },
+      "videos": [
+        {
+          "topic_slug": "vectors",
+          "topic_title": "Vectors",
+          "strand": "Pure",
+          "role": "primary",
+          "video_title": "A-Level Maths: J1-03 [Vectors: Finding the Vector between Two Points in 2D]",
+          "channel": "TLMaths",
+          "watch_url": "https://www.youtube.com/watch?v=AIDeSAWwEII",
+          "video_id": "AIDeSAWwEII",
+          "duration_seconds": 164,
+          "embed_url": "https://www.youtube-nocookie.com/embed/AIDeSAWwEII",
+          "start_seconds": null,
+          "teaching_benefit": "See why the vector between two points is the destination position minus the starting position.",
+          "lesson_subtopic": "Finding the vector AB between two points from their position vectors",
+          "scope_note": "A short UK A-level explanation in two dimensions; apply the same component-by-component idea to the site's three-dimensional work.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=AIDeSAWwEII"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "statistical-sampling",
+      "title": "Statistical sampling",
+      "strand": "Statistics",
+      "specification_topic_number": 1,
+      "site_url": "https://www.mathsalevel.ai/topics/statistical-sampling",
+      "intro_markdown": "A sample is produced by a process, not just by a number of people. To understand whether it can represent a population, follow the route from the intended population to the final responses.",
+      "tips": [
+        {
+          "id": "statistical-sampling-tip-1",
+          "stuck_on": "I cannot distinguish different ways a sample can go wrong.",
+          "title": "Separate the population, the list and the respondents",
+          "body_markdown": "Suppose a college wants the views of all its students, emails a list of current addresses, and receives replies from some of them. Those are three different groups.\n\nStudents missing from the list never had a chance to respond; students on it may choose not to reply. Keeping the stages separate helps you distinguish a coverage problem from a non-response problem instead of calling everything “bias”."
+        },
+        {
+          "id": "statistical-sampling-tip-2",
+          "stuck_on": "I assume a large sample must be representative.",
+          "title": "More observations do not automatically fix a tilted selection",
+          "body_markdown": "Imagine tasting soup only from the surface before it has been stirred. Taking fifty spoonfuls from the same place does not solve the problem of what you are sampling.\n\nLikewise, a very large voluntary poll can still systematically miss particular views. A larger sample can reduce random variation under a sound design, but sample size alone does not repair an unrepresentative selection process."
+        },
+        {
+          "id": "statistical-sampling-tip-3",
+          "stuck_on": "I am unsure what makes a sample genuinely simple random.",
+          "title": "Equal individual chances are not the whole story",
+          "body_markdown": "From four people \\(A,B,C,D\\), suppose you choose either the pair \\(AB\\) or the pair \\(CD\\), each with probability one half. Every individual has the same chance of selection.\n\nBut this is not a simple random sample of size 2: pairs such as \\(AC\\) can never be chosen. For simple random sampling, every possible sample of the required size must have the same chance, not merely every individual."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "An interviewer fills age-group quotas but chooses the easiest people to approach within each group. Do the matching proportions make the sample random?",
+        "answer_markdown": "No. The proportions may match, but the selection within groups is still non-random."
+      },
+      "videos": [
+        {
+          "topic_slug": "statistical-sampling",
+          "topic_title": "Statistical sampling",
+          "strand": "Statistics",
+          "role": "primary",
+          "video_title": "Edexcel A Level Maths Statistics 1 | Data Collection & Sampling",
+          "channel": "AJMaths",
+          "watch_url": "https://www.youtube.com/watch?v=Mep-OcODJfE",
+          "video_id": "Mep-OcODJfE",
+          "duration_seconds": 999,
+          "embed_url": "https://www.youtube-nocookie.com/embed/Mep-OcODJfE",
+          "start_seconds": null,
+          "teaching_benefit": "Connect population, sampling frame and sampling methods to Edexcel-style questions.",
+          "lesson_subtopic": "Data collection and sampling methods for Edexcel Statistics 1, with review-exercise questions",
+          "scope_note": "An exercise-led revision lesson rather than a purely conceptual introduction.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=Mep-OcODJfE"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "data-presentation",
+      "title": "Data presentation and interpretation",
+      "strand": "Statistics",
+      "specification_topic_number": 2,
+      "site_url": "https://www.mathsalevel.ai/topics/data-presentation",
+      "intro_markdown": "A graph or summary is a compressed version of the original observations. Ask what it preserves, what it hides and what assumptions you need to recover an estimate.",
+      "tips": [
+        {
+          "id": "data-presentation-tip-1",
+          "stuck_on": "I do not see why grouped-data calculations are estimates.",
+          "title": "Grouping loses the exact positions within each band",
+          "body_markdown": "If ten observations lie between 0 and 10, you know their band but not where they sit inside it. A group concentrated near 1 and a group concentrated near 9 could have the same frequency table.\n\nUsing a midpoint for an estimated mean, or interpolating within a class, fills in some of that missing detail by assumption. That is why the result is an estimate, even when your arithmetic is exact."
+        },
+        {
+          "id": "data-presentation-tip-2",
+          "stuck_on": "I cannot explain what spread adds to an average.",
+          "title": "The same average can describe very different groups",
+          "body_markdown": "The data sets \\(0,0,10,10\\) and \\(4,4,6,6\\) both have mean 5. In the first, every observation is five units from the mean; in the second, every observation is one unit away.\n\nSo “both averages are 5” leaves out a major difference. Try sketching the observations as dots before calculating: it makes clear which summary describes the centre and which describes the variation around it."
+        },
+        {
+          "id": "data-presentation-tip-3",
+          "stuck_on": "I do not know why missing readings need special care.",
+          "title": "A missing reading is not a reading of zero",
+          "body_markdown": "Suppose a rainfall column has a recorded zero, an empty entry and a trace code. Do not turn all three into zero: they convey different information, and the data-set definitions tell you how each should be handled.\n\nReplacing a missing observation with zero leaves the total of the recorded values unchanged but increases the number of observations you are treating as measured. Cleaning data means making a justified decision, not merely making every cell contain a number."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Three measured values are 4, 6 and 8, with a fourth reading missing. What is the mean of the available observations, and what would wrongly treating the missing reading as zero do?",
+        "answer_markdown": "The observed-data mean is \\(18/3=6\\). Filling the missing value with zero would give \\(18/4=4.5\\), a different calculation based on an invented measurement."
+      },
+      "videos": [
+        {
+          "topic_slug": "data-presentation",
+          "topic_title": "Data presentation and interpretation",
+          "strand": "Statistics",
+          "role": "primary",
+          "video_title": "IGCSE & GCSE - Frequency Density & Histograms",
+          "channel": "Ace Maths",
+          "watch_url": "https://www.youtube.com/watch?v=B5p-mbRIaV0",
+          "video_id": "B5p-mbRIaV0",
+          "duration_seconds": 653,
+          "embed_url": "https://www.youtube-nocookie.com/embed/B5p-mbRIaV0",
+          "start_seconds": null,
+          "teaching_benefit": "Rebuild the histogram idea that frequency is represented by bar area when class widths differ.",
+          "lesson_subtopic": "Frequency density = frequency / class width, and why area represents frequency in a histogram",
+          "scope_note": "A GCSE/IGCSE foundation refresher; it does not cover the whole A-level data-presentation topic.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=B5p-mbRIaV0"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "probability",
+      "title": "Probability",
+      "strand": "Statistics",
+      "specification_topic_number": 3,
+      "site_url": "https://www.mathsalevel.ai/topics/probability",
+      "intro_markdown": "Probabilities are often easier to understand as counts of equally likely outcomes or as proportions in a small table. Build the picture first, then attach the symbols.",
+      "tips": [
+        {
+          "id": "probability-tip-1",
+          "stuck_on": "I mix up the two directions of a conditional probability.",
+          "title": "Replace percentages with a small group of people",
+          "body_markdown": "In a group of 20 people, 8 play guitar, 5 play drums, and 3 play both. Imagine choosing one person at random, with everyone equally likely to be chosen. Among the drummers, 3 out of 5 play guitar; among the guitarists, 3 out of 8 play drums.\n\nThus \\(P(G\\mid D)=3/5\\), while \\(P(D\\mid G)=3/8\\). The overlap did not change. What changed was the group you were considering."
+        },
+        {
+          "id": "probability-tip-2",
+          "stuck_on": "An at-least-one question seems to have too many cases.",
+          "title": "Count the easy opposite",
+          "body_markdown": "To find the probability of at least one six in four independent throws of a fair die, listing one six, two sixes, three sixes and four sixes is unnecessary. The opposite event has one simple description: no sixes.\n\nIts probability is \\((5/6)^4\\), so the answer is \\(1-(5/6)^4\\). This approach works because the event and its complement cover every possibility without overlap."
+        },
+        {
+          "id": "probability-tip-3",
+          "stuck_on": "I cannot decide whether overlapping events are independent.",
+          "title": "Test independence by checking whether the proportion changes",
+          "body_markdown": "On a fair die, half the outcomes are even. Among the multiples of 3, namely 3 and 6, half are still even, so learning “multiple of 3” has not changed the probability of “even”.\n\nAmong the outcomes greater than 3, namely 4, 5 and 6, two thirds are even. That information does change the probability. Overlap alone cannot tell you whether events are independent."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "A bag contains three red and two blue counters. Two are drawn without replacement: what is the probability that both are red?",
+        "answer_markdown": "\\(\\frac35\\times\\frac24=\\frac3{10}\\). After the first red is removed, the second draw uses a different proportion."
+      },
+      "videos": [
+        {
+          "topic_slug": "probability",
+          "topic_title": "Probability",
+          "strand": "Statistics",
+          "role": "primary",
+          "video_title": "Conditional Probability Explained: Visual Intuition",
+          "channel": "Harvard Online",
+          "watch_url": "https://www.youtube.com/watch?v=by3_weGwnMg",
+          "video_id": "by3_weGwnMg",
+          "duration_seconds": 273,
+          "embed_url": "https://www.youtube-nocookie.com/embed/by3_weGwnMg",
+          "start_seconds": 159,
+          "teaching_benefit": "Replace conditional-probability percentages with counts of people, then narrow the group being considered.",
+          "lesson_subtopic": "Conditional probability via a medical test: restricting the population to those who tested positive",
+          "scope_note": "Uses a medical-testing example and Bayes language; use the counting picture without treating a new named formula as required memorisation.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=by3_weGwnMg"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "statistical-distributions",
+      "title": "Statistical distributions",
+      "strand": "Statistics",
+      "specification_topic_number": 4,
+      "site_url": "https://www.mathsalevel.ai/topics/statistical-distributions",
+      "intro_markdown": "Before choosing a distribution, say exactly what the random variable records. Then use pictures to understand the calculator inputs.",
+      "tips": [
+        {
+          "id": "statistical-distributions-tip-1",
+          "stuck_on": "I choose a binomial model whenever I see a count.",
+          "title": "“Counting” does not automatically mean “binomial”",
+          "body_markdown": "Compare “the number of correct guesses in ten attempts” with “the number of attempts until the first correct guess”. The first has a fixed number of trials; the second does not.\n\nA binomial model may fit the first if the trials are independent and have the same success probability. Do not choose it for the second merely because the answer is a whole-number count. The definition of the variable decides the model."
+        },
+        {
+          "id": "statistical-distributions-tip-2",
+          "stuck_on": "I cannot decide which way to move the half in continuity correction.",
+          "title": "Give each integer a strip of width one",
+          "body_markdown": "When approximating a binomial variable by a normal one, picture the value 5 as a bar spanning 4.5 to 5.5. To include every value up to and including 5, include the whole bar, right up to 5.5.\n\nThat explains \\(P(X\\leq5)\\approx P(Y<5.5)\\) and \\(P(X\\geq5)\\approx P(Y>4.5)\\), when the approximation is appropriate. Continuity correction is about including the whole integer bar, not guessing which way to move a half."
+        },
+        {
+          "id": "statistical-distributions-tip-3",
+          "stuck_on": "Standardising feels like a calculator procedure without a purpose.",
+          "title": "A z-score changes the ruler, not the observation",
+          "body_markdown": "A value of 120 from a normal distribution with mean 100 and standard deviation 10 is two standard deviations above its mean. A value of 55 from one with mean 50 and standard deviation 2.5 is also two standard deviations above.\n\nBoth have \\(z=2\\), so they occupy the same relative position in their respective normal distributions. Standardising lets you compare positions using the same “standard-deviation units”."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Under a suitable normal approximation, which boundaries represent \\(P(4\\leq X\\leq8)\\)? Picture the complete bars at both ends.",
+        "answer_markdown": "Use \\(P(3.5<Y<8.5)\\). Both the bar at 4 and the bar at 8 must be included."
+      },
+      "videos": [
+        {
+          "topic_slug": "statistical-distributions",
+          "topic_title": "Statistical distributions",
+          "strand": "Statistics",
+          "role": "primary",
+          "video_title": "An Introduction to the Binomial Distribution",
+          "channel": "jbstatistics",
+          "watch_url": "https://www.youtube.com/watch?v=qIzC1-9PwQo",
+          "video_id": "qIzC1-9PwQo",
+          "duration_seconds": 850,
+          "embed_url": "https://www.youtube-nocookie.com/embed/qIzC1-9PwQo",
+          "start_seconds": null,
+          "teaching_benefit": "Identify the fixed trials, independence and constant success probability before choosing a binomial model.",
+          "lesson_subtopic": "Conditions for a binomial model (fixed n, independent trials, two outcomes, constant p) and the pmf",
+          "scope_note": "Uses non-UK notation, including Bin(n,p) and probability-mass-function terminology; this is not a normal-distribution lesson.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=qIzC1-9PwQo"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "hypothesis-testing",
+      "title": "Statistical hypothesis testing",
+      "strand": "Statistics",
+      "specification_topic_number": 5,
+      "site_url": "https://www.mathsalevel.ai/topics/hypothesis-testing",
+      "intro_markdown": "Try to separate the assumption, the evidence and the decision. They are three different things, even though the notation puts them close together.",
+      "tips": [
+        {
+          "id": "hypothesis-testing-tip-1",
+          "stuck_on": "I am unsure what a p-value does and does not mean.",
+          "title": "A p-value looks from the assumption towards the data",
+          "body_markdown": "A test asks: assuming the null model is true, how unusual would results at least as extreme as these be, in the direction or directions specified by the test? It does not calculate the probability that the null hypothesis is true.\n\nThe direction matters. “A rare result under this model” can count as evidence against the model, but it is not the same statement as “there is a 3% chance the model is true”."
+        },
+        {
+          "id": "hypothesis-testing-tip-2",
+          "stuck_on": "My critical region does not use the whole significance level.",
+          "title": "A discrete test cannot always spend the whole significance allowance",
+          "body_markdown": "Suppose \\(X\\sim B(20,0.5)\\) under the null hypothesis, and the alternative is an increased success probability. The upper-tail probabilities are \\(P(X\\geq14)\\approx0.0577\\) and \\(P(X\\geq15)\\approx0.0207\\).\n\nAt a 5% significance level, the rejection region therefore starts at 15, not 14. The whole-number boundary makes the probability jump past 5%; it need not land exactly on 5%."
+        },
+        {
+          "id": "hypothesis-testing-tip-3",
+          "stuck_on": "I do not understand why sample size changes a test of a mean.",
+          "title": "A bigger sample gives a tighter view of the mean",
+          "body_markdown": "For independent observations from a normal population with known standard deviation 12, a sample mean based on 4 observations has standard deviation \\(12/\\sqrt4=6\\). With 16 observations it is \\(12/\\sqrt{16}=3\\).\n\nThe null mean has not moved, but the distribution of sample means is narrower. The same difference from the null mean can therefore be more convincing evidence with the larger sample."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "A valid test gives a p-value of 0.03. What decisions follow at significance levels of 5% and 1%, without interpreting 0.03 as the probability that the null hypothesis is true?",
+        "answer_markdown": "Reject at 5%, but do not reject at 1%. The evidence passes one threshold and not the stricter one."
+      },
+      "videos": [
+        {
+          "topic_slug": "hypothesis-testing",
+          "topic_title": "Statistical hypothesis testing",
+          "strand": "Statistics",
+          "role": "primary",
+          "video_title": "An Introduction to Hypothesis Testing",
+          "channel": "jbstatistics",
+          "watch_url": "https://www.youtube.com/watch?v=tTeMYuS87oU",
+          "video_id": "tTeMYuS87oU",
+          "duration_seconds": 594,
+          "embed_url": "https://www.youtube-nocookie.com/embed/tTeMYuS87oU",
+          "start_seconds": null,
+          "teaching_benefit": "Ask how likely a result this good or better would be if the person were simply guessing.",
+          "lesson_subtopic": "Informal hypothesis test on a binomial proportion: H0: p = 1/4 against H1: p > 1/4",
+          "scope_note": "A binomial example that explains the logic; use the site's notes for the formal Edexcel test layout.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=tTeMYuS87oU"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "quantities-and-units",
+      "title": "Quantities and units",
+      "strand": "Mechanics",
+      "specification_topic_number": 6,
+      "site_url": "https://www.mathsalevel.ai/topics/quantities-and-units",
+      "intro_markdown": "Treat units as part of the calculation, not as a label added at the end. They can tell you which operation makes sense and expose mistakes before the numbers get complicated.",
+      "tips": [
+        {
+          "id": "quantities-and-units-tip-1",
+          "stuck_on": "I cannot decide whether to multiply or divide in a conversion.",
+          "title": "Convert by multiplying by a fraction equal to one",
+          "body_markdown": "To convert \\(72\\ \\mathrm{km\\,h^{-1}}\\), multiply by \\(\\frac{1000\\ \\mathrm m}{1\\ \\mathrm{km}}\\) and by \\(\\frac{1\\ \\mathrm h}{3600\\ \\mathrm s}\\). The kilometre and hour units cancel, leaving \\(20\\ \\mathrm{m\\,s^{-1}}\\).\n\nEach conversion fraction represents equal quantities on top and bottom. You are changing how the same speed is measured, not changing the speed itself."
+        },
+        {
+          "id": "quantities-and-units-tip-2",
+          "stuck_on": "I forget that area and volume conversions need powers.",
+          "title": "When a length is squared, square the conversion too",
+          "body_markdown": "Since \\(1\\ \\mathrm{cm}=0.01\\ \\mathrm m\\), \\(1\\ \\mathrm{cm^2}=(0.01\\ \\mathrm m)^2=0.0001\\ \\mathrm{m^2}\\). A cubic-centimetre conversion would use the third power instead.\n\nThe same attention helps with moments: \\(5\\ \\mathrm N\\) acting at a perpendicular distance of \\(20\\ \\mathrm{cm}\\) produces \\(100\\ \\mathrm{N\\,cm}=1\\ \\mathrm{N\\,m}\\), not \\(100\\ \\mathrm{N\\,m}\\)."
+        },
+        {
+          "id": "quantities-and-units-tip-3",
+          "stuck_on": "I am unsure how much a unit check can prove.",
+          "title": "Correct units are a necessary check, not a complete proof",
+          "body_markdown": "Both \\(ut+at^2\\) and \\(ut+\\tfrac12at^2\\) have units of length. A unit check cannot decide which is the correct constant-acceleration displacement formula.\n\nBut \\(u+at^2\\) tries to add speed to length, so it fails immediately. Use dimensions to rule out impossible expressions, then use the mathematics to settle factors, signs and assumptions."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "A speed is \\(250\\ \\mathrm{cm\\,s^{-1}}\\). What is it in metres per second?",
+        "answer_markdown": "\\(2.5\\ \\mathrm{m\\,s^{-1}}\\). Only the length unit changes; the seconds already match."
+      },
+      "videos": [
+        {
+          "topic_slug": "quantities-and-units",
+          "topic_title": "Quantities and units",
+          "strand": "Mechanics",
+          "role": "primary",
+          "video_title": "Modelling in Mechanics 1 • Overview and Assumptions • Mech1 Ex8A/B/C",
+          "channel": "Bicen Maths",
+          "watch_url": "https://www.youtube.com/watch?v=EoBMMVW96ag",
+          "video_id": "EoBMMVW96ag",
+          "duration_seconds": 1223,
+          "embed_url": "https://www.youtube-nocookie.com/embed/EoBMMVW96ag",
+          "start_seconds": 701,
+          "teaching_benefit": "Review SI units within an Edexcel mechanics lesson, starting at the relevant chapter rather than watching the whole introduction.",
+          "lesson_subtopic": "Modelling assumptions and SI units for Edexcel Mechanics Year 1 Chapter 8",
+          "scope_note": "Start at 11:41 for SI units; the next published chapter, Scalars, begins at 14:10.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=EoBMMVW96ag"
+          ],
+          "suggested_end_seconds": 850
+        }
+      ]
+    },
+    {
+      "slug": "kinematics",
+      "title": "Kinematics",
+      "strand": "Mechanics",
+      "specification_topic_number": 7,
+      "site_url": "https://www.mathsalevel.ai/topics/kinematics",
+      "intro_markdown": "Many motion mistakes come from solving the right equation for the wrong event. Name the event and check which quantity must satisfy the condition.",
+      "tips": [
+        {
+          "id": "kinematics-tip-1",
+          "stuck_on": "I confuse returning to the origin with being momentarily at rest.",
+          "title": "Different zeros mean different events",
+          "body_markdown": "For \\(s(t)=t^2-4t\\), the object is at the reference position when \\(s=0\\), at \\(t=0\\) and \\(t=4\\). It is momentarily at rest when \\(v=2t-4=0\\), at \\(t=2\\).\n\nThose are not the same event. Its acceleration is 2 throughout, so it never has zero acceleration in this model. Ask “zero position, zero velocity or zero acceleration?” before solving anything."
+        },
+        {
+          "id": "kinematics-tip-2",
+          "stuck_on": "Two objects start at different times and my equations do not match.",
+          "title": "Give a later event its own clock",
+          "body_markdown": "If object \\(B\\) starts moving two seconds after object \\(A\\), then when \\(A\\)'s clock reads \\(t\\), \\(B\\) has been moving for only \\(t-2\\) seconds, provided \\(t\\geq2\\).\n\nAt a constant speed of \\(10\\ \\mathrm{m\\,s^{-1}}\\), \\(B\\)'s displacement from its own start is \\(10(t-2)\\), not \\(10t\\). The same idea helps when a journey switches from one phase to another."
+        },
+        {
+          "id": "kinematics-tip-3",
+          "stuck_on": "I do not know when I can double the time to the highest point.",
+          "title": "Use symmetry only when the heights match",
+          "body_markdown": "With constant gravity and no air resistance, a projectile returning to its launch height takes equal times to go up and come down. An initial upward component of \\(19.6\\ \\mathrm{m\\,s^{-1}}\\), using \\(g=9.8\\), gives 2 seconds to the top and 4 seconds back to the launch height.\n\nIf it lands below or above that height, doubling the time to the top no longer gives the landing time. The picture must justify the shortcut."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "An object has \\(s=t^2-6t\\). At \\(t=3\\), is it at the reference position, momentarily at rest, or both?",
+        "answer_markdown": "It is momentarily at rest because \\(v=2t-6=0\\), but its position is \\(s=-9\\), not zero."
+      },
+      "videos": [
+        {
+          "topic_slug": "kinematics",
+          "topic_title": "Kinematics",
+          "strand": "Mechanics",
+          "role": "primary",
+          "video_title": "Independence of Horizontal and Vertical Motion - A Level Physics",
+          "channel": "Physics Online",
+          "watch_url": "https://www.youtube.com/watch?v=j0sEOVax734",
+          "video_id": "j0sEOVax734",
+          "duration_seconds": 270,
+          "embed_url": "https://www.youtube-nocookie.com/embed/j0sEOVax734",
+          "start_seconds": null,
+          "teaching_benefit": "Watch a projected ball and a dropped ball demonstrate the independence of horizontal and vertical motion.",
+          "lesson_subtopic": "Projectile motion: horizontal and vertical components are independent (two-ball-bearing demonstration)",
+          "scope_note": "A UK A-level Physics demonstration, not a worked Mathematics projectile question.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=j0sEOVax734"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "forces-and-newtons-laws",
+      "title": "Forces and Newton's laws",
+      "strand": "Mechanics",
+      "specification_topic_number": 8,
+      "site_url": "https://www.mathsalevel.ai/topics/forces-and-newtons-laws",
+      "intro_markdown": "Before resolving forces, decide which object you are describing and what each force acts on. A carefully labelled physical picture often removes the apparent complexity.",
+      "tips": [
+        {
+          "id": "forces-and-newtons-laws-tip-1",
+          "stuck_on": "I confuse balanced forces with a Newton's-third-law pair.",
+          "title": "Give every force a sender and a receiver",
+          "body_markdown": "For a book resting on a table, “Earth on book” is its weight and “table on book” is the contact force. Both belong on the book's force diagram.\n\nThey are not a Newton's-third-law pair: the partner of “table on book” is “book on table”, which acts on a different object. Writing the two names beside an arrow makes that distinction much easier to see."
+        },
+        {
+          "id": "forces-and-newtons-laws-tip-2",
+          "stuck_on": "I assume the normal reaction must equal the weight.",
+          "title": "The contact force answers what the motion requires",
+          "body_markdown": "A 60 kg person in a lift accelerating upwards at \\(2\\ \\mathrm{m\\,s^{-2}}\\) has \\(R-60g=60(2)\\). With \\(g=9.8\\), the floor's upward force is \\(R=708\\ \\mathrm N\\), while the person's weight remains \\(588\\ \\mathrm N\\).\n\nThe extra upward force produces the acceleration. The normal reaction is not automatically another name for weight; its value follows from the motion and the other forces."
+        },
+        {
+          "id": "forces-and-newtons-laws-tip-3",
+          "stuck_on": "I cannot decide which direction friction acts.",
+          "title": "Remove friction in your imagination",
+          "body_markdown": "Suppose the component of weight down a slope is 5 N, and a separate force pulls up the slope with 3 N. Without friction, the tendency is 2 N downhill.\n\nIf the object remains at rest, friction must therefore act uphill with 2 N, provided the available limiting friction is at least that large. This thought experiment identifies the required direction before you write a friction equation."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "A 3 kg object experiences horizontal forces of 10 N right and 4 N left, with no other horizontal forces. What is its horizontal acceleration?",
+        "answer_markdown": "The resultant is 6 N right, so the acceleration is \\(2\\ \\mathrm{m\\,s^{-2}}\\) right."
+      },
+      "videos": [
+        {
+          "topic_slug": "forces-and-newtons-laws",
+          "topic_title": "Forces and Newton's laws",
+          "strand": "Mechanics",
+          "role": "primary",
+          "video_title": "A-Level Maths: R2-01 [Forces: Newton's Second Law]",
+          "channel": "TLMaths",
+          "watch_url": "https://www.youtube.com/watch?v=7XtlQNGtmrQ",
+          "video_id": "7XtlQNGtmrQ",
+          "duration_seconds": 181,
+          "embed_url": "https://www.youtube-nocookie.com/embed/7XtlQNGtmrQ",
+          "start_seconds": null,
+          "teaching_benefit": "Reconnect resultant force, mass and acceleration before tackling a more complicated force diagram.",
+          "lesson_subtopic": "Newton's second law: resultant force = mass x acceleration, and its relationship to equilibrium",
+          "scope_note": "A short UK A-level introduction to Newton's second law, not a lesson on friction or connected particles.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=7XtlQNGtmrQ"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "moments",
+      "title": "Moments",
+      "strand": "Mechanics",
+      "specification_topic_number": 9,
+      "site_url": "https://www.mathsalevel.ai/topics/moments",
+      "intro_markdown": "A moment depends on the force's line of action, not simply on how far away your hand touches an object. Try picturing what would actually turn.",
+      "tips": [
+        {
+          "id": "moments-tip-1",
+          "stuck_on": "I use the rod length without checking the force's line of action.",
+          "title": "A long handle helps only if the force can turn it",
+          "body_markdown": "Push along a straight rod directly towards its pivot. Even if you push at the far end, the force's line of action passes through the pivot, so its perpendicular distance is zero.\n\nNow push sideways at the same point and there is a turning effect. The useful distance is from the pivot to the line of action, not automatically the length of the rod."
+        },
+        {
+          "id": "moments-tip-2",
+          "stuck_on": "I cannot tell whether my balance point is in a sensible place.",
+          "title": "A balance point sits nearer the larger weight",
+          "body_markdown": "On a light horizontal beam, place downward forces of 20 N at \\(x=1\\) m and 60 N at \\(x=3\\) m. For a balancing support between them, moments give \\(20(x-1)=60(3-x)\\).\n\nThis gives \\(x=2.5\\) m, nearer the larger force. The larger force needs the shorter lever arm. That picture is a useful reasonableness check on the algebra."
+        },
+        {
+          "id": "moments-tip-3",
+          "stuck_on": "I assume balanced moments mean the whole system is in equilibrium.",
+          "title": "Zero turning effect does not guarantee equilibrium",
+          "body_markdown": "Imagine two upward forces of 5 N, one a metre to the left of a point and one a metre to its right. Their moments about that point cancel, but their resultant is still 10 N upward.\n\nThe system has no net moment about that point, yet it is not in equilibrium. Check both the resultant force and the resultant moment; passing one test does not make the other unnecessary."
+        }
+      ],
+      "quick_check": {
+        "question_markdown": "Can a 10 N force with perpendicular distance 0.6 m balance the moment of a 20 N force with perpendicular distance 0.3 m? Assume opposite turning directions.",
+        "answer_markdown": "Yes: each moment has magnitude \\(6\\ \\mathrm{N\\,m}\\). This balances their moments, but complete equilibrium also requires zero resultant force."
+      },
+      "videos": [
+        {
+          "topic_slug": "moments",
+          "topic_title": "Moments",
+          "strand": "Mechanics",
+          "role": "primary",
+          "video_title": "A-Level Maths: S1-01 Moments: What is a Moment?",
+          "channel": "TLMaths",
+          "watch_url": "https://www.youtube.com/watch?v=0TFemygToUs",
+          "video_id": "0TFemygToUs",
+          "duration_seconds": 363,
+          "embed_url": "https://www.youtube-nocookie.com/embed/0TFemygToUs",
+          "start_seconds": null,
+          "teaching_benefit": "See how changing where the same force acts changes its turning effect.",
+          "lesson_subtopic": "What a moment is: turning effect of a force and dependence on distance from the pivot",
+          "scope_note": "An introductory UK A-level demonstration; full equilibrium still needs both force and moment equations.",
+          "evidence_level": "transcript-excerpt-reviewed",
+          "embedding_status": "embed URL constructed from verified video ID; not playback-tested",
+          "evidence_urls": [
+            "https://www.youtube.com/watch?v=0TFemygToUs"
+          ]
+        }
+      ]
+    }
+  ],
+  "editorial_notes_markdown": "## Editor notes: placement and review\n\nThis is a companion layer, not another specification checklist or a replacement course. The 19-topic order follows the existing site and the [Pearson Edexcel 9MA0 specification](https://qualifications.pearson.com/content/dam/pdf/A%20Level/Mathematics/2017/specification-and-sample-assesment/a-level-l3-mathematics-specification-issue4.pdf).\n\n### Suggested presentation\n\n- **Section name:** Use “Another way in” rather than promising a shortcut or calling the material easy. Place it alongside the existing method notes, without replacing them.\n- **Start with the difficulty:** Let a student choose an “I am stuck because…” prompt, then reveal its explanation. The JSON includes a `stuck_on` label for each of the 57 tips.\n- **Small checks:** Show the question before the answer, with an explicit “Reveal explanation” control. Keep the answer accessible by keyboard and avoid marking a specification point as mastered simply because the answer was opened.\n- **Supporting videos:** Offer one relevant watch suggestion per topic, with its channel, purpose and scope note. A video illustrates part of a topic, not necessarily the whole topic or the exact Edexcel examination style.\n- **Preserve the existing structure:** Add the content using the supplied topic slugs. Do not change the 89 specification-point records, existing questions, progress, review scheduling or formula reference as part of this addition.\n\n### Originality and mathematical review\n\nThe explanations use newly written examples and reasoning rather than copying the existing method notes. Their purpose is to revisit the same mathematics through a different representation, so overlap in concepts and standard mathematical vocabulary is deliberate.\n\nThe numerical examples and self-check answers have been checked, and the prose was compared with the captured topic notes for repeated wording. This is not a claim that every possible misconception has been eliminated or that the content has been tested with students.\n\n### Video evidence and embedding\n\nFor all 19 selected videos, the title, channel, ID and duration were checked against the fetched watch page, and relevant description text and transcript excerpts were reviewed. None was watched end to end or playback-tested in an embedded player, so these are reasoned recommendations rather than a certification of every spoken explanation, caption or on-screen calculation.\n\nThe JSON supplies proposed privacy-enhanced embed URLs and the original watch links. URL construction does not establish permission to embed: YouTube documents player errors for videos whose owners do not allow embedded playback ([YouTube IFrame Player API reference](https://developers.google.com/youtube/iframe_api_reference)).\n\n- **Load on request:** Start with a simple “Watch explanation” control and create the player only when the student chooses it, respecting the site's existing consent settings. Do not autoplay.\n- **Privacy wording:** YouTube offers privacy-enhanced mode in its embedding settings ([YouTube embedding help](https://support.google.com/youtube/answer/171780?hl=en)). Do not describe the proposed `youtube-nocookie.com` URLs as a guarantee of zero tracking.\n- **Fallback:** Keep the ordinary “Watch on YouTube” link visible alongside the player. Test actual playback before publication rather than treating a syntactically correct URL as a working embed.\n- **Attribution:** Show the creator and title, and use YouTube's player rather than downloading or rehosting the video. Keep editorial review metadata out of the student's main explanation panel.\n\n### Optional illustrations\n\nThe strongest candidates for small original diagrams are the two-strip product-rule rectangle, the integer bars behind continuity correction, the point tracked through a function transformation, and the contrasting force lines through and beside a pivot. These are implementation suggestions; no new diagrams have been created in this pack.\n\n### Publishing checklist\n\n- **Mathematics rendering:** Render the supplied LaTeX consistently with the existing site. Check fractions, conditional-probability bars, superscripts, vector arrows and units on mobile as well as desktop.\n- **Video review:** Treat the stated review level as a limit, not a quality badge. Verify the intended video, its on-screen notation, sound, captions and relevance before publication; a transcript cannot verify all of those.\n- **Playback:** Test every embed on the actual site and keep a normal YouTube link available if it fails. No live-site player or signed-in student flow has been tested for this pack.\n- **Student feedback:** Trial a few tips with a learner and ask them to explain the idea back before adding more text. A useful explanation should reduce the difficulty rather than simply add another thing to read."
+}
