@@ -542,33 +542,29 @@ test("the header carries the logo, and it is still called what the site is calle
   expect(box!.height).toBeGreaterThan(14);
 });
 
-test("the student picks the topic they are covering, and it leads from then on", async ({ page }) => {
+test("the dashboard opens on whatever was practised last", async ({ page }) => {
   await page.goto("/");
-
-  // Before choosing, the panel suggests something and invites a choice.
+  // With no history it suggests a starting point rather than resuming.
   await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+  await expect(page.getByText("Carry on with")).toHaveCount(0);
 
-  await page.goto("/topics/differentiation");
-  const toggle = page.getByRole("button", { name: /covering this in class/i });
-  await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  await toggle.click();
-  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  // Practise something — one answered question is enough to record it.
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
 
-  // The dashboard now opens on it, and Start goes there.
+  // No declaring, no button: the dashboard now opens there.
   await page.goto("/");
-  await expect(page.getByText("Your topic right now")).toBeVisible();
+  await expect(page.getByText("Carry on with")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Differentiation" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Start" })).toHaveAttribute(
     "href",
     "/practice/differentiation",
   );
-
-  // And it can be handed back.
-  await page.goto("/topics/differentiation");
-  await page.getByRole("button", { name: /covering this in class/i }).click();
-  await page.goto("/");
-  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
-  await expect(page.getByText("Your topic right now")).toHaveCount(0);
 });
 
 test("the dashboard never frames revision as a debt", async ({ page }) => {
@@ -652,12 +648,17 @@ test("the nudge to go back to a topic names it, rather than counting things", as
     );
   });
 
-  // Class is on something else, so the suggestion is not what Start opens on.
-  await page.goto("/topics/differentiation");
-  await page.getByRole("button", { name: /covering this in class/i }).click();
+  // Practise something else, so the nudge is not what Start already opens on.
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
 
   await page.goto("/");
-  await expect(page.getByText("Your topic right now")).toBeVisible();
+  await expect(page.getByText("Carry on with")).toBeVisible();
 
   // Named and clickable, not "some earlier topics are ready for another look".
   const nudge = page.getByText(/You last practised/);
@@ -673,14 +674,13 @@ test("the nudge to go back to a topic names it, rather than counting things", as
   await expect(nudge).not.toContainText("Differentiation");
 });
 
-test("the copy says what to press, not what a panel is", async ({ page }) => {
-  // "this panel will open on it from then on" meant nothing to a student.
+test("the dashboard explains itself without jargon", async ({ page }) => {
   await page.goto("/");
-  // Wait for the panel to settle. Both lines render only once the stored
-  // preference has been read, so reading the page too early finds neither —
-  // which is exactly how this test failed on the phone project first time.
   await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
   const main = await page.locator("main").innerText();
+  // "this panel will open on it from then on" meant nothing to a student, and
+  // neither does any other word taken straight from the code.
   expect(main).not.toMatch(/\bpanel\b/i);
-  expect(main).toContain("I’m covering this in class");
+  // The button this used to talk about is gone; nothing may still mention it.
+  expect(main).not.toMatch(/covering this in class/i);
 });
