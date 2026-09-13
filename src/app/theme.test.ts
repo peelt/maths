@@ -196,6 +196,32 @@ describe.each(THEMES)("theme: %s", (theme) => {
   });
 });
 
+describe.each(THEMES)("brand colours: %s", (theme) => {
+  const t = tokens(`[data-theme="${theme}"]`);
+
+  it("defines both brand colours", () => {
+    // The logo is drawn from tokens rather than its own hex, so a theme that
+    // forgets them renders the mark in whatever it inherits — or nothing.
+    expect(t["--brand-ink"], "--brand-ink").toBeTruthy();
+    expect(t["--brand-accent"], "--brand-accent").toBeTruthy();
+  });
+
+  it("keeps the logo readable on the canvas it sits on", () => {
+    // The header sits on the canvas. WCAG exempts logotypes from contrast
+    // rules, but a logo nobody can see is still a broken logo: the supplied
+    // artwork's navy is 1.19:1 against the dark theme, which is what forced
+    // these to be per-theme in the first place.
+    expect(contrast(t["--brand-ink"], t["--bg"]), "ink on canvas").toBeGreaterThanOrEqual(4.5);
+    expect(contrast(t["--brand-accent"], t["--bg"]), "accent on canvas").toBeGreaterThanOrEqual(3);
+  });
+
+  it("keeps the two halves of the wordmark distinguishable", () => {
+    // "A Level" and "Maths" are different colours; if they converge in any
+    // theme the split reads as a rendering fault rather than a design.
+    expect(hueGap(t["--brand-ink"], t["--brand-accent"])).toBeGreaterThanOrEqual(30);
+  });
+});
+
 describe("the default light theme", () => {
   const t = tokens('[data-theme="mist"]');
 

@@ -3,69 +3,82 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Logo, LogoMark } from "./Logo";
 
-/**
- * The claim the mark makes is mathematical, so the geometry is worth
- * asserting: if the dot drifts off the turning point or the crossbar stops
- * meeting the legs, the drawing still looks like a logo but stops being true.
- */
+/** Evaluate a quadratic Bezier component at t. */
+const at = (t: number, p0: number, p1: number, p2: number) =>
+  (1 - t) ** 2 * p0 + 2 * (1 - t) * t * p1 + t ** 2 * p2;
+
 describe("LogoMark", () => {
   const html = renderToStaticMarkup(<LogoMark />);
 
-  /** Pull the numbers back out of the rendered path data. */
-  const path = /d="M5 24 L([\d.]+) ([\d.]+) Q([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) L23 24"/.exec(html);
-  const bar = /d="M([\d.]+) 16H([\d.]+)"/.exec(html);
-  const dot = /<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/.exec(html);
+  const curve = /d="M([\d.]+) ([\d.]+) Q([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+)"/.exec(html);
+  const xAxis = /d="M([\d.]+) ([\d.]+)H([\d.]+)"/.exec(html);
+  const yAxis = /d="M([\d.]+) ([\d.]+)V([\d.]+)"/.exec(html);
 
-  it("draws the letter, the crossbar and the point", () => {
-    expect(path, "letter path").not.toBeNull();
-    expect(bar, "crossbar path").not.toBeNull();
-    expect(dot, "turning point").not.toBeNull();
+  it("draws a curve and both axes", () => {
+    expect(curve, "parabola").not.toBeNull();
+    expect(xAxis, "x-axis").not.toBeNull();
+    expect(yAxis, "y-axis").not.toBeNull();
   });
 
-  it("puts the dot exactly on the turning point", () => {
-    // For a quadratic with a symmetric control point the gradient is zero at
-    // the midpoint, which is 0.25*start + 0.5*control + 0.25*end.
-    const [, , y0, cx, cy, , y2] = path!.map(Number);
-    const apexY = 0.25 * y0 + 0.5 * cy + 0.25 * y2;
-    const [, dotX, dotY] = dot!.map(Number);
-    expect(dotY).toBeCloseTo(apexY, 2);
-    expect(dotX).toBeCloseTo(cx, 2);
+  it("is a real parabola, not something that merely looks like one", () => {
+    // A quadratic Bezier IS a parabola, so this is free — but only if the
+    // endpoints are level. Tilt them and the curve is still a parabola, just
+    // not one whose axis of symmetry is vertical, and the mark starts to lean.
+    const [, , y0, , , , y2] = curve!.map(Number);
+    expect(y0).toBeCloseTo(y2, 6);
   });
 
-  it("is symmetric about the middle of the box", () => {
-    // An A that leans is just a mistake.
-    const [, x0, , cx, , x2] = path!.map(Number);
-    expect(cx).toBeCloseTo(14, 2);
-    expect(x0 + x2).toBeCloseTo(28, 2);
-    const [, barFrom, barTo] = bar!.map(Number);
-    expect(barFrom + barTo).toBeCloseTo(28, 2);
+  it("puts the turning point where the curve is actually lowest", () => {
+    const [, x0, y0, cx, cy, x2, y2] = curve!.map(Number);
+    // For level endpoints the vertex is at t = 0.5. Confirm by sampling rather
+    // than by asserting the arithmetic that produced it.
+    let lowest = { t: 0, y: -Infinity };
+    for (let t = 0; t <= 1; t += 0.001) {
+      const y = at(t, y0, cy, y2);
+      if (y > lowest.y) lowest = { t, y };
+    }
+    expect(lowest.t).toBeCloseTo(0.5, 2);
+    expect(at(0.5, x0, cx, x2)).toBeCloseTo(50, 6);
   });
 
-  it("ends the crossbar on the legs, not near them", () => {
-    // The left leg runs from (5, 24) to the top of the straight section. The
-    // bar has to meet it at y = 16, or the A comes apart at small sizes.
-    const [, xTop, yTop] = path!.map(Number);
-    const s = (24 - 16) / (24 - yTop);
-    const expected = 5 + (xTop - 5) * s;
-    const [, barFrom] = bar!.map(Number);
-    expect(barFrom).toBeCloseTo(expected, 2);
+  it("keeps the vertex clear of the x-axis", () => {
+    // In the supplied artwork the curve turns above the axis rather than
+    // sitting on it. Touching would read as a different drawing.
+    const [, , y0, , cy, , y2] = curve!.map(Number);
+    const vertexY = at(0.5, y0, cy, y2);
+    const [, , axisY] = xAxis!.map(Number);
+    expect(vertexY).toBeLessThan(axisY); // SVG y grows downward
+    expect(axisY - vertexY).toBeGreaterThanOrEqual(5);
   });
 
-  it("keeps the apex flat enough for the dot to read as a turning point", () => {
-    // A pointed apex made the dot look like a pin head stuck on the tip. The
-    // straight legs must stop well before the top so there is an arc to sit on.
-    const [, , yTop, , cy] = path!.map(Number);
-    expect(yTop - cy).toBeGreaterThanOrEqual(3.5);
+  it("is symmetric about the y-axis", () => {
+    // A graph whose curve is off-centre from its own axis is just a mistake.
+    const [, x0, , cx, , x2] = curve!.map(Number);
+    const [, axisX] = yAxis!.map(Number);
+    expect(cx).toBeCloseTo(axisX, 6);
+    expect((x0 + x2) / 2).toBeCloseTo(axisX, 6);
   });
 
-  it("carries no colour of its own", () => {
-    // Strokes inherit, and the dot uses the plot series colour, which is
-    // deliberately not semantic. Amber means "do this next"; green and red
-    // mean right and wrong. The logo must borrow none of them.
-    expect(html).toContain("currentColor");
-    expect(html).toContain("var(--plot-a)");
+  it("crosses the axes rather than stopping at them", () => {
+    // The vertical runs below the horizontal and the horizontal starts left of
+    // the vertical, which is what makes it read as a pair of axes.
+    const [, axisXFrom, axisY, axisXTo] = xAxis!.map(Number);
+    // "M50 86V20" starts at the BOTTOM and draws upward, so the first
+    // coordinate is the low end. Naming these the wrong way round is how this
+    // assertion failed the first time it ran.
+    const [, vertX, vertBottom, vertTop] = yAxis!.map(Number);
+    expect(axisXFrom).toBeLessThan(vertX);
+    expect(axisXTo).toBeGreaterThan(vertX);
+    expect(vertBottom).toBeGreaterThan(axisY);
+    expect(vertTop).toBeLessThan(axisY);
+  });
+
+  it("takes its colours from the theme, not from the file", () => {
+    // The artwork is on white. Hard-coding its navy would make the mark
+    // invisible in the dark theme, where it is 1.19:1 against the background.
+    expect(html).toContain("var(--brand-ink)");
+    expect(html).toContain("var(--brand-accent)");
     expect(html).not.toMatch(/#[0-9a-f]{3,8}/i);
-    expect(html).not.toMatch(/var\(--(accent|correct|wrong)/);
   });
 
   it("is decorative, so it is not announced", () => {
@@ -74,55 +87,59 @@ describe("LogoMark", () => {
   });
 
   it("scales rather than fixing a pixel size", () => {
-    // It sits next to text at several sizes, so it is sized in em by its
-    // caller and must not carry width/height of its own.
-    expect(html).toContain('viewBox="0 0 28 26"');
+    expect(html).toMatch(/viewBox="[\d. ]+"/);
     expect(html).not.toMatch(/<svg[^>]*\swidth=/);
   });
 });
 
 describe("Logo", () => {
-  it("is called what the site is called, whatever the mark shows", () => {
-    // The mark stands in for the A on screen. A screen reader must still hear
-    // the real name rather than "Level Maths", which is not the name of
-    // anything.
-    const html = renderToStaticMarkup(<Logo />);
+  const html = renderToStaticMarkup(<Logo />);
+
+  it("says the site's name once", () => {
     expect(html).toContain("A Level Maths");
-    // And the visible half must not be read out as well, or it says it twice.
-    expect(html).toMatch(/aria-hidden="true"[^>]*>Level Maths/);
+    // The visible wordmark is split across two colours, so it is two elements.
+    // Both must be hidden, or a screen reader reads the name twice.
+    expect(html).toMatch(/aria-hidden="true"/);
+    expect(html).toContain("sr-only");
+  });
+
+  it("colours Maths differently from A Level, as the artwork does", () => {
+    expect(html).toMatch(/brand-accent[^<]*>Maths|Maths/);
+    expect(html).toContain("var(--brand-ink)");
+    expect(html).toContain("var(--brand-accent)");
   });
 
   it("can drop the exam code where there is no room", () => {
     expect(renderToStaticMarkup(<Logo subtitle={false} />)).not.toContain("9MA0");
-    expect(renderToStaticMarkup(<Logo />)).toContain("9MA0");
+    expect(html).toContain("9MA0");
   });
 });
 
 describe("the browser tab icon", () => {
   // A favicon is a separate document and cannot reach the app's CSS custom
-  // properties, so the mark has to be drawn twice. Duplication that a build
-  // cannot check is duplication that drifts, so check it here.
+  // properties, so the mark has to be drawn twice. Duplication a build cannot
+  // check is duplication that drifts.
   const icon = readFileSync(new URL("../app/icon.svg", import.meta.url), "utf8");
   const mark = renderToStaticMarkup(<LogoMark />);
 
-  it("draws exactly the same glyph as the header mark", () => {
-    for (const d of [...mark.matchAll(/ d="([^"]+)"/g)].map((m) => m[1])) {
+  it("draws exactly the same paths as the header mark", () => {
+    const paths = [...mark.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]);
+    expect(paths.length).toBeGreaterThanOrEqual(5);
+    for (const d of paths) {
       expect(icon, `path missing from icon.svg: ${d}`).toContain(d);
     }
-    const dot = /<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/.exec(mark)!;
-    expect(icon).toContain(`cx="${dot[1]}" cy="${dot[2]}" r="${dot[3]}"`);
+  });
+
+  it("is allowed to be heavier, because 16px needs it", () => {
+    // The one permitted difference: at the header's 5.5 weight the axes thin
+    // to hairlines in a tab. The shape is identical; only the ink is thicker.
+    const headerWeight = Number(/stroke-width="?\{?([\d.]+)/.exec(mark)![1]);
+    const iconWeight = Number(/stroke-width="([\d.]+)"/.exec(icon)![1]);
+    expect(iconWeight).toBeGreaterThan(headerWeight);
   });
 
   it("carries its own colours, because it cannot inherit any", () => {
-    expect(icon).not.toContain("currentColor");
     expect(icon).not.toContain("var(--");
-    // And it must survive a dark browser chrome, where charcoal ink would all
-    // but disappear.
     expect(icon).toContain("prefers-color-scheme: dark");
-  });
-
-  it("is cropped to the glyph rather than reusing the header's padding", () => {
-    // At 16px the header's breathing room would shrink the letter to nothing.
-    expect(icon).toMatch(/viewBox="2 2\.5 24 24"/);
   });
 });

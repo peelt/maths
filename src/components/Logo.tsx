@@ -1,84 +1,85 @@
 /**
- * The mark: the A of "A Level", drawn as a maximum.
+ * The supplied logo: a parabola on a pair of axes, then "A Level Maths" with
+ * "Maths" in the brand teal.
  *
- * The legs are straight, the apex is a smooth arc, and the dot sits exactly
- * where the gradient is zero. So the letter is a curve with a stationary
- * point, and the crossbar is the axis it turns above — a real piece of the
- * course rather than decoration. A student who has done differentiation sees
- * it; everyone else just sees an A, which is the only kind of cleverness worth
- * putting in a logo.
+ * Redrawn as SVG rather than dropped in as the original raster, for three
+ * reasons that all show up in this particular app:
  *
- * Four things decided the drawing, and each was settled by looking at renders
- * side by side rather than by argument:
+ *  - The artwork is on white. The dark theme would show it as a white slab,
+ *    and its navy is 1.19:1 against that background — effectively invisible.
+ *    As SVG the ink is a token and swaps with the theme.
+ *  - It is also the browser tab icon, at 16px. A raster scaled to that is mush.
+ *  - The site offers three text sizes, and a wordmark set in live text grows
+ *    with them. A picture of words does not.
  *
- *  - A FLAT ENOUGH APEX. The first version curved both legs into a single
- *    bowed arch: mathematically fine, but it read as a tent rather than a
- *    letter. Straight legs fixed the letterform, and then a pointed apex made
- *    the dot look like a pin head stuck on the tip. Flattening the top is what
- *    makes the dot read as a turning point instead of an ornament.
- *
- *  - NO RING ROUND THE DOT. A background-coloured ring separated the dot from
- *    the curve, but at 24px it severed the apex and the A came apart.
- *
- *  - COMPUTED, NOT EYEBALLED. The apex is the quadratic's midpoint, which for
- *    a symmetric control point is exactly where dy/dx = 0, and the crossbar
- *    ends where the legs actually cross y = 16 — so the bar meets the strokes
- *    rather than floating near them.
- *
- *  - THEME TOKENS ONLY. The strokes take currentColor and the dot is the plot
- *    series colour, which is deliberately non-semantic: amber means "do this
- *    next" and green and red mean right and wrong, so the logo must borrow
- *    none of them.
+ * The curve is a real parabola, not an approximation: a quadratic Bezier IS a
+ * parabola, and for level endpoints the vertex lands at t = 0.5, so the
+ * control point below is solved for rather than nudged into place. The turning
+ * point sits just above the x-axis, as in the original.
  */
 
-/** Straight legs into a rounded apex. Turning point: (14, 7.4). */
-const LETTER = "M5 24 L11.2 9.8 Q14 5 16.8 9.8 L23 24";
+/** Both arms level at this height. SVG y grows downward, so the curve opens up. */
+const ARM_Y = 16;
 
-/** The crossbar, ending exactly where the legs cross this height. */
-const CROSSBAR = "M8.49 16H19.51";
+/**
+ * The parabola. Control point y = 2 * vertexY - armY, which puts the vertex
+ * exactly on (50, 66) — nine units clear of the axis.
+ */
+const PARABOLA = "M20 16 Q50 116 80 16";
 
-/** Where the gradient is zero: the quadratic's midpoint. */
-const TURNING_POINT = { x: 14, y: 7.4, r: 1.9 };
+/** The axes. Lines stop where the arrowheads start, so the joint has no bulge. */
+const Y_AXIS = "M50 86V20";
+const Y_HEAD = "M50 6 L56.5 21 L43.5 21 Z";
+const X_AXIS = "M8 75H82";
+const X_HEAD = "M96 75 L81 81.5 L81 68.5 Z";
 
 export function LogoMark({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 28 26"
+      viewBox="4 4 93 86"
       className={className}
       role="presentation"
       aria-hidden="true"
       focusable="false"
     >
-      <g fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round">
-        <path d={LETTER} />
-        <path d={CROSSBAR} />
-      </g>
-      <circle
-        cx={TURNING_POINT.x}
-        cy={TURNING_POINT.y}
-        r={TURNING_POINT.r}
-        fill="var(--plot-a)"
+      <path
+        d={PARABOLA}
+        fill="none"
+        stroke="var(--brand-accent)"
+        strokeWidth={5.5}
+        strokeLinecap="round"
       />
+      <g fill="var(--brand-ink)" stroke="var(--brand-ink)" strokeWidth={5.5} strokeLinecap="round">
+        <path d={Y_AXIS} />
+        <path d={X_AXIS} />
+      </g>
+      <g fill="var(--brand-ink)">
+        <path d={Y_HEAD} />
+        <path d={X_HEAD} />
+      </g>
     </svg>
   );
 }
 
+/** Exported for the tests, which check the drawing is a true parabola. */
+export const MARK_GEOMETRY = { ARM_Y, PARABOLA, Y_AXIS, X_AXIS };
+
 /**
  * The header lockup.
  *
- * The mark stands in for the A, so the words beside it are "Level Maths" —
- * but only on screen. The accessible name is the whole title, because "Level
- * Maths" is not the name of anything and a screen reader user should hear what
- * the site is called rather than a puzzle to solve.
+ * The wordmark is live text in the site's own face rather than outlined
+ * letterforms, so it inherits the reader's text-size choice and stays crisp at
+ * any zoom. The two-colour split is the logo's, and it is decorative: the
+ * link's accessible name is the whole title, read once.
  */
 export function Logo({ subtitle = true }: { subtitle?: boolean }) {
   return (
     <span className="flex min-w-0 items-center gap-2">
-      <LogoMark className="h-[1.5em] w-[1.5em] shrink-0" />
+      <LogoMark className="h-[1.7em] w-[1.7em] shrink-0" />
       <span className="min-w-0 truncate">
         <span className="sr-only">A Level Maths</span>
-        <span aria-hidden="true" className="font-bold tracking-tight">
-          Level Maths
+        <span aria-hidden="true" className="font-bold tracking-tight text-[var(--brand-ink)]">
+          A Level <span className="text-[var(--brand-accent)]">Maths</span>
         </span>
         {subtitle ? (
           <span className="ml-2 hidden text-xs font-medium text-muted sm:inline">Edexcel 9MA0</span>

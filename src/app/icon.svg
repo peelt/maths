@@ -1,25 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="2 2.5 24 24" role="img" aria-label="A Level Maths">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0.5 93 93" role="img" aria-label="A Level Maths">
   <!--
     The same mark as src/components/Logo.tsx, redrawn here because a favicon is
-    a separate document and cannot reach the app's CSS custom properties. The
-    viewBox is cropped tight to the glyph so it fills a 16px tab rather than
-    floating in the padding the header version needs.
+    a separate document and cannot reach the app's CSS custom properties. A test
+    asserts the two stay identical.
 
-    Browser chrome is light or dark and the page cannot know which, so the ink
-    switches on prefers-color-scheme. The dot switches too: the light theme's
-    teal is too dark to read against a dark tab strip.
+    Two deliberate differences from the header version, both about size rather
+    than shape. The viewBox is squared up around the glyph so it fills a 16px
+    tab instead of sitting in the header's padding, and the strokes are heavier
+    — at 16px the 5.5 weight thins to hairlines and the axes disappear. The
+    paths themselves are identical, which is what the test checks.
+
+    The colours switch on prefers-color-scheme: the brand navy is 1.19:1
+    against a dark tab strip.
   -->
   <style>
-    .ink { stroke: #414d57 }
-    .point { fill: #17595c }
+    .ink { fill: #14294f; stroke: #14294f }
+    .accent { stroke: #0e8a7c }
     @media (prefers-color-scheme: dark) {
-      .ink { stroke: #bac1c8 }
-      .point { fill: #3f9ea1 }
+      .ink { fill: #ccd3da; stroke: #ccd3da }
+      .accent { stroke: #2fb3a2 }
     }
   </style>
-  <g class="ink" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M5 24 L11.2 9.8 Q14 5 16.8 9.8 L23 24"/>
-    <path d="M8.49 16H19.51"/>
+  <path class="accent" d="M20 16 Q50 116 80 16" fill="none" stroke-width="7.5" stroke-linecap="round"/>
+  <g class="ink" stroke-width="7.5" stroke-linecap="round">
+    <path d="M50 86V20"/>
+    <path d="M8 75H82"/>
   </g>
-  <circle class="point" cx="14" cy="7.4" r="1.9"/>
+  <g class="ink" stroke="none">
+    <path d="M50 6 L56.5 21 L43.5 21 Z"/>
+    <path d="M96 75 L81 81.5 L81 68.5 Z"/>
+  </g>
 </svg>
