@@ -33,15 +33,30 @@ test("answering a question gives immediate feedback and a mark scheme", async ({
 
   await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
 
-  // Deliberately wrong, so the mark scheme is shown.
   const input = page.getByLabel("Your answer");
   if (await input.isVisible().catch(() => false)) {
+    // Deliberately wrong, so the mark scheme is shown without being asked for.
     await input.fill("-999999");
-    await page.getByRole("button", { name: "Check" }).click();
   } else {
-    // A multiple choice question — pick the first option.
+    // A multiple choice question. Nothing in the DOM says which option is
+    // right, and this topic's one such question has the correct answer first
+    // in roughly a third of seeds — so the verdict decides what to assert
+    // below, rather than the test assuming it answered wrongly. Assuming it
+    // is what made this test fail about one run in fifty.
     await page.locator("main fieldset button").first().click();
-    await page.getByRole("button", { name: "Check" }).click();
+  }
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+
+  await expect(page.getByText(/^(Correct\.|Not quite\.)$/)).toBeVisible();
+
+  const reveal = page.getByRole("button", { name: "Show the worked solution" });
+  if (await page.getByText("Not quite.").isVisible()) {
+    // Getting it wrong opens the mark scheme on its own. The student should
+    // not have to ask for it at the moment they most need it, so the reveal
+    // button being absent is the assertion, not an incidental detail.
+    await expect(reveal).toHaveCount(0);
+  } else {
+    await reveal.click();
   }
 
   await expect(page.getByText("Where the marks are")).toBeVisible();
