@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "./Logo";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { FormulaSheet } from "./FormulaSheet";
@@ -59,9 +60,8 @@ export function SiteChrome({ children }: { children: ReactNode }) {
          * which is ambiguous to tooling and to tests.
          */}
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-          <Link href="/" className="order-1 mr-auto min-w-0 truncate font-bold tracking-tight">
-            A Level Maths
-            <span className="ml-2 hidden text-xs font-medium text-muted sm:inline">Edexcel 9MA0</span>
+          <Link href="/" className="order-1 mr-auto min-w-0">
+            <Logo />
           </Link>
 
           <div className="order-2 flex shrink-0 items-center gap-1 sm:order-3">

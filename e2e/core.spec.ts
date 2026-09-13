@@ -519,3 +519,22 @@ test("the sign-in log is closed by default", async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("table")).toHaveCount(0);
 });
+
+test("the header carries the logo, and it is still called what the site is called", async ({ page }) => {
+  await page.goto("/");
+
+  // The mark stands in for the A on screen, so a reader who cannot see it must
+  // still get the real name from the link rather than "Level Maths".
+  const brand = page.getByRole("banner").getByRole("link", { name: "A Level Maths" });
+  await expect(brand).toBeVisible();
+
+  // One decorative SVG inside it, hidden from assistive technology.
+  const mark = brand.locator("svg");
+  await expect(mark).toHaveAttribute("aria-hidden", "true");
+
+  // And it renders at a real size rather than collapsing to nothing, which is
+  // how an em-sized SVG fails when its container has no font size.
+  const box = await mark.boundingBox();
+  expect(box!.width).toBeGreaterThan(14);
+  expect(box!.height).toBeGreaterThan(14);
+});
