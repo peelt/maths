@@ -396,7 +396,10 @@ test("the homepage has exactly one h1, and the figure is decorative", async ({ p
   await page.goto("/");
   // The homepage had no h1 at all before the hero was added.
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.locator("h1")).toContainText("A Level Maths");
+  // Asserted as "there is one, and it is the hero" rather than against its
+  // wording, so renaming the heading cannot fail a test about page structure.
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator("h1")).toContainText("one short session at a time");
 
   // The figure repeats nothing a screen reader needs, so it must be hidden.
   const figures = page.locator("main section svg");
@@ -537,4 +540,88 @@ test("the header carries the logo, and it is still called what the site is calle
   const box = await mark.boundingBox();
   expect(box!.width).toBeGreaterThan(14);
   expect(box!.height).toBeGreaterThan(14);
+});
+
+test("the student picks the topic they are covering, and it leads from then on", async ({ page }) => {
+  await page.goto("/");
+
+  // Before choosing, the panel suggests something and invites a choice.
+  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+
+  await page.goto("/topics/differentiation");
+  const toggle = page.getByRole("button", { name: /covering this in class/i });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+
+  // The dashboard now opens on it, and Start goes there.
+  await page.goto("/");
+  await expect(page.getByText("Your topic right now")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Differentiation" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start" })).toHaveAttribute(
+    "href",
+    "/practice/differentiation",
+  );
+
+  // And it can be handed back.
+  await page.goto("/topics/differentiation");
+  await page.getByRole("button", { name: /covering this in class/i }).click();
+  await page.goto("/");
+  await expect(page.getByRole("link", { name: "Pick a topic" })).toBeVisible();
+  await expect(page.getByText("Your topic right now")).toHaveCount(0);
+});
+
+test("the dashboard never frames revision as a debt", async ({ page }) => {
+  // The wording is the feature here. "Due", "overdue" and a count of what is
+  // waiting turn a revision site into a pile of homework, which is the thing
+  // most likely to end the session before it starts.
+  await page.goto("/");
+  // Prove the panel actually rendered first: an assertion that some words are
+  // absent passes just as happily on a blank page.
+  await expect(page.getByRole("link", { name: "Start" })).toBeVisible();
+  const main = await page.locator("main").innerText();
+  expect(main).not.toMatch(/\boverdue\b/i);
+  expect(main).not.toMatch(/due for review/i);
+  expect(main).not.toMatch(/\d+ spec points? ready for review/i);
+});
+
+test("being stuck mid-question does not mean leaving the session", async ({ page }) => {
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
+  const article = page.locator("article");
+  const question = (await article.innerText()).split("\n")[0];
+
+  // The explanation comes to the question. Leaving for the topic page would
+  // build a brand new set on the way back, so "read up and carry on" used to
+  // cost you your place.
+  await page.getByRole("button", { name: "Explain this" }).click();
+  await expect(article).toContainText(/METHOD/i);
+  await expect(article).toContainText(/WATCH FOR/i);
+  expect(await article.innerText()).toContain(question);
+
+  // Opening the method must not hand over the hint as well: that is separate
+  // help the student did not ask for.
+  await expect(page.getByRole("button", { name: "Nudge me" })).toBeVisible();
+
+  // And it folds away, still without navigating.
+  await page.getByRole("button", { name: "Hide" }).click();
+  await expect(article).not.toContainText(/WATCH FOR/i);
+  expect(await article.innerText()).toContain(question);
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+});
+
+test("the explanation is still there once the answer is marked", async ({ page }) => {
+  await page.goto("/practice/differentiation");
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
+  const input = page.locator("main").getByLabel("Your answer");
+  if (await input.isVisible().catch(() => false)) await input.fill("0");
+  else await page.locator("main fieldset button").first().click();
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText(/Correct\.|Not quite\./)).toBeVisible();
+
+  // Getting it wrong is exactly when the method is wanted most.
+  await page.getByRole("button", { name: "Explain the method" }).click();
+  await expect(page.locator("article")).toContainText(/METHOD/i);
 });

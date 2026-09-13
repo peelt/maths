@@ -143,7 +143,7 @@ export function ProgressView() {
           <p className="mt-3 text-sm text-muted">
             {streak.current} day streak
             {streak.longest > streak.current ? ` · best ${streak.longest}` : ""}
-            {due > 0 ? ` · ${due} spec point${due === 1 ? "" : "s"} due for review` : ""}
+            {due > 0 ? ` · ${due} ready for another look` : ""}
           </p>
         ) : null}
       </section>

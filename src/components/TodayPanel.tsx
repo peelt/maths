@@ -4,26 +4,38 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getProgressStore, streakIsLive, type Streak } from "@/lib/progress";
 import { dueCount, sortByPriority, type ReviewState } from "@/lib/scheduling";
-import { allTopics, getSpecPoint } from "@/content/spec";
+import { allTopics, getSpecPoint, getTopic } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
+import { readCurrentTopic } from "@/lib/currentTopic";
 
 /**
  * The one thing to do next.
  *
  * The whole panel exists to remove a decision. Opening a revision site and
  * being shown nineteen topics is a choice, and on a bad day a choice is where
- * the session ends. So this resolves to a single primary button: either what
- * is due for review, or a sensible place to start.
+ * the session ends. So this resolves to a single primary button.
+ *
+ * WHAT FILLS THAT BUTTON CHANGED. It used to be whatever the review scheduler
+ * judged most overdue, under the heading "Due for review" — which was the
+ * wrong thing to put first. A revision site that opens by telling a student
+ * what they owe accumulates debt in their head, and for the reader this one is
+ * built for, a pile of overdue work is what ends the session before it starts.
+ *
+ * Now the student names the topic they are covering in class and that leads.
+ * Scheduling still runs underneath, because it is what makes anything stick,
+ * but it offers rather than demands: it appears as a quiet line under the
+ * button, never as the headline, and never with a count of what is late.
  */
 
 interface State {
   loading: boolean;
+  /** The topic the student said they are covering. Null until they say. */
+  chosen: string | null;
   due: number;
   streak: Streak | null;
   nextTopicSlug: string;
   nextTopicName: string;
   reason: string;
-  reviewed: number;
 }
 
 const practisable = () => specPointsWithQuestions();
@@ -51,12 +63,12 @@ function defaultTopic() {
 export function TodayPanel() {
   const [state, setState] = useState<State>({
     loading: true,
+    chosen: null,
     due: 0,
     streak: null,
     nextTopicSlug: defaultTopic().slug,
     nextTopicName: defaultTopic().name,
     reason: "Start at the beginning",
-    reviewed: 0,
   });
 
   useEffect(() => {
@@ -76,26 +88,40 @@ export function TodayPanel() {
 
       let slug = defaultTopic().slug;
       let name = defaultTopic().name;
-      let reason = states.length === 0 ? "A good place to start" : "Next up";
+      let reason = states.length === 0 ? "A good place to start" : "Where you left off";
 
+      // The scheduler's pick, used only when the student has not named a topic.
       if (top) {
         const [paper, code] = top.specPoint.split(":");
         const found = getSpecPoint(paper as "pure" | "statistics" | "mechanics", code);
         if (found) {
           slug = found.topic.slug;
           name = found.topic.name;
-          reason = due > 0 ? "Due for review" : "Weakest area";
+          reason = "Worth another look";
         }
+      }
+
+      // What the student said they are covering beats anything inferred. They
+      // know what is on the whiteboard this week and the scheduler does not.
+      const chosen = readCurrentTopic(
+        typeof window === "undefined" ? undefined : window.localStorage,
+        (candidate) => Boolean(getTopic(candidate)),
+      );
+      const chosenTopic = chosen ? getTopic(chosen) : undefined;
+      if (chosenTopic) {
+        slug = chosenTopic.slug;
+        name = chosenTopic.name;
+        reason = "Your topic right now";
       }
 
       setState({
         loading: false,
+        chosen,
         due,
         streak,
         nextTopicSlug: slug,
         nextTopicName: name,
         reason,
-        reviewed: states.length,
       });
     })();
 
@@ -104,7 +130,7 @@ export function TodayPanel() {
     };
   }, []);
 
-  const { loading, due, streak, nextTopicSlug, nextTopicName, reason, reviewed } = state;
+  const { loading, chosen, due, streak, nextTopicSlug, nextTopicName, reason } = state;
   const live = streak ? streakIsLive(streak) : false;
 
   return (
@@ -114,11 +140,7 @@ export function TodayPanel() {
       <p className="mt-2 text-muted">
         {loading
           ? "Checking where you left off…"
-          : due > 0
-            ? `${due} spec point${due === 1 ? "" : "s"} ready for review. Five questions, about eight minutes.`
-            : reviewed > 0
-              ? "Nothing overdue. Five questions to keep it sharp — about eight minutes."
-              : "Five questions, about eight minutes. Marked as you go, with the full mark scheme after each one."}
+          : "Five questions, about eight minutes. Marked as you go, with the full mark scheme after each one."}
       </p>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -132,9 +154,31 @@ export function TodayPanel() {
           href="/topics"
           className="inline-flex items-center justify-center rounded-lg border border-border px-5 py-3.5 font-semibold hover:bg-surface-2"
         >
-          Pick something else
+          {chosen ? "Change topic" : "Pick a topic"}
         </Link>
       </div>
+
+      {!loading && !chosen ? (
+        <p className="mt-4 text-sm text-muted">
+          Doing something particular in class? Open the topic and say so — this panel will open on
+          it from then on.
+        </p>
+      ) : null}
+
+      {/*
+        The offer, deliberately without a number. A count of what is waiting is
+        a backlog, and a backlog is the thing that ends the session before it
+        starts; "there is some" is all the student needs to decide.
+      */}
+      {!loading && due > 0 ? (
+        <p className="mt-4 text-sm text-muted">
+          Some earlier topics are ready for another look whenever you fancy it —{" "}
+          <Link href="/progress" className="text-accent underline underline-offset-2">
+            see what you have covered
+          </Link>
+          .
+        </p>
+      ) : null}
 
       {streak && streak.current > 0 ? (
         <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border pt-4 text-sm">

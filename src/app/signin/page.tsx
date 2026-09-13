@@ -32,7 +32,7 @@ export default async function SignInPage(props: PageProps<"/signin">) {
       <PageHeading
         eyebrow="Edexcel 9MA0"
         title="Sign in to save your progress"
-        lead="So the site remembers what you have done, what is due for review, and can pick up where you left off on any device."
+        lead="So the site remembers what you have done and can pick up where you left off on any device."
       />
       <SignInForm next={safeRedirectPath(nextParam)} linkError={errorParam ?? null} />
     </div>

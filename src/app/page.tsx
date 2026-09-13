@@ -36,11 +36,11 @@ export default function HomePage() {
             Pearson Edexcel · 9MA0
           </p>
           <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-balance sm:mt-2 sm:text-4xl">
-            A Level Maths, one short session at a time
+            Milo Maths, one short session at a time
           </h1>
           <p className="mt-2 text-pretty text-sm text-muted sm:mt-3 sm:text-base">
             All {specStats.points} spec points, {questionTemplates.length} question types marked as
-            you go with the mark scheme shown, and a plan for what to revise next.
+            you go with the mark scheme shown. Pick whatever you are covering in class.
           </p>
         </div>
         {/*

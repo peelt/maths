@@ -8,6 +8,8 @@ import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
 import { noteFor } from "@/content/notes";
 import { TopicIllustration } from "@/components/illustration/topics";
+import { ClassTopicToggle } from "@/components/ClassTopicToggle";
+import { TeachingNoteBody } from "@/components/TeachingNoteBody";
 
 export function generateStaticParams() {
   return allTopics.map((topic) => ({ slug: topic.slug }));
@@ -49,12 +51,19 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
       </div>
 
       {templateCount > 0 ? (
-        <Link
-          href={`/practice/${topic.slug}`}
-          className="mb-10 inline-flex items-center rounded-lg bg-accent-fill px-6 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
-        >
-          Practise this topic
-        </Link>
+        <div className="mb-10 flex flex-wrap items-center gap-3">
+          <Link
+            href={`/practice/${topic.slug}`}
+            className="inline-flex items-center rounded-lg bg-accent-fill px-6 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
+          >
+            Practise this topic
+          </Link>
+          {/*
+            Marking the topic makes the dashboard open on it, so the choice is
+            made when the class moves on rather than every single session.
+          */}
+          <ClassTopicToggle slug={topic.slug} />
+        </div>
       ) : (
         <p className="mb-10 rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm text-muted">
           No practice questions could be built for this topic. Every spec point has questions, so
@@ -104,33 +113,7 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
                     <span className="hidden text-accent group-open:inline">How it works ▾</span>
                   </summary>
                   <div className="border-t border-border px-4 py-4">
-                    <Maths className="text-[0.95rem] leading-relaxed [&_p]:m-0">{note.idea}</Maths>
-
-                    <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-wider text-muted">
-                      Method
-                    </p>
-                    <ol className="space-y-2">
-                      {note.method.map((step, i) => (
-                        <li key={i} className="flex gap-3">
-                          <span className="mt-0.5 h-fit shrink-0 rounded bg-surface px-1.5 py-0.5 font-mono text-xs font-bold tabular-nums">
-                            {i + 1}
-                          </span>
-                          <Maths className="min-w-0 flex-1 text-sm leading-relaxed [&_p]:m-0">{step}</Maths>
-                        </li>
-                      ))}
-                    </ol>
-
-                    <p className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wider text-wrong">
-                      Watch for
-                    </p>
-                    <ul className="space-y-2">
-                      {note.watchFor.map((item, i) => (
-                        <li key={i} className="flex gap-3">
-                          <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-wrong" />
-                          <Maths className="min-w-0 flex-1 text-sm leading-relaxed [&_p]:m-0">{item}</Maths>
-                        </li>
-                      ))}
-                    </ul>
+                    <TeachingNoteBody note={note} />
                   </div>
                 </details>
               ) : null}
