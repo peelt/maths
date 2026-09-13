@@ -8,7 +8,6 @@ import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
 import { noteFor } from "@/content/notes";
 import { TopicIllustration } from "@/components/illustration/topics";
-import { ClassTopicToggle } from "@/components/ClassTopicToggle";
 import { TeachingNoteBody } from "@/components/TeachingNoteBody";
 
 export function generateStaticParams() {
@@ -51,19 +50,12 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
       </div>
 
       {templateCount > 0 ? (
-        <div className="mb-10 flex flex-wrap items-center gap-3">
-          <Link
-            href={`/practice/${topic.slug}`}
-            className="inline-flex items-center rounded-lg bg-accent-fill px-6 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
-          >
-            Practise this topic
-          </Link>
-          {/*
-            Marking the topic makes the dashboard open on it, so the choice is
-            made when the class moves on rather than every single session.
-          */}
-          <ClassTopicToggle slug={topic.slug} />
-        </div>
+        <Link
+          href={`/practice/${topic.slug}`}
+          className="mb-10 inline-flex items-center rounded-lg bg-accent-fill px-6 py-3 font-semibold text-on-accent hover:bg-accent-fill-hover"
+        >
+          Practise this topic
+        </Link>
       ) : (
         <p className="mb-10 rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm text-muted">
           No practice questions could be built for this topic. Every spec point has questions, so

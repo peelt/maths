@@ -4,9 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getProgressStore, streakIsLive, type Streak } from "@/lib/progress";
 import { isDue, sortByPriority, type ReviewState } from "@/lib/scheduling";
-import { allTopics, getSpecPoint, getTopic } from "@/content/spec";
+import { allTopics, getSpecPoint } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
-import { readCurrentTopic } from "@/lib/currentTopic";
 import { sinceLastPractised } from "@/lib/timing";
 
 /**
@@ -22,7 +21,14 @@ import { sinceLastPractised } from "@/lib/timing";
  * what they owe accumulates debt in their head, and for the reader this one is
  * built for, a pile of overdue work is what ends the session before it starts.
  *
- * Now the student names the topic they are covering in class and that leads.
+ * Now it opens on whatever the student last practised, which is almost always
+ * what class is on. That was first built as a button — "I'm covering this in
+ * class" — and the button did not earn its place: it described an input while
+ * its only effect was this page's Start link, so its purpose was not obvious
+ * to anyone pressing it. Practising a topic already says which topic you are
+ * on, so nothing needs declaring, and the answer now follows the account
+ * rather than the device the declaration was made on.
+ *
  * Scheduling still runs underneath, because it is what makes anything stick,
  * but it offers rather than demands: it appears as a quiet line under the
  * button, never as the headline, and never with a count of what is late.
@@ -30,8 +36,8 @@ import { sinceLastPractised } from "@/lib/timing";
 
 interface State {
   loading: boolean;
-  /** The topic the student said they are covering. Null until they say. */
-  chosen: string | null;
+  /** True once the panel is showing the topic they were last working on. */
+  resuming: boolean;
   /**
    * One specific topic worth going back to, or null.
    *
@@ -71,7 +77,7 @@ function defaultTopic() {
 export function TodayPanel() {
   const [state, setState] = useState<State>({
     loading: true,
-    chosen: null,
+    resuming: false,
     revisit: null,
     streak: null,
     nextTopicSlug: defaultTopic().slug,
@@ -84,7 +90,11 @@ export function TodayPanel() {
 
     void (async () => {
       const store = await getProgressStore();
-      const [states, streak] = await Promise.all([store.getReviewStates(), store.getStreak()]);
+      const [states, streak, attempts] = await Promise.all([
+        store.getReviewStates(),
+        store.getStreak(),
+        store.getAttempts(1),
+      ]);
       if (cancelled) return;
 
       const covered = practisable();
@@ -108,17 +118,22 @@ export function TodayPanel() {
         }
       }
 
-      // What the student said they are covering beats anything inferred. They
-      // know what is on the whiteboard this week and the scheduler does not.
-      const chosen = readCurrentTopic(
-        typeof window === "undefined" ? undefined : window.localStorage,
-        (candidate) => Boolean(getTopic(candidate)),
-      );
-      const chosenTopic = chosen ? getTopic(chosen) : undefined;
-      if (chosenTopic) {
-        slug = chosenTopic.slug;
-        name = chosenTopic.name;
-        reason = "Your topic right now";
+      /*
+       * What they last practised beats anything the scheduler infers: it is
+       * almost always what class is on, and it needed no asking. Attempts come
+       * back newest first from both stores.
+       */
+      const [latest] = attempts;
+      let resuming = false;
+      if (latest) {
+        const [paper, code] = latest.specPoint.split(":");
+        const found = getSpecPoint(paper as "pure" | "statistics" | "mechanics", code);
+        if (found) {
+          slug = found.topic.slug;
+          name = found.topic.name;
+          reason = "Carry on with";
+          resuming = true;
+        }
       }
 
       /*
@@ -144,7 +159,7 @@ export function TodayPanel() {
 
       setState({
         loading: false,
-        chosen,
+        resuming,
         revisit,
         streak,
         nextTopicSlug: slug,
@@ -158,7 +173,7 @@ export function TodayPanel() {
     };
   }, []);
 
-  const { loading, chosen, revisit, streak, nextTopicSlug, nextTopicName, reason } = state;
+  const { loading, resuming, revisit, streak, nextTopicSlug, nextTopicName, reason } = state;
   const live = streak ? streakIsLive(streak) : false;
 
   return (
@@ -182,15 +197,13 @@ export function TodayPanel() {
           href="/topics"
           className="inline-flex items-center justify-center rounded-lg border border-border px-5 py-3.5 font-semibold hover:bg-surface-2"
         >
-          {chosen ? "Change topic" : "Pick a topic"}
+          Pick a topic
         </Link>
       </div>
 
-      {!loading && !chosen ? (
+      {!loading && resuming ? (
         <p className="mt-4 text-sm text-muted">
-          Covering something else in class? Open that topic and press{" "}
-          <span className="font-medium text-text">I&rsquo;m covering this in class</span> — then
-          this page starts there every time.
+          This is where you were last. Practise anything else and it will start there instead.
         </p>
       ) : null}
 
