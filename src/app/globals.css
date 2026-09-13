@@ -79,6 +79,21 @@
    * Plot series. Not semantic: these must never be read as status, so they
    * avoid both the green/red feedback pair and the blue/yellow axis.
    */
+
+  /*
+   * The logo's own colours.
+   *
+   * These are brand values rather than UI tokens, so they do not follow the
+   * rules above — but they cannot ignore the canvas either. The supplied
+   * artwork sits on white; on this canvas its navy is fine and its teal falls
+   * to 2.72:1, which would leave "Maths" visibly weaker than "A Level" beside
+   * it. The teal is deepened just enough to clear 3:1 while staying the same
+   * colour, and both swap in the dark theme, where the navy is 1.19:1 against
+   * the background and effectively invisible.
+   */
+  --brand-ink: #14294f;
+  --brand-accent: #0e8a7c;
+
   --plot-a: #17595c;
   --plot-b: #c96f9c;
   --plot-c: #6b6f76;
@@ -114,7 +129,11 @@
     --note-soft: #1f2832;
     --note-border: #3c4c5c;
 
-    --plot-a: #3f9ea1;
+  
+  --brand-ink: #ccd3da;
+  --brand-accent: #2fb3a2;
+
+  --plot-a: #3f9ea1;
     --plot-b: #f0b3ce;
     --plot-c: #9aa3ad;
   }
@@ -147,6 +166,10 @@
   --note: #3f5468;
   --note-soft: #e7eff6;
   --note-border: #a2bcd0;
+
+  --brand-ink: #14294f;
+  --brand-accent: #0e8a7c;
+
   --plot-a: #17595c;
   --plot-b: #c96f9c;
   --plot-c: #6b6f76;
@@ -180,6 +203,10 @@
   --note: #4a4034;
   --note-soft: #efe6d9;
   --note-border: #bca88b;
+
+  --brand-ink: #14294f;
+  --brand-accent: #0e8a7c;
+
   --plot-a: #17595c;
   --plot-b: #c96f9c;
   --plot-c: #6f675c;
@@ -208,6 +235,10 @@
   --note: #a9bdd0;
   --note-soft: #1f2832;
   --note-border: #3c4c5c;
+
+  --brand-ink: #ccd3da;
+  --brand-accent: #2fb3a2;
+
   --plot-a: #3f9ea1;
   --plot-b: #f0b3ce;
   --plot-c: #9aa3ad;
