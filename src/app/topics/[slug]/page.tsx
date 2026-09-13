@@ -9,6 +9,8 @@ import { interactiveFor } from "@/components/interactive";
 import { noteFor } from "@/content/notes";
 import { TopicIllustration } from "@/components/illustration/topics";
 import { TeachingNoteBody } from "@/components/TeachingNoteBody";
+import { AnotherWayIn } from "@/components/AnotherWayIn";
+import { companionFor } from "@/content/another-way-in";
 
 export function generateStaticParams() {
   return allTopics.map((topic) => ({ slug: topic.slug }));
@@ -27,6 +29,7 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
   if (!topic) notFound();
 
   const templateCount = questionTemplates.filter((q) => q.topicSlug === topic.slug).length;
+  const companion = companionFor(topic.slug);
 
   return (
     <div>
@@ -63,6 +66,15 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
           breakdown below is unaffected.
         </p>
       )}
+
+      {/*
+        * Between the topic's own introduction and the spec breakdown: far
+        * enough down that it does not greet someone who is not stuck, near
+        * enough up that someone who is does not have to scroll past every spec
+        * point to find it. Keyed by slug so its open tips and any loaded video
+        * do not survive a move to another topic.
+        */}
+      {companion ? <AnotherWayIn key={topic.slug} topic={companion} topicName={topic.name} /> : null}
 
       <ol className="space-y-5">
         {topic.points.map((point) => {
