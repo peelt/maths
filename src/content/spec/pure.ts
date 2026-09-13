@@ -13,7 +13,7 @@ export const pureTopics: Topic[] = [
     name: "Proof",
     slug: "proof",
     blurb:
-      "Only one spec point, but proof appears across the whole paper and is pure AO2 marks — the half of the exam that is not about doing a technique.",
+      "Only one spec point, but proof appears across the whole paper and is pure AO2 — reasoning and communication rather than carrying out a technique, worth roughly a quarter of the marks in the qualification.",
     points: [
       {
         code: "1.1",
