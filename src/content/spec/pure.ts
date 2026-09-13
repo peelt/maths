@@ -120,7 +120,7 @@ export const pureTopics: Topic[] = [
         title: "Transformations of graphs",
         year: "both",
         summary:
-          "Understand the effect of the transformations y = af(x), y = f(x) + a, y = f(x + a), y = f(ax) and combinations of these, and sketch the resulting graphs.",
+          "Understand the effect of the transformations y = af(x), y = f(x) + a, y = f(x + a), y = f(ax) and combinations of these, and sketch the resulting graphs; sketch y = f(-x) from the graph of y = f(x).",
         examNote:
           "The inside-the-bracket transformations behave counter-intuitively: f(x + a) shifts left, and f(ax) stretches by a factor of 1/a. Combinations are Year 2 and order matters. This is a strong candidate for interactive practice — it is far easier to see than to memorise.",
         keywords: ["transformations", "translation", "stretch", "reflection", "shift", "graph transformations"],
@@ -130,7 +130,7 @@ export const pureTopics: Topic[] = [
         title: "Partial fractions",
         year: 2,
         summary:
-          "Decompose rational functions into partial fractions, with denominators no more complicated than squared linear terms and no more than three terms.",
+          "Decompose rational functions into partial fractions, with denominators no more complicated than squared linear terms, no more than three terms, and numerators constant or linear.",
         examNote:
           "Almost never asked for its own sake. It is a setup step for integration, for binomial expansion of a rational function, or for a differential equation — so if partial fractions appear in part (a), look at what part (b) wants before choosing your method.",
         keywords: ["partial fractions", "decompose", "rational function", "cover up"],
@@ -229,7 +229,7 @@ export const pureTopics: Topic[] = [
         code: "4.3",
         title: "Sigma notation",
         year: 2,
-        summary: "Understand and use sigma notation for sums of series.",
+        summary: "Understand and use sigma notation for sums of series, including knowing that summing 1 over n terms gives n.",
         examNote:
           "Read the limits carefully — a sum from r = 3 to 20 is not the same as one from r = 1 to 20, and the usual fix is to compute the full sum and subtract the missing start.",
         keywords: ["sigma", "sum", "series", "notation"],
@@ -321,7 +321,7 @@ export const pureTopics: Topic[] = [
         summary:
           "Use the identities tan x = sin x / cos x and sin^2 x + cos^2 x = 1, and the derived identities for sec^2 and cosec^2, to solve equations and prove further identities.",
         examNote:
-          "The two Pythagorean extensions are derived by dividing the main identity by cos^2 or sin^2 — worth being able to re-derive under pressure rather than trusting memory. These are in the formula booklet, so the marks are for using them well, not recalling them.",
+          "The Pythagorean identities are not printed in the formula booklet. Know sin^2 x + cos^2 x = 1, then divide through by cos^2 x to get 1 + tan^2 x = sec^2 x, or by sin^2 x to get 1 + cot^2 x = cosec^2 x. Deriving the other two in a line is safer than trusting memory, and the skill worth practising is spotting which form turns the equation or the proof in front of you into something solvable.",
         keywords: ["identities", "pythagorean", "sec squared", "cosec squared", "tan", "prove"],
       },
       {
@@ -360,7 +360,7 @@ export const pureTopics: Topic[] = [
         summary:
           "Use trigonometric functions to solve problems in context, including problems involving vectors, kinematics and forces.",
         examNote:
-          "The modelling contexts named in the spec are wave motion, a point on a rotating wheel, and hours of daylight through the year — all of which reduce to interpreting amplitude, period and vertical shift in real terms.",
+          "The modelling contexts named in the spec are wave motion, the height of a point on a vertical circular wheel, and hours of sunlight through the year — all of which reduce to interpreting amplitude, period and vertical shift in real terms.",
         keywords: ["context", "modelling", "wave", "tides", "daylight", "circular motion"],
       },
     ],

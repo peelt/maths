@@ -50,7 +50,7 @@ export const statisticsTopics: Topic[] = [
         title: "Scatter diagrams, regression and correlation",
         year: "both",
         summary:
-          "Interpret scatter diagrams and regression lines for bivariate data, including recognising distinct sections of a population; use interpolation and understand the dangers of extrapolation; interpret correlation informally, and understand that correlation does not imply causation.",
+          "Interpret scatter diagrams and regression lines for bivariate data, using the terms explanatory (independent) and response (dependent) variable, including recognising distinct sections of a population; use interpolation and understand the dangers of extrapolation; interpret correlation informally, and understand that correlation does not imply causation.",
         examNote:
           "Calculating regression lines is explicitly excluded — you interpret them, you do not derive them. Predicting outside the data range is extrapolation and is unreliable; saying so is a mark. The Year 2 extension uses logarithms to linearise a power or exponential model, which is spec point 6.6 from Pure reappearing.",
         keywords: ["scatter", "regression", "correlation", "causation", "interpolation", "extrapolation", "bivariate", "explanatory", "response"],
@@ -170,7 +170,7 @@ export const statisticsTopics: Topic[] = [
         title: "The language of hypothesis testing",
         year: "both",
         summary:
-          "Understand and apply the language of hypothesis testing developed through a binomial model — null and alternative hypotheses, significance level, test statistic, one- and two-tail tests, critical value, critical region, acceptance region and p-value; extend to correlation coefficients, interpreting a given coefficient against a p-value or critical value.",
+          "Understand and apply the language of hypothesis testing developed through a binomial model — null and alternative hypotheses, significance level, test statistic, one- and two-tail tests, critical value, critical region, acceptance region and p-value; know informally that a binomial distribution has expected value np, which is what a two-tail test needs in order to pick its tail; extend to correlation coefficients, knowing that r lies between -1 and 1 and that r = +/-1 means the points lie on a straight line, and interpreting a given coefficient against a p-value or critical value.",
         examNote:
           "Calculating a correlation coefficient is excluded — you interpret one the calculator gives you. For correlation tests the hypotheses must be stated in terms of the population correlation coefficient with a null hypothesis of zero. Two-tail tests halve the significance level at each end, which is the most common slip.",
         keywords: ["hypothesis", "null", "alternative", "significance", "critical region", "p-value", "one tail", "two tail", "correlation coefficient"],
