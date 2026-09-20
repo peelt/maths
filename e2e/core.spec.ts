@@ -890,3 +890,34 @@ test("the whole specification stays listed whatever is ticked", async ({ page })
   // at you elsewhere, not about hiding half the specification from view.
   await expect(page.getByRole("link", { name: /Numerical methods/ })).toBeVisible();
 });
+
+test("accepting the covered suggestion changes what the homepage offers", async ({ page }) => {
+  await page.goto("/");
+  const before = await page.locator('a[href^="/practice/"]').count();
+  expect(before).toBeGreaterThan(13);
+  await expect(page.locator('a[href="/practice/numerical-methods"]')).toBeVisible();
+
+  await page.goto("/topics");
+  const panel = page.locator("main details").filter({ hasText: "Which topics have you covered" });
+  await panel.locator("summary").click();
+
+  // The ticks are only a suggestion until they are accepted. Showing ticks
+  // that are not in force would misstate what the site is doing, so the panel
+  // says so and nothing is filtered until this button is pressed.
+  await expect(panel.getByText(/every topic is being offered/)).toBeVisible();
+  await panel.getByRole("button", { name: "Use this as my starting point" }).click();
+  await expect(panel.getByText(/every topic is being offered/)).toHaveCount(0);
+
+  // The point of the whole feature: the earlier tests all passed while this
+  // filter did nothing, because they checked a value was stored and never
+  // that storing it changed anything.
+  await page.goto("/");
+  const after = await page.locator('a[href^="/practice/"]').count();
+  expect(after).toBeLessThan(before);
+  await expect(page.locator('a[href="/practice/numerical-methods"]')).toHaveCount(0);
+
+  // Hidden, not vanished: say what is missing and how to get it back.
+  await expect(page.getByText(/topics hidden because you haven/)).toBeVisible();
+  await page.getByRole("link", { name: /Change what you/ }).click();
+  await expect(page).toHaveURL(/\/topics$/);
+});

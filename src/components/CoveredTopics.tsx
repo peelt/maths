@@ -60,11 +60,27 @@ export function CoveredTopics() {
           is examined at the end either way.
         </p>
 
+        {/*
+          * Until something is stored, the ticks below are only a suggestion:
+          * nothing is filtered and every topic is offered. Showing ticks that
+          * are not in force would be a lie about what the site is doing, so
+          * say it plainly and give one button to accept them.
+          */}
         {started ? null : (
-          <p className="mt-2 text-sm text-muted">
-            Ticked below is a guess: the content this specification shares with AS Maths, which is
-            usually taught first.
-          </p>
+          <div className="mt-3 rounded-lg bg-surface-2 p-3">
+            <p className="text-sm leading-relaxed">
+              <strong>Nothing is set yet, so every topic is being offered.</strong> The ticks below
+              are a suggestion — the content this specification shares with AS Maths, which is
+              usually taught first.
+            </p>
+            <button
+              type="button"
+              onClick={() => writeCovered(seed())}
+              className="mt-2 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-semibold hover:bg-surface-2"
+            >
+              Use this as my starting point
+            </button>
+          </div>
         )}
 
         {ORDER.map((paper) => (

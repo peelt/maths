@@ -3,15 +3,22 @@ import { TodayPanel } from "@/components/TodayPanel";
 import { allTopics, specStats } from "@/content/spec";
 import { formulaStats } from "@/content/formulae";
 import { questionTemplates, specPointsWithQuestions } from "@/lib/questions";
-import { PaperBadge } from "@/components/ui";
 import { HeroFigure } from "@/components/illustration/HeroFigure";
-import { TopicIllustration } from "@/components/illustration/topics";
+import { PractiseNow, type PractiseCard } from "@/components/PractiseNow";
 
 export default function HomePage() {
   const covered = specPointsWithQuestions();
-  const practisableTopics = allTopics.filter((t) =>
-    t.points.some((p) => covered.has(`${t.paper}:${p.code}`)),
-  );
+  // Computed here so the content stays on the server; PractiseNow only
+  // decides which of these to show, from what the student has marked.
+  const cards: PractiseCard[] = allTopics
+    .filter((t) => t.points.some((p) => covered.has(`${t.paper}:${p.code}`)))
+    .map((t) => ({
+      slug: t.slug,
+      name: t.name,
+      paper: t.paper,
+      questionTypes: questionTemplates.filter((q) => q.topicSlug === t.slug).length,
+      specPoints: t.points.length,
+    }));
 
   /*
    * On a phone the hero comes SECOND, so the one primary action is the first
@@ -58,37 +65,7 @@ export default function HomePage() {
 
       <section className="order-3">
         <h2 className="mb-4 text-lg font-bold">Ready to practise now</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {practisableTopics.map((topic) => {
-            const count = questionTemplates.filter((q) => q.topicSlug === topic.slug).length;
-            return (
-              <Link
-                key={topic.slug}
-                href={`/practice/${topic.slug}`}
-                className="group rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/50 hover:bg-surface-2"
-              >
-                <div className="flex items-start gap-3">
-                  <TopicIllustration
-                    slug={topic.slug}
-                    className="mt-0.5 h-9 w-13 shrink-0 opacity-80 transition-opacity group-hover:opacity-100"
-                  />
-                  <div className="min-w-0 flex-1">
-                    {/* Wraps rather than overflowing: the illustration plus a
-                        two-part paper badge does not fit one row at 360px. */}
-                    <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
-                      <span className="font-semibold group-hover:text-accent">{topic.name}</span>
-                      <PaperBadge paper={topic.paper} />
-                    </div>
-                    <p className="mt-1.5 text-sm text-muted">
-                      {count} question type{count === 1 ? "" : "s"} · {topic.points.length} spec
-                      point{topic.points.length === 1 ? "" : "s"}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        <PractiseNow cards={cards} />
       </section>
 
       <section className="order-4 rounded-xl border border-border bg-surface-2 p-6">
