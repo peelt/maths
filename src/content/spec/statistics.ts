@@ -18,7 +18,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "1.1",
         title: "Populations, samples and sampling methods",
-        year: 1,
+        phase: "first",
         summary:
           "Understand population and sample, and use samples to make informal inferences; understand simple random, stratified, systematic, quota and opportunity sampling; select or critique a sampling technique in context, recognising that different samples can lead to different conclusions.",
         examNote:
@@ -38,7 +38,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "2.1",
         title: "Diagrams for single-variable data",
-        year: 1,
+        phase: "spanning",
         summary:
           "Interpret histograms, frequency polygons, box and whisker plots including outliers, and cumulative frequency diagrams, understanding that area in a histogram represents frequency.",
         examNote:
@@ -48,17 +48,17 @@ export const statisticsTopics: Topic[] = [
       {
         code: "2.2",
         title: "Scatter diagrams, regression and correlation",
-        year: "both",
+        phase: "first",
         summary:
           "Interpret scatter diagrams and regression lines for bivariate data, using the terms explanatory (independent) and response (dependent) variable, including recognising distinct sections of a population; use interpolation and understand the dangers of extrapolation; interpret correlation informally, and understand that correlation does not imply causation.",
         examNote:
-          "Calculating regression lines is explicitly excluded — you interpret them, you do not derive them. Predicting outside the data range is extrapolation and is unreliable; saying so is a mark. The Year 2 extension uses logarithms to linearise a power or exponential model, which is spec point 6.6 from Pure reappearing.",
+          "Calculating regression lines is explicitly excluded — you interpret them, you do not derive them. Predicting outside the data range is extrapolation and is unreliable; saying so is a mark. The later extension uses logarithms to linearise a power or exponential model, which is spec point 6.6 from Pure reappearing.",
         keywords: ["scatter", "regression", "correlation", "causation", "interpolation", "extrapolation", "bivariate", "explanatory", "response"],
       },
       {
         code: "2.3",
         title: "Central tendency, variation and coding",
-        year: 1,
+        phase: "first",
         summary:
           "Interpret mean, median and mode, and range, interpercentile range, variance and standard deviation, for discrete, continuous, grouped and ungrouped data; use linear interpolation for percentiles from grouped data; calculate standard deviation from summary statistics; understand and use coding.",
         examNote:
@@ -68,7 +68,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "2.4",
         title: "Outliers and cleaning data",
-        year: 1,
+        phase: "first",
         summary:
           "Recognise and interpret possible outliers in data sets and diagrams; select or critique data presentation techniques; clean data, including dealing with missing data, errors and outliers.",
         examNote:
@@ -88,7 +88,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "3.1",
         title: "Mutually exclusive and independent events",
-        year: 1,
+        phase: "first",
         summary:
           "Understand and use mutually exclusive and independent events when calculating probabilities, using Venn diagrams, tree diagrams and set notation.",
         examNote:
@@ -98,7 +98,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "3.2",
         title: "Conditional probability",
-        year: 2,
+        phase: "later",
         summary:
           "Understand and use conditional probability, including tree diagrams, Venn diagrams and two-way tables, and the conditional probability formula and its consequences.",
         examNote:
@@ -108,7 +108,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "3.3",
         title: "Modelling with probability",
-        year: "both",
+        phase: "spanning",
         summary:
           "Model with probability, including critiquing the assumptions made and the likely effect of more realistic assumptions.",
         examNote:
@@ -128,7 +128,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "4.1",
         title: "Discrete distributions and the binomial",
-        year: 1,
+        phase: "first",
         summary:
           "Understand and use simple discrete probability distributions including the discrete uniform and the binomial as models, and calculate binomial probabilities, using a calculator for individual and cumulative probabilities.",
         examNote:
@@ -138,7 +138,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "4.2",
         title: "The normal distribution",
-        year: 2,
+        phase: "later",
         summary:
           "Understand and use the normal distribution as a model and find probabilities with it; know the shape, symmetry, and that the points of inflection lie one standard deviation either side of the mean; use the normal approximation to the binomial when n is large and p is close to 0.5, with a continuity correction.",
         examNote:
@@ -148,7 +148,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "4.3",
         title: "Choosing a distribution",
-        year: 2,
+        phase: "later",
         summary:
           "Select an appropriate probability distribution for a context with reasoning, including recognising when the binomial or normal model may not be appropriate.",
         examNote:
@@ -168,7 +168,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "5.1",
         title: "The language of hypothesis testing",
-        year: "both",
+        phase: "spanning",
         summary:
           "Understand and apply the language of hypothesis testing developed through a binomial model — null and alternative hypotheses, significance level, test statistic, one- and two-tail tests, critical value, critical region, acceptance region and p-value; know informally that a binomial distribution has expected value np, which is what a two-tail test needs in order to pick its tail; extend to correlation coefficients, knowing that r lies between -1 and 1 and that r = +/-1 means the points lie on a straight line, and interpreting a given coefficient against a p-value or critical value.",
         examNote:
@@ -178,7 +178,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "5.2",
         title: "Hypothesis test for a binomial proportion",
-        year: 1,
+        phase: "first",
         summary:
           "Conduct a hypothesis test for the proportion in a binomial distribution and interpret the result in context, understanding that a sample is used to infer about a population and that the significance level is the probability of incorrectly rejecting the null hypothesis.",
         examNote:
@@ -188,7 +188,7 @@ export const statisticsTopics: Topic[] = [
       {
         code: "5.3",
         title: "Hypothesis test for the mean of a normal distribution",
-        year: 2,
+        phase: "later",
         summary:
           "Conduct a hypothesis test for the mean of a normal distribution with known, given or assumed variance, and interpret the result in context, using the distribution of the sample mean.",
         examNote:

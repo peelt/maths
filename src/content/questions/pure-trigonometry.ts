@@ -2,7 +2,7 @@ import type { QuestionTemplate } from "@/lib/questions/types";
 import { factor, fraction, leading, signed } from "./format";
 
 /**
- * Question templates for Year 2 Pure: trigonometry beyond the sine and cosine
+ * Question templates for the later Pure content: trigonometry beyond the sine and cosine
  * rules — small angle approximations, reciprocal functions, identities, the
  * compound and double angle formulae, and R form.
  *

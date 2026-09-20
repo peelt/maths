@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { allTopics, getTopic } from "@/content/spec";
 import { questionTemplates } from "@/lib/questions";
 import { Maths } from "@/components/Maths";
-import { PageHeading, PaperBadge, YearBadge } from "@/components/ui";
+import { PageHeading, PaperBadge, PhaseBadge } from "@/components/ui";
 import { interactiveFor } from "@/components/interactive";
 import { noteFor } from "@/content/notes";
 import { TopicIllustration } from "@/components/illustration/topics";
@@ -87,7 +87,7 @@ export default async function TopicPage(props: PageProps<"/topics/[slug]">) {
                   {point.code}
                 </span>
                 <h2 className="text-lg font-bold">{point.title}</h2>
-                <YearBadge year={point.year} />
+                <PhaseBadge phase={point.phase} />
               </div>
 
               <Maths className="text-[0.97rem] leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0">

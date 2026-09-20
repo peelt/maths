@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { Paper } from "@/content/spec";
+import type { Paper, Phase } from "@/content/spec";
 
 /** Shared presentational pieces, kept in one place so spacing stays consistent. */
 
@@ -53,8 +53,19 @@ export function PaperBadge({ paper }: { paper: Paper }) {
   );
 }
 
-export function YearBadge({ year }: { year: 1 | 2 | "both" }) {
-  const label = year === "both" ? "Year 1 → 2" : `Year ${year}`;
+const PHASE_LABEL: Record<Phase, string> = {
+  first: "Taught first",
+  later: "Taught later",
+  spanning: "Started first, finished later",
+};
+
+/**
+ * When a point is usually met. Deliberately not "Year 1" / "Year 2": the board
+ * sets no such split, and nothing here is finished business — every point is
+ * examined on the papers at the end.
+ */
+export function PhaseBadge({ phase }: { phase: Phase }) {
+  const label = PHASE_LABEL[phase];
   return (
     <span className="inline-flex items-center rounded-full border border-border bg-surface-2 px-2.5 py-0.5 text-xs font-medium text-muted">
       {label}

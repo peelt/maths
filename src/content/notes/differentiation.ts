@@ -70,7 +70,7 @@ export const differentiationNotes: TeachingNote[] = [
     ],
     watchFor: [
       "The product and chain rules are NOT in the formula booklet, even though the quotient rule is. That is the opposite of what most people assume.",
-      "Forgetting the derivative of the inside in a chain rule. It makes the answer wrong by a constant factor every time, and it is the most common Year 2 slip.",
+      "Forgetting the derivative of the inside in a chain rule. It makes the answer wrong by a constant factor every time, and it is one of the most common slips later in the course.",
       "The order of subtraction in the quotient rule. It is $v\\frac{du}{dx}$ first — unlike the product rule, it is not symmetric.",
       "A quotient can often be rewritten as a product with a negative power, which is usually less error-prone.",
     ],

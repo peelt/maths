@@ -2,7 +2,7 @@ import type { QuestionTemplate } from "@/lib/questions/types";
 import { fraction, leading, signed } from "./format";
 
 /**
- * Question templates for Year 1 Pure: exponentials and logarithms,
+ * Question templates for the early content Pure: exponentials and logarithms,
  * differentiation, integration and vectors.
  */
 export const pureCalculusQuestions: QuestionTemplate[] = [

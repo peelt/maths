@@ -4,6 +4,7 @@ import { allTopics, paperLabels, specStats, type Paper } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
 import { PageHeading } from "@/components/ui";
 import { TopicIllustration } from "@/components/illustration/topics";
+import { CoveredTopics } from "@/components/CoveredTopics";
 
 export const metadata: Metadata = {
   title: "Topics",
@@ -28,6 +29,14 @@ export default function TopicsPage() {
         title="The whole specification"
         lead={`All ${specStats.topics} topics and ${specStats.points} spec points, in specification order. Each one says what the exam actually asks of you.`}
       />
+
+      {/*
+        * The whole specification stays listed here whatever is ticked: this
+        * page is the map, and a map with half of it missing is worse than one
+        * with parts marked "not yet". What gets ticked steers what the site
+        * puts in front of you elsewhere.
+        */}
+      <CoveredTopics />
 
       <div className="space-y-10">
         {order.map((paper) => {

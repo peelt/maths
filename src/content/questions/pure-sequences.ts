@@ -2,7 +2,7 @@ import type { QuestionTemplate } from "@/lib/questions/types";
 import { factor, leading, signed } from "./format";
 
 /**
- * Question templates for Year 2 Pure: sequences and series.
+ * Question templates for the later Pure content: sequences and series.
  *
  * A note on what is and is not in the formula booklet, because it drives how
  * these mark schemes are written: the arithmetic and geometric SUM formulae

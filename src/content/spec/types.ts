@@ -11,18 +11,28 @@
 export type Paper = "pure" | "statistics" | "mechanics";
 
 /**
- * Where a spec point falls in a typical two-year teaching order.
- * "both" means the point is introduced in Year 1 and extended in Year 2 —
- * common in this spec, where e.g. binomial expansion starts with positive
- * integer n and later extends to rational n.
+ * When a spec point is usually taught, derived from the specification itself.
+ *
+ * The board does not divide this course into years — the words "Year 1" and
+ * "Year 2" appear nowhere in the specification, and all three papers are sat
+ * at the end. The one division it does make is to mark the content shared
+ * with AS Mathematics in bold, "to support the co-teaching of this
+ * qualification with the AS Mathematics qualification". Schools generally
+ * teach that AS content first, so it is the honest basis for this field.
+ *
+ * "spanning" is not a hedge: the bold runs through parts of a spec point, so
+ * binomial expansion is marked AS for positive integer n and A level for
+ * rational n. A point with any bold at all is met before the rest of it is.
+ *
+ * Derived by scripts/derive-phase.py, not assigned by hand.
  */
-export type Year = 1 | 2 | "both";
+export type Phase = "first" | "later" | "spanning";
 
 export interface SpecPoint {
   /** Official spec code, e.g. "2.3". Unique within a paper. */
   code: string;
   title: string;
-  year: Year;
+  phase: Phase;
   /** What the specification actually requires, in plain English. */
   summary: string;
   /** Where the marks are, and what examiners reliably ask. */

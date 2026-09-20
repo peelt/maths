@@ -47,9 +47,15 @@ export function getSpecPoint(paper: Paper, code: string) {
   return pointIndex.get(qualifiedCode(paper, code));
 }
 
-/** Does this spec point appear in the given teaching year? */
-export function inYear(point: SpecPoint, year: 1 | 2): boolean {
-  return point.year === year || point.year === "both";
+/**
+ * Is any part of this spec point usually taught in the first year?
+ *
+ * "spanning" counts, because a point that is part AS content is met early
+ * even though it is finished later. Used to seed the "already covered"
+ * default; once a student has marked their own topics, their answer wins.
+ */
+export function taughtEarly(point: SpecPoint): boolean {
+  return point.phase === "first" || point.phase === "spanning";
 }
 
 export const specStats = {

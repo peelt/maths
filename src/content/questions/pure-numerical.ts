@@ -4,7 +4,7 @@ import { signed } from "./format";
 /**
  * Question templates for Pure topic 9: Numerical methods.
  *
- * Entirely Year 2 and entirely self-contained, which makes it the most
+ * Entirely the later content and entirely self-contained, which makes it the most
  * learnable topic on the paper. Knowing HOW each method fails is worth as many
  * marks as using it, so the solutions spell out the named failure modes.
  */
