@@ -30,7 +30,7 @@ const order: Paper[] = ["pure", "statistics", "mechanics"];
 const SECTIONS = [
   {
     key: "first",
-    title: "Taught first",
+    title: "Phase 1",
     intro:
       "The content this specification shares with AS Maths. Usually the first year of the course.",
     has: (t: (typeof allTopics)[number]) =>
@@ -38,7 +38,7 @@ const SECTIONS = [
   },
   {
     key: "later",
-    title: "Taught later",
+    title: "Phase 2",
     intro:
       "The rest of the A Level. Usually the second year — and examined on the same papers as everything above.",
     has: (t: (typeof allTopics)[number]) =>

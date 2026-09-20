@@ -855,8 +855,8 @@ test("the course is split by what has been taught, not by a year the board never
   // so neither does the site. "Year 1" would claim an authority that the
   // specification does not give, and imply the content is behind them.
   await expect(page.getByText(/Year [12]/)).toHaveCount(0);
-  await expect(page.getByText("Taught first").first()).toBeVisible();
+  await expect(page.getByText("Phase 1").first()).toBeVisible();
 
   await page.goto("/topics/numerical-methods");
-  await expect(page.getByText("Taught later").first()).toBeVisible();
+  await expect(page.getByText("Phase 2").first()).toBeVisible();
 });
