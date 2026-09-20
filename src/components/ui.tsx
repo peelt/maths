@@ -54,9 +54,9 @@ export function PaperBadge({ paper }: { paper: Paper }) {
 }
 
 const PHASE_LABEL: Record<Phase, string> = {
-  first: "Taught first",
-  later: "Taught later",
-  spanning: "Started first, finished later",
+  first: "Phase 1",
+  later: "Phase 2",
+  spanning: "Phase 1 \u2192 2",
 };
 
 /**
