@@ -18,7 +18,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "6.1",
         title: "Quantities and units in the S.I. system",
-        year: 1,
+        phase: "spanning",
         summary:
           "Understand and use the fundamental S.I. quantities of length, time and mass, and the derived quantities velocity, acceleration, force, weight and moment, converting between units where required.",
         examNote:
@@ -33,12 +33,12 @@ export const mechanicsTopics: Topic[] = [
     name: "Kinematics",
     slug: "kinematics",
     blurb:
-      "Motion described by graphs, by the constant-acceleration formulae, and by calculus — plus projectiles, the flagship Year 2 mechanics question.",
+      "Motion described by graphs, by the constant-acceleration formulae, and by calculus — plus projectiles, the flagship mechanics question, taught later.",
     points: [
       {
         code: "7.1",
         title: "The language of kinematics",
-        year: 1,
+        phase: "first",
         summary:
           "Understand and use position, displacement, distance travelled, velocity, speed and acceleration, knowing that distance and speed must be positive.",
         examNote:
@@ -48,7 +48,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "7.2",
         title: "Kinematics graphs",
-        year: 1,
+        phase: "first",
         summary:
           "Understand, use and interpret displacement-time and velocity-time graphs for motion in a straight line, interpreting gradient in both and area under the velocity-time graph.",
         examNote:
@@ -58,7 +58,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "7.3",
         title: "Constant acceleration formulae",
-        year: "both",
+        phase: "spanning",
         summary:
           "Understand, use and derive the constant acceleration formulae for motion in a straight line, and extend them to two dimensions using vectors in i, j or column form.",
         examNote:
@@ -68,7 +68,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "7.4",
         title: "Calculus in kinematics",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use calculus for motion in a straight line — differentiating displacement to velocity to acceleration and integrating back — and extend to two dimensions by differentiating and integrating vectors with respect to time.",
         examNote:
@@ -78,7 +78,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "7.5",
         title: "Projectiles",
-        year: 2,
+        phase: "later",
         summary:
           "Model motion under gravity in a vertical plane using vectors; derive formulae for time of flight, range and greatest height, and the equation of the path of a projectile.",
         examNote:
@@ -98,7 +98,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.1",
         title: "Forces and Newton's first law",
-        year: 1,
+        phase: "first",
         summary:
           "Understand the concept of a force and use Newton's first law, including normal reaction, tension, thrust or compression, and resistance.",
         examNote:
@@ -108,7 +108,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.2",
         title: "Newton's second law",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use Newton's second law for motion in a straight line, restricted to forces in two perpendicular directions or simple cases of forces as two-dimensional vectors, extending to situations where forces must be resolved.",
         examNote:
@@ -118,7 +118,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.3",
         title: "Weight and motion under gravity",
-        year: 1,
+        phase: "first",
         summary:
           "Understand and use weight and motion in a straight line under gravity, and gravitational acceleration g and its value to varying degrees of accuracy, aware that g depends on location.",
         examNote:
@@ -128,7 +128,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.4",
         title: "Newton's third law, connected particles and equilibrium",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use Newton's third law and the equilibrium of forces on a particle; apply to problems involving smooth pulleys and connected particles, including particles in contact; resolve forces in two dimensions and handle equilibrium under coplanar forces.",
         examNote:
@@ -138,7 +138,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.5",
         title: "Resultant forces and dynamics in a plane",
-        year: 2,
+        phase: "later",
         summary:
           "Use the addition of forces and resultant forces, and dynamics for motion in a plane, resolving a vector into components or using a vector diagram.",
         examNote:
@@ -148,7 +148,7 @@ export const mechanicsTopics: Topic[] = [
       {
         code: "8.6",
         title: "Friction",
-        year: 2,
+        phase: "later",
         summary:
           "Understand and use the friction model with the coefficient of friction, for motion of a body on a rough surface, including limiting friction and statics.",
         examNote:
@@ -163,12 +163,12 @@ export const mechanicsTopics: Topic[] = [
     name: "Moments",
     slug: "moments",
     blurb:
-      "One spec point, entirely Year 2, and highly formulaic — rods, beams and ladders in equilibrium.",
+      "One spec point, taught later in the course, and highly formulaic — rods, beams and ladders in equilibrium.",
     points: [
       {
         code: "9.1",
         title: "Moments and the equilibrium of rigid bodies",
-        year: 2,
+        phase: "later",
         summary:
           "Understand and use moments in simple static contexts, and the equilibrium of rigid bodies, with problems involving parallel and non-parallel coplanar forces.",
         examNote:

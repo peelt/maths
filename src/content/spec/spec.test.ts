@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allSpecPoints, allTopics, getSpecPoint, inYear, qualifiedCode, specStats } from "./index";
+import { allSpecPoints, allTopics, getSpecPoint, qualifiedCode, specStats, taughtEarly } from "./index";
 import { toHtml } from "@/components/Maths";
 
 describe("9MA0 specification map", () => {
@@ -47,10 +47,29 @@ describe("9MA0 specification map", () => {
     }
   });
 
-  it("assigns every spec point to at least one teaching year", () => {
+  it("gives every spec point a teaching phase derived from the specification", () => {
     for (const point of allSpecPoints) {
-      expect(inYear(point, 1) || inYear(point, 2)).toBe(true);
+      expect(["first", "later", "spanning"]).toContain(point.phase);
     }
+  });
+
+  it("keeps all three phases populated", () => {
+    // A derivation that collapsed to one value would pass the check above
+    // while telling a student nothing. The specification's bold marking
+    // genuinely splits three ways, so the data must too.
+    for (const phase of ["first", "later", "spanning"] as const) {
+      expect(allSpecPoints.some((p) => p.phase === phase)).toBe(true);
+    }
+  });
+
+  it("treats spanning points as met early", () => {
+    // A point that is part AS content is seen before it is finished, so it
+    // must seed as covered -- otherwise the first-year default hides work
+    // the student has already started.
+    const spanning = allSpecPoints.find((p) => p.phase === "spanning");
+    expect(spanning && taughtEarly(spanning)).toBe(true);
+    const later = allSpecPoints.find((p) => p.phase === "later");
+    expect(later && taughtEarly(later)).toBe(false);
   });
 });
 

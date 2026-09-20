@@ -6,6 +6,7 @@ import { getProgressStore, streakIsLive, type Streak } from "@/lib/progress";
 import { isDue, sortByPriority, type ReviewState } from "@/lib/scheduling";
 import { allTopics, getSpecPoint } from "@/content/spec";
 import { specPointsWithQuestions } from "@/lib/questions";
+import { isCovered, readCovered } from "@/lib/covered";
 import { sinceLastPractised } from "@/lib/timing";
 
 /**
@@ -63,7 +64,12 @@ const practisable = () => specPointsWithQuestions();
  */
 function defaultTopic() {
   const covered = practisable();
+  const taught = readCovered();
   const ranked = allTopics
+    // Opening on something the class has not reached yet is the fastest way
+    // to make the site feel like it is not for you. If nothing is marked,
+    // isCovered returns true throughout and this changes nothing.
+    .filter((topic) => isCovered(taught, topic.slug))
     .map((topic) => ({
       topic,
       score: topic.points.filter((p) => covered.has(`${topic.paper}:${p.code}`)).length,

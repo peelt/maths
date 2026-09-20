@@ -2,7 +2,7 @@ import type { QuestionTemplate } from "@/lib/questions/types";
 import { fraction, leading, signed } from "./format";
 
 /**
- * Question templates for Year 1 Pure: proof, algebra, coordinate geometry,
+ * Question templates for the early Pure content: proof, algebra, coordinate geometry,
  * sequences and trigonometry.
  *
  * Every template generates its numbers from a seed and computes its own

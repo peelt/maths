@@ -18,11 +18,11 @@ export const pureTopics: Topic[] = [
       {
         code: "1.1",
         title: "Methods of proof",
-        year: "both",
+        phase: "spanning",
         summary:
           "Build an argument from given assumptions through logical steps to a conclusion, using proof by deduction, proof by exhaustion, disproof by counter-example, and proof by contradiction.",
         examNote:
-          "Proof by contradiction is Year 2 and the two classic results — that the square root of 2 is irrational, and that there are infinitely many primes — are explicitly named in the spec, so learn both properly. Disproof by counter-example is the cheapest mark in the paper: you need one example, not an argument. Marks are lost on presentation more than on ideas, so state what you assume, and end by saying what you have shown.",
+          "Proof by contradiction is taught later and the two classic results — that the square root of 2 is irrational, and that there are infinitely many primes — are explicitly named in the spec, so learn both properly. Disproof by counter-example is the cheapest mark in the paper: you need one example, not an argument. Marks are lost on presentation more than on ideas, so state what you assume, and end by saying what you have shown.",
         keywords: ["proof", "contradiction", "exhaustion", "deduction", "counter-example", "counterexample", "irrational", "primes"],
       },
     ],
@@ -38,7 +38,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.1",
         title: "Laws of indices",
-        year: 1,
+        phase: "first",
         summary:
           "Use the laws of indices for all rational exponents, including negative and fractional powers, and the equivalence between fractional powers and roots.",
         examNote:
@@ -48,7 +48,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.2",
         title: "Surds",
-        year: 1,
+        phase: "first",
         summary:
           "Manipulate surds and rationalise the denominator, including simplifying algebraic surds.",
         examNote:
@@ -58,7 +58,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.3",
         title: "Quadratic functions and their graphs",
-        year: 1,
+        phase: "first",
         summary:
           "Work with quadratics and their graphs; the discriminant and the conditions for real, repeated and no real roots; completing the square; solving by factorisation, formula, calculator or completing the square — including quadratics in a function of the unknown.",
         examNote:
@@ -68,7 +68,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.4",
         title: "Simultaneous equations",
-        year: 1,
+        phase: "spanning",
         summary:
           "Solve simultaneous equations in two variables by elimination and substitution, including one linear and one quadratic equation.",
         examNote:
@@ -78,7 +78,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.5",
         title: "Inequalities",
-        year: 1,
+        phase: "first",
         summary:
           "Solve linear and quadratic inequalities in one variable and interpret them graphically, including inequalities with brackets and fractions; express solutions using 'and'/'or' or set notation; represent linear and quadratic inequalities graphically.",
         examNote:
@@ -88,7 +88,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.6",
         title: "Polynomials and the factor theorem",
-        year: "both",
+        phase: "spanning",
         summary:
           "Expand, collect, factorise and divide polynomials algebraically; use the factor theorem; simplify rational expressions by factorising, cancelling and algebraic division.",
         examNote:
@@ -98,17 +98,17 @@ export const pureTopics: Topic[] = [
       {
         code: "2.7",
         title: "Graphs of functions",
-        year: "both",
+        phase: "spanning",
         summary:
           "Sketch curves from simple equations including cubics and quartics, the modulus of a linear function, and reciprocal graphs y = a/x and y = a/x^2 with their asymptotes; interpret algebraic solutions graphically; understand proportional relationships and their graphs.",
         examNote:
-          "Sketch means shape, intercepts and asymptotes — not a plotted table of values, and not a calculator screenshot. Modulus graphs are Year 2 and the classic trap is forgetting the second case when solving |ax + b| = cx + d; always check your solutions back in the original equation.",
+          "Sketch means shape, intercepts and asymptotes — not a plotted table of values, and not a calculator screenshot. Modulus graphs come later and the classic trap is forgetting the second case when solving |ax + b| = cx + d; always check your solutions back in the original equation.",
         keywords: ["sketch", "cubic", "quartic", "modulus", "asymptote", "reciprocal", "proportion", "intercepts"],
       },
       {
         code: "2.8",
         title: "Composite and inverse functions",
-        year: 2,
+        phase: "spanning",
         summary:
           "Understand functions as mappings, with domain and range; form composite functions; find inverse functions and their graphs.",
         examNote:
@@ -118,17 +118,17 @@ export const pureTopics: Topic[] = [
       {
         code: "2.9",
         title: "Transformations of graphs",
-        year: "both",
+        phase: "spanning",
         summary:
           "Understand the effect of the transformations y = af(x), y = f(x) + a, y = f(x + a), y = f(ax) and combinations of these, and sketch the resulting graphs; sketch y = f(-x) from the graph of y = f(x).",
         examNote:
-          "The inside-the-bracket transformations behave counter-intuitively: f(x + a) shifts left, and f(ax) stretches by a factor of 1/a. Combinations are Year 2 and order matters. This is a strong candidate for interactive practice — it is far easier to see than to memorise.",
+          "The inside-the-bracket transformations behave counter-intuitively: f(x + a) shifts left, and f(ax) stretches by a factor of 1/a. Combinations come later and order matters. This is a strong candidate for interactive practice — it is far easier to see than to memorise.",
         keywords: ["transformations", "translation", "stretch", "reflection", "shift", "graph transformations"],
       },
       {
         code: "2.10",
         title: "Partial fractions",
-        year: 2,
+        phase: "later",
         summary:
           "Decompose rational functions into partial fractions, with denominators no more complicated than squared linear terms, no more than three terms, and numerators constant or linear.",
         examNote:
@@ -138,7 +138,7 @@ export const pureTopics: Topic[] = [
       {
         code: "2.11",
         title: "Functions in modelling",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use functions in modelling, including considering the limitations and refinements of models.",
         examNote:
@@ -158,7 +158,7 @@ export const pureTopics: Topic[] = [
       {
         code: "3.1",
         title: "Straight lines",
-        year: 1,
+        phase: "first",
         summary:
           "Use the equation of a straight line in the forms y - y1 = m(x - x1) and ax + by + c = 0; find lines through two points or parallel/perpendicular to a given line; use straight-line models in context.",
         examNote:
@@ -168,7 +168,7 @@ export const pureTopics: Topic[] = [
       {
         code: "3.2",
         title: "Circles",
-        year: 1,
+        phase: "spanning",
         summary:
           "Use the equation of a circle (x - a)^2 + (y - b)^2 = r^2 and the expanded form; complete the square to find centre and radius; use the angle in a semicircle, the perpendicular from the centre bisecting a chord, and the tangent-radius property.",
         examNote:
@@ -178,7 +178,7 @@ export const pureTopics: Topic[] = [
       {
         code: "3.3",
         title: "Parametric equations",
-        year: 2,
+        phase: "later",
         summary:
           "Understand and use parametric equations of curves and convert between Cartesian and parametric forms.",
         examNote:
@@ -188,7 +188,7 @@ export const pureTopics: Topic[] = [
       {
         code: "3.4",
         title: "Parametric equations in modelling",
-        year: 2,
+        phase: "spanning",
         summary:
           "Use parametric equations in modelling in a variety of contexts.",
         examNote:
@@ -208,17 +208,17 @@ export const pureTopics: Topic[] = [
       {
         code: "4.1",
         title: "Binomial expansion",
-        year: "both",
+        phase: "spanning",
         summary:
           "Expand (a + bx)^n for positive integer n using n! and nCr notation and Pascal's triangle; extend to any rational n, including using it for approximations, and know that the expansion is valid for |bx/a| < 1.",
         examNote:
-          "The rational-n case is Year 2 and the validity condition is a guaranteed mark that students routinely skip — state it. Approximation questions want you to substitute a specific small value and compare; do not round early.",
+          "The rational-n case comes later and the validity condition is a guaranteed mark that students routinely skip — state it. Approximation questions want you to substitute a specific small value and compare; do not round early.",
         keywords: ["binomial", "expansion", "pascal", "ncr", "factorial", "validity", "approximation"],
       },
       {
         code: "4.2",
         title: "Sequences and recurrence relations",
-        year: 2,
+        phase: "later",
         summary:
           "Work with sequences given by a formula for the nth term and by recurrence relations of the form x(n+1) = f(x n); identify increasing, decreasing and periodic sequences.",
         examNote:
@@ -228,7 +228,7 @@ export const pureTopics: Topic[] = [
       {
         code: "4.3",
         title: "Sigma notation",
-        year: 2,
+        phase: "later",
         summary: "Understand and use sigma notation for sums of series, including knowing that summing 1 over n terms gives n.",
         examNote:
           "Read the limits carefully — a sum from r = 3 to 20 is not the same as one from r = 1 to 20, and the usual fix is to compute the full sum and subtract the missing start.",
@@ -237,7 +237,7 @@ export const pureTopics: Topic[] = [
       {
         code: "4.4",
         title: "Arithmetic sequences and series",
-        year: 2,
+        phase: "later",
         summary:
           "Work with arithmetic sequences and series, including the formulae for the nth term and the sum to n terms, and the sum of the first n natural numbers.",
         examNote:
@@ -247,7 +247,7 @@ export const pureTopics: Topic[] = [
       {
         code: "4.5",
         title: "Geometric sequences and series",
-        year: 2,
+        phase: "later",
         summary:
           "Work with geometric sequences and series, including the nth term, the sum of a finite series, and the sum to infinity of a convergent series with |r| < 1.",
         examNote:
@@ -257,7 +257,7 @@ export const pureTopics: Topic[] = [
       {
         code: "4.6",
         title: "Sequences and series in modelling",
-        year: 2,
+        phase: "spanning",
         summary:
           "Use sequences and series in modelling, recognising when a situation is arithmetic — a fixed amount added each period — and when it is geometric, with a fixed percentage change.",
         examNote:
@@ -277,17 +277,17 @@ export const pureTopics: Topic[] = [
       {
         code: "5.1",
         title: "Definitions, sine and cosine rules, radians",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use the definitions of sine, cosine and tangent for all arguments via the unit circle; the sine and cosine rules and the area of a triangle; work in radians, including arc length and sector area.",
         examNote:
-          "The ambiguous case of the sine rule is named in the spec — when you find an angle from the sine rule, check whether the obtuse partner also works. Radians are Year 2, and arc length and sector area are trivially easy marks provided you have not left the calculator in degrees.",
+          "The ambiguous case of the sine rule is named in the spec — when you find an angle from the sine rule, check whether the obtuse partner also works. Radians come later, and arc length and sector area are trivially easy marks provided you have not left the calculator in degrees.",
         keywords: ["sine rule", "cosine rule", "area of triangle", "radians", "arc length", "sector", "ambiguous case", "unit circle"],
       },
       {
         code: "5.2",
         title: "Small angle approximations",
-        year: 2,
+        phase: "spanning",
         summary:
           "Use the standard small angle approximations for sine, cosine and tangent, with the angle in radians.",
         examNote:
@@ -297,7 +297,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.3",
         title: "Trigonometric graphs and exact values",
-        year: "both",
+        phase: "spanning",
         summary:
           "Understand the sine, cosine and tangent functions, their graphs, symmetries and periodicity; know the exact values of sine, cosine and tangent for the standard angles and their multiples.",
         examNote:
@@ -307,7 +307,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.4",
         title: "Reciprocal and inverse trigonometric functions",
-        year: 2,
+        phase: "later",
         summary:
           "Understand secant, cosecant and cotangent, and arcsin, arccos and arctan, their relationships to sine, cosine and tangent, and their graphs, domains and ranges.",
         examNote:
@@ -317,7 +317,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.5",
         title: "Trigonometric identities",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use the identities tan x = sin x / cos x and sin^2 x + cos^2 x = 1, and the derived identities for sec^2 and cosec^2, to solve equations and prove further identities.",
         examNote:
@@ -327,7 +327,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.6",
         title: "Double angle, compound angle and R form",
-        year: 2,
+        phase: "later",
         summary:
           "Use the compound angle formulae for sin, cos and tan, the double angle formulae and their geometrical proofs, including application to half angles; express a cos x + b sin x in the equivalent form R cos(x ± α) or R sin(x ± α).",
         examNote:
@@ -337,7 +337,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.7",
         title: "Solving trigonometric equations",
-        year: "both",
+        phase: "spanning",
         summary:
           "Solve trigonometric equations in a given interval, including quadratics in sin, cos and tan, and equations involving multiples of the unknown angle.",
         examNote:
@@ -347,7 +347,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.8",
         title: "Proving trigonometric identities",
-        year: "both",
+        phase: "later",
         summary: "Construct proofs involving trigonometric functions and identities.",
         examNote:
           "Work on one side only and transform it into the other — never treat it as an equation and operate on both sides, which examiners penalise. Converting everything to sine and cosine is the reliable fallback when you cannot see the trick.",
@@ -356,7 +356,7 @@ export const pureTopics: Topic[] = [
       {
         code: "5.9",
         title: "Trigonometry in context",
-        year: "both",
+        phase: "later",
         summary:
           "Use trigonometric functions to solve problems in context, including problems involving vectors, kinematics and forces.",
         examNote:
@@ -371,12 +371,12 @@ export const pureTopics: Topic[] = [
     name: "Exponentials and logarithms",
     slug: "exponentials-and-logarithms",
     blurb:
-      "Entirely Year 1, self-contained, and the gateway to exponential modelling — one of the most heavily examined AO3 contexts in the whole qualification.",
+      "Taught early, self-contained, and the gateway to exponential modelling — one of the most heavily examined AO3 contexts in the whole qualification.",
     points: [
       {
         code: "6.1",
         title: "Exponential functions and their graphs",
-        year: 1,
+        phase: "first",
         summary:
           "Know and use the function a^x and its graph for positive a, understanding the difference in shape for a < 1 and a > 1; know and use e^x and its graph, including y = e^(ax+b) + c.",
         examNote:
@@ -386,7 +386,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.2",
         title: "The gradient of e^kx",
-        year: 1,
+        phase: "first",
         summary:
           "Know that the gradient of e^kx is k e^kx, and hence understand why the exponential model is suitable in many applications.",
         examNote:
@@ -396,7 +396,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.3",
         title: "Logarithms as inverse functions",
-        year: 1,
+        phase: "first",
         summary:
           "Know and use log base a as the inverse of a^x, and ln x as the inverse of e^x, with their graphs; solve equations of the form e^(ax+b) = p and ln(ax + b) = q.",
         examNote:
@@ -406,7 +406,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.4",
         title: "Laws of logarithms",
-        year: 1,
+        phase: "first",
         summary:
           "Use the laws of logarithms for products, quotients and powers, including the special cases of reciprocals and roots.",
         examNote:
@@ -416,7 +416,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.5",
         title: "Solving equations of the form a^x = b",
-        year: 1,
+        phase: "first",
         summary: "Solve equations of the form a^x = b, using the change of base formula where helpful.",
         examNote:
           "Mechanical once you take logs of both sides. The only real difficulty appears when the power is itself an expression, such as 2^(3x-1) = 3 — keep the bracket intact when you bring it down.",
@@ -425,7 +425,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.6",
         title: "Logarithmic graphs and estimating parameters",
-        year: 1,
+        phase: "first",
         summary:
           "Use logarithmic graphs to estimate parameters in relationships of the form y = ax^n and y = kb^x, given data for x and y.",
         examNote:
@@ -435,7 +435,7 @@ export const pureTopics: Topic[] = [
       {
         code: "6.7",
         title: "Exponential growth and decay in modelling",
-        year: 1,
+        phase: "first",
         summary:
           "Understand and use exponential growth and decay in modelling — including compound interest, radioactive decay, drug concentration and population growth — and consider the limitations and refinements of such models.",
         examNote:
@@ -455,7 +455,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.1",
         title: "The derivative, first principles and second derivatives",
-        year: "both",
+        phase: "spanning",
         summary:
           "Understand the derivative as the gradient of the tangent and as a rate of change; differentiate from first principles for small positive integer powers of x and for sin x and cos x; sketch the gradient function; use the second derivative for maxima, minima, convex and concave sections, and points of inflection.",
         examNote:
@@ -465,7 +465,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.2",
         title: "Standard derivatives",
-        year: "both",
+        phase: "spanning",
         summary:
           "Differentiate x^n for rational n, and e^kx, a^kx, sin kx, cos kx, tan kx and ln x, with related sums, differences and constant multiples.",
         examNote:
@@ -475,7 +475,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.3",
         title: "Tangents, normals and stationary points",
-        year: "both",
+        phase: "spanning",
         summary:
           "Apply differentiation to find gradients, tangents and normals, maxima, minima and stationary points and points of inflection, and identify where functions are increasing or decreasing.",
         examNote:
@@ -485,7 +485,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.4",
         title: "Product, quotient and chain rules",
-        year: 2,
+        phase: "later",
         summary:
           "Differentiate using the product, quotient and chain rules, including connected rates of change and inverse functions; differentiate cosec x, cot x and sec x.",
         examNote:
@@ -495,7 +495,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.5",
         title: "Implicit and parametric differentiation",
-        year: 2,
+        phase: "later",
         summary:
           "Differentiate simple functions and relations defined implicitly or parametrically, for the first derivative only, including finding tangents and normals to such curves.",
         examNote:
@@ -505,7 +505,7 @@ export const pureTopics: Topic[] = [
       {
         code: "7.6",
         title: "Constructing differential equations",
-        year: 2,
+        phase: "later",
         summary:
           "Construct simple differential equations in pure mathematics and in context, including kinematics, population growth and price-demand relationships.",
         examNote:
@@ -525,7 +525,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.1",
         title: "The Fundamental Theorem of Calculus",
-        year: 1,
+        phase: "first",
         summary:
           "Know and use the Fundamental Theorem of Calculus — integration as the reverse of differentiation, with a constant of integration required for indefinite integrals.",
         examNote:
@@ -535,7 +535,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.2",
         title: "Standard integrals",
-        year: "both",
+        phase: "spanning",
         summary:
           "Integrate x^n excluding n = -1, and e^kx, 1/x, sin kx and cos kx, with related sums, differences and constant multiples; use trigonometric identities to integrate expressions such as sin^2 x and tan^2 x.",
         examNote:
@@ -545,7 +545,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.3",
         title: "Definite integrals and areas",
-        year: "both",
+        phase: "spanning",
         summary:
           "Evaluate definite integrals; use a definite integral to find the area under a curve and the area between two curves, including curves defined parametrically.",
         examNote:
@@ -555,7 +555,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.4",
         title: "Integration as the limit of a sum",
-        year: 2,
+        phase: "later",
         summary: "Understand and use integration as the limit of a sum.",
         examNote:
           "Conceptual and usually short, but it is the idea that justifies why an integral measures an area at all, and it connects directly to the trapezium rule in topic 9.",
@@ -564,7 +564,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.5",
         title: "Integration by substitution and by parts",
-        year: 2,
+        phase: "later",
         summary:
           "Carry out simple cases of integration by substitution and by parts, understanding these as the inverse processes of the chain and product rules; recognise integrals of the form f'(x)/f(x) giving a logarithm.",
         examNote:
@@ -574,7 +574,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.6",
         title: "Integration using partial fractions",
-        year: 2,
+        phase: "later",
         summary: "Integrate using partial fractions that are linear in the denominator.",
         examNote:
           "This is why partial fractions exist in the spec at all. Each linear piece integrates to a logarithm, and the answer is usually tidied into a single log using the log laws — which is often the final accuracy mark.",
@@ -583,7 +583,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.7",
         title: "Differential equations with separable variables",
-        year: 2,
+        phase: "later",
         summary:
           "Find the analytical solution of simple first order differential equations with separable variables, including finding particular solutions.",
         examNote:
@@ -593,7 +593,7 @@ export const pureTopics: Topic[] = [
       {
         code: "8.8",
         title: "Interpreting solutions of differential equations",
-        year: 2,
+        phase: "later",
         summary:
           "Interpret the solution of a differential equation in context, including identifying its limitations, with links to kinematics.",
         examNote:
@@ -608,12 +608,12 @@ export const pureTopics: Topic[] = [
     name: "Numerical methods",
     slug: "numerical-methods",
     blurb:
-      "Entirely Year 2 and entirely self-contained — the most learnable topic in the paper, and the one where knowing how each method fails is worth as much as using it.",
+      "Taught later and entirely self-contained — the most learnable topic in the paper, and the one where knowing how each method fails is worth as much as using it.",
     points: [
       {
         code: "9.1",
         title: "Locating roots by change of sign",
-        year: 2,
+        phase: "later",
         summary:
           "Locate roots of f(x) = 0 by considering sign changes in an interval where f is sufficiently well behaved, and understand how change of sign methods can fail.",
         examNote:
@@ -623,7 +623,7 @@ export const pureTopics: Topic[] = [
       {
         code: "9.2",
         title: "Iterative methods, cobweb and staircase diagrams",
-        year: 2,
+        phase: "later",
         summary:
           "Solve equations approximately using simple iterative methods of the form x(n+1) = f(x n), and draw the associated cobweb and staircase diagrams to show convergence geometrically.",
         examNote:
@@ -633,7 +633,7 @@ export const pureTopics: Topic[] = [
       {
         code: "9.3",
         title: "The Newton-Raphson method",
-        year: 2,
+        phase: "later",
         summary:
           "Solve equations using the Newton-Raphson method and other recurrence relations, and understand how such methods can fail.",
         examNote:
@@ -643,7 +643,7 @@ export const pureTopics: Topic[] = [
       {
         code: "9.4",
         title: "The trapezium rule",
-        year: 2,
+        phase: "later",
         summary:
           "Use numerical integration, including the trapezium rule, to estimate the area under a curve, and determine limits between which the true value must lie.",
         examNote:
@@ -653,7 +653,7 @@ export const pureTopics: Topic[] = [
       {
         code: "9.5",
         title: "Numerical methods in context",
-        year: 2,
+        phase: "later",
         summary: "Use numerical methods to solve problems in context.",
         examNote:
           "The framing is usually that an equation cannot be solved analytically, so an approximate method is the only option — saying that explicitly is often worth a mark.",
@@ -672,17 +672,17 @@ export const pureTopics: Topic[] = [
       {
         code: "10.1",
         title: "Vectors in two and three dimensions",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use vectors in two and three dimensions, in column form and in i, j and k unit vector form.",
         examNote:
-          "Three dimensions is the Year 2 extension and adds almost no new technique — the same methods, one more component. Being fluent moving between column and i, j, k notation matters because questions switch between them freely.",
+          "Three dimensions is the later extension and adds almost no new technique — the same methods, one more component. Being fluent moving between column and i, j, k notation matters because questions switch between them freely.",
         keywords: ["vectors", "column vector", "i j k", "unit vector", "three dimensions", "3D"],
       },
       {
         code: "10.2",
         title: "Magnitude and direction",
-        year: 1,
+        phase: "first",
         summary:
           "Calculate the magnitude and direction of a vector and convert between component form and magnitude-direction form; find a unit vector in a given direction.",
         examNote:
@@ -692,7 +692,7 @@ export const pureTopics: Topic[] = [
       {
         code: "10.3",
         title: "Vector arithmetic and its geometry",
-        year: 1,
+        phase: "first",
         summary:
           "Add vectors diagrammatically and algebraically, multiply by scalars, and understand the geometrical interpretation, including the triangle and parallelogram laws and parallel vectors.",
         examNote:
@@ -702,7 +702,7 @@ export const pureTopics: Topic[] = [
       {
         code: "10.4",
         title: "Position vectors and distance",
-        year: "both",
+        phase: "first",
         summary:
           "Use position vectors, and calculate the distance between two points represented by position vectors, in two and three dimensions.",
         examNote:
@@ -712,7 +712,7 @@ export const pureTopics: Topic[] = [
       {
         code: "10.5",
         title: "Vectors in problem solving",
-        year: "both",
+        phase: "spanning",
         summary:
           "Use vectors to solve problems in pure mathematics and in context, including forces.",
         examNote:
