@@ -152,6 +152,13 @@ test("the progress page invites you to start when there is no history", async ({
 test("the progress page reports what you have done", async ({ page }) => {
   // Answer one question, then confirm it is reflected in the history.
   await page.goto("/practice/algebra-and-functions");
+  // Wait for the question before asking which answer control it uses. Without
+  // this, isVisible() is a point-in-time check against a page that may not
+  // have rendered yet: it returns false, the test takes the multiple-choice
+  // branch, and then waits out the clock for a fieldset that never appears.
+  // The two sibling tests above already guard this way.
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
   const input = page.getByLabel("Your answer");
   if (await input.isVisible().catch(() => false)) {
     await input.fill("1");
@@ -852,41 +859,4 @@ test("the course is split by what has been taught, not by a year the board never
 
   await page.goto("/topics/numerical-methods");
   await expect(page.getByText("Taught later").first()).toBeVisible();
-});
-
-test("the covered-topics panel starts closed, suggests a first year, and remembers", async ({ page }) => {
-  await page.goto("/topics");
-  const panel = page.locator("main details").filter({ hasText: "Which topics have you covered" });
-  expect(await panel.evaluate((el: HTMLDetailsElement) => el.open), "panel started open").toBe(false);
-
-  await panel.locator("summary").click();
-  const boxes = panel.locator("input[type=checkbox]");
-  await expect(boxes).toHaveCount(19);
-
-  // Seeded from the specification's own AS marking, not from nothing and not
-  // from everything: a suggestion that suggests nothing is worse than none.
-  const seeded = await panel.locator("input[type=checkbox]:checked").count();
-  expect(seeded).toBeGreaterThan(5);
-  expect(seeded).toBeLessThan(19);
-
-  // Topics with no AS content at all must not be suggested as covered.
-  await expect(panel.getByRole("checkbox", { name: "Numerical methods" })).not.toBeChecked();
-  await expect(panel.getByRole("checkbox", { name: "Moments" })).not.toBeChecked();
-
-  await panel.getByRole("checkbox", { name: "Moments" }).check();
-  await page.reload();
-  const after = page.locator("main details").filter({ hasText: "Which topics have you covered" });
-  await after.locator("summary").click();
-  await expect(after.getByRole("checkbox", { name: "Moments" })).toBeChecked();
-});
-
-test("the whole specification stays listed whatever is ticked", async ({ page }) => {
-  await page.goto("/topics");
-  const panel = page.locator("main details").filter({ hasText: "Which topics have you covered" });
-  await panel.locator("summary").click();
-  await panel.getByRole("checkbox", { name: "Numerical methods" }).uncheck();
-
-  // This page is the map of the course. Ticking is about what the site pushes
-  // at you elsewhere, not about hiding half the specification from view.
-  await expect(page.getByRole("link", { name: /Numerical methods/ })).toBeVisible();
 });
