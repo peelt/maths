@@ -152,6 +152,13 @@ test("the progress page invites you to start when there is no history", async ({
 test("the progress page reports what you have done", async ({ page }) => {
   // Answer one question, then confirm it is reflected in the history.
   await page.goto("/practice/algebra-and-functions");
+  // Wait for the question before asking which answer control it uses. Without
+  // this, isVisible() is a point-in-time check against a page that may not
+  // have rendered yet: it returns false, the test takes the multiple-choice
+  // branch, and then waits out the clock for a fieldset that never appears.
+  // The two sibling tests above already guard this way.
+  await expect(page.getByText(/Question 1 of 5/)).toBeVisible();
+
   const input = page.getByLabel("Your answer");
   if (await input.isVisible().catch(() => false)) {
     await input.fill("1");
